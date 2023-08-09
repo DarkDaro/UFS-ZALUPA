@@ -78,6 +78,7 @@ globals
     constant integer REAS4___h_a = StringHash( "h_has_a_REA_ult" )
   //constant integer REAS6___chance = 30
     constant real REAS6___time = 5.
+    constant real REAS6___t = 5.
     constant integer REAS6___a_r = 'A04O'
     constant integer REAS6___s_r = 'A04P'
     constant integer REAS6___h_att = StringHash( "h_att" )
