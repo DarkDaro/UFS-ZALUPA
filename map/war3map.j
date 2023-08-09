@@ -393,8 +393,8 @@ globals
     unit gg_unit_ncp2_0016 = null
     unit gg_unit_ncp2_0017 = null
     unit gg_unit_edos_0053 = null
+    hashtable HashS = InitHashtable( )
     hashtable HT = InitHashtable( )
-
     hashtable udg_SystemHash = InitHashtable()
     string Color_Soft_Green = "|cFF404040"
     integer Online_Players = 0
@@ -3579,67 +3579,91 @@ endfunction
 
 
 function StunUnitAct takes nothing returns nothing
-  local timer t=GetExpiredTimer()
-  local integer HID=GetHandleId(t)
-  local unit target=LoadUnitHandle(udg_SystemHash,HID,400)
-  local real last=LoadReal(udg_SystemHash,GetHandleId(target),300)
-  call SaveReal(udg_SystemHash,GetHandleId(target),300,last-.01)
-  
-  if last<.1 or GetUnitAbilityLevel(target,'BPSE')==0 then
-    if IsUnitType(target,UNIT_TYPE_HERO)==false then
-      call FlushChildHashtable(udg_SystemHash,GetHandleId(target))
-    endif
-    call UnitRemoveAbility(target,'BPSE')
-    call RemoveSavedReal(udg_SystemHash,GetHandleId(target),300)
-    call RemoveSavedHandle(udg_SystemHash,GetHandleId(target),100)
+    local timer t=GetExpiredTimer()
+    local integer HID=GetHandleId(t)
+    local unit target=LoadUnitHandle(udg_Hash,HID,400)
+    local integer UID=GetHandleId(target)
+    local real last=LoadReal(udg_Hash,UID,300)
+    call SaveReal(udg_Hash,UID,300,last-0.10)
     
-    call PauseTimer(t)
-    call FlushChildHashtable(udg_SystemHash,HID)
-    call DestroyTimer(t)
-  endif
-  set t =null
-  set t=null
+  //call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun time-"  + R2S(last) )
+  
+    if last<0.10 or GetUnitAbilityLevel(target,'BPSE')==0 then
+    
+      if IsUnitType(target,UNIT_TYPE_HERO)==false then
+     //   call FlushChildHashtable(udg_Hash,UID)
+      endif
+      
+      call UnitRemoveAbility(target,'BPSE')
+  //    call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun clear" )
+      call RemoveSavedReal(udg_Hash,UID,300)
+      call RemoveSavedHandle(udg_Hash,UID,100)
+      call FlushChildHashtable(udg_Hash,HID)
+      call PauseTimer(t)
+      call DestroyTimer(t)
+    endif
+    
+    set t =null
+    set t=null
 endfunction
 
 function StunUnit takes unit target,real last returns real
-  local timer t=null
-  local integer UID=GetHandleId(target)
-  local unit dummy
-  local integer HID
-  local boolean boolean01=false
-  //своя хештаблица для стана
-  if GetUnitAbilityLevel(target,'BPSE')==0 and LoadTimerHandle(udg_SystemHash,UID,100)==null then
+    local timer t=null
+    local integer UID=GetHandleId(target)
+    local unit dummy
+    local integer HID=0
+    local boolean boolean01=false
+    if IsUnitType(target, UNIT_TYPE_HERO) then 
+    
+    set last = last
+    //call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun reduce" + R2S(ItemStunReduceCal(target)) )
+    
+    endif
+    
+      //ItemRezCal
+    //своя хештаблица для стана
+    if GetUnitAbilityLevel(target,'BPSE')==0 and LoadTimerHandle(udg_Hash,UID,100)==null then
     set t=CreateTimer()
     set boolean01=true
-  else
-    set t=LoadTimerHandle(udg_SystemHash,UID,100)
-  endif
-  set HID=GetHandleId(t)
-  call SaveTimerHandle(udg_SystemHash,UID,100,t)
-  call SaveUnitHandle(udg_SystemHash,HID,400, target)
-  
-  if last>LoadReal(udg_SystemHash,UID,300) then
+    else
+    set t=LoadTimerHandle(udg_Hash,UID,100)
+    endif
+    
+    set HID=GetHandleId(t)
+    call SaveTimerHandle(udg_Hash,UID,100,t)
+    call SaveUnitHandle(udg_Hash,HID,400, target)
+    
+    if last>LoadReal(udg_Hash,UID,300) then
     set last=last
-    set dummy=CreateUnitAtLoc(GetOwningPlayer(target),'e002',GetUnitLoc(target),0)
-    call UnitAddAbility(dummy,'A04S')
-    call SetUnitAbilityLevel(dummy,'A04S',1+R2I(last))
+    call SaveReal(udg_Hash,UID,300,last)
+    set dummy=CreateUnit(GetOwningPlayer(target), 'u01Q', GetUnitX(target), GetUnitY(target), 0)
+    call UnitAddAbility(dummy,'A167')
+    call UnitApplyTimedLife(dummy, 'BTLF', 2.00)
+    call SetUnitAbilityLevel(dummy,'A167',1+R2I(last))
+    call UnitShareVision( target, GetOwningPlayer( dummy ), true )
     call IssueTargetOrder(dummy,"thunderbolt",target)
-  //   call DisplayTextToForce( GetPlayersAll( ), "Stun continue_"+GetUnitName(target))
-  else
-    set last=LoadReal(udg_SystemHash,UID,300)+last
- //   call DisplayTextToForce( GetPlayersAll( ), "Stun increase_"+GetUnitName(target))
-  endif
-  call SaveReal(udg_SystemHash,UID,300,last)
-  
-  if boolean01 then
-  //  call DisplayTextToForce( GetPlayersAll( ), "Stun timer_"+GetUnitName(target))
-    call TimerStart(t,0.01,true,function StunUnitAct)
-  endif
-  set t=null
-  set dummy=null
-  return last
+    call UnitShareVision( target, GetOwningPlayer( dummy ), false )
+    //call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun continue" + R2S(last) )
+    else
+    if last > 0.01 and last < LoadReal(udg_Hash, UID, 300) then
+    call SaveReal(udg_Hash, UID, 300, last)
+    //call DisplayTextToForce( GetPlayersAll(), GetUnitName(target) + " stun updated " + R2S(last) )
+    else
+    //set boolean01=true Работает без него
+    set last=LoadReal(udg_Hash,UID,300)+last
+    call SaveReal(udg_Hash,UID,300,last)
+    //call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun increase+" + R2S(last) )
+    endif
+    endif
+    
+    if boolean01 then
+    //call DisplayTextToForce( GetPlayersAll(), "Stun timer start" )
+    call TimerStart(t,0.10,true,function StunUnitAct)
+    endif
+    set t=null
+    set dummy=null
+    return last
 endfunction
-
 
 
 function Stun__StopUnit takes nothing returns nothing
