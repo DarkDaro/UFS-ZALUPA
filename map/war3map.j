@@ -295,7 +295,7 @@ globals
     trigger TKLS4_Trg = CreateTrigger( )
     constant integer TKLS5___ab_id = 'A03Y'
     constant real TKLS5___percent_int = 1.2
-    constant real TKLS5___stun_time = 3.0
+    constant real TKLS5___stun_time = 2.0
     constant real TKLS5___radius = 300.
     constant integer TKLS5___slowing = 8
     constant string TKLS5___eff_target = "war3mapImported\\Crystal Impale.mdl"
@@ -4251,12 +4251,13 @@ function DMKillsLib__WinPlayer takes integer pid returns nothing
     call StopMusic( FALSE )
     call FogEnable( false )
     call FogMaskEnable( false )
-    set p = GetLocalPlayer( )
-    if p != Player( pid - 1 ) then
-        call StartSound( gg_snd_defeat )
-    else
-        call StartSound( gg_snd_victory )
-    endif
+   // set p = GetLocalPlayer( )
+   // if p != Player( pid - 1 ) then
+    //    call StartSound( gg_snd_defeat )
+   // else
+   //     call StartSound( gg_snd_victory )
+   // endif
+    call StartSound( gg_snd_defeat )
     loop
         exitwhen( time <= 0. )
         call TriggerSleepAction( 1. )
@@ -6160,26 +6161,30 @@ function TDMKillsLib__WinTeam takes integer t returns nothing
     call StopMusic( false )
     call FogEnable( false )
     call FogMaskEnable( false )
-    set p = GetLocalPlayer( )
-    if t == 1 then
-        if GetConvertedPlayerId( GetLocalPlayer( ) ) < 6 then
-            call StartSound( gg_snd_victory )
-        else
-            call StartSound( gg_snd_defeat )
-        endif
-    else
-        if GetConvertedPlayerId( GetLocalPlayer( ) ) < 6 then
-            call StartSound( gg_snd_defeat )
-        else
-            call StartSound( gg_snd_victory )
-        endif
-    endif
+   // set p = GetLocalPlayer( )
+    //if t == 1 then
+
+    //    if GetConvertedPlayerId( GetLocalPlayer( ) ) < 6 then
+    //        call StartSound( gg_snd_victory )
+    //    else
+   //         call StartSound( gg_snd_defeat )
+   //     endif
+
+    //else
+    //    if GetConvertedPlayerId( GetLocalPlayer( ) ) < 6 then
+    //        call StartSound( gg_snd_defeat )
+    //    else
+    //        call StartSound( gg_snd_victory )
+   //     endif
+   // endif
+    call StartSound( gg_snd_victory )
     loop
         exitwhen( time <= 0. )
         call TriggerSleepAction( 1. )
         call PauseGame( true )
         set time = time - ( 1.0 )
     endloop
+
     call EndGame( true )
 endfunction
 
