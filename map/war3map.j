@@ -3654,10 +3654,10 @@ function StunUnit takes unit target,real last returns real
     if last>LoadReal(udg_Hash,UID,300) then
     set last=last
     call SaveReal(udg_Hash,UID,300,last)
-    set dummy=CreateUnit(GetOwningPlayer(target), 'u01Q', GetUnitX(target), GetUnitY(target), 0)
-    call UnitAddAbility(dummy,'A167')
-    call UnitApplyTimedLife(dummy, 'BTLF', 2.00)
-    call SetUnitAbilityLevel(dummy,'A167',1+R2I(last))
+    set dummy=CreateUnitAtLoc(GetOwningPlayer(target),'e002',GetUnitLoc(target),0)
+    call UnitAddAbility(dummy,'A04S')
+    call SetUnitAbilityLevel(dummy,'A04S',1+R2I(last))
+
     call UnitShareVision( target, GetOwningPlayer( dummy ), true )
     call IssueTargetOrder(dummy,"thunderbolt",target)
     call UnitShareVision( target, GetOwningPlayer( dummy ), false )
@@ -12936,7 +12936,7 @@ function main takes nothing returns nothing
 endfunction
 
 function config takes nothing returns nothing
-    call SetMapName( "|cFF404040UFS Arena|r 2.8" )
+    call SetMapName( "|cFF404040UFS Arena v1.1|r" )
     call SetMapDescription( "UFS Arena" )
     call SetPlayers(10)
     call SetTeams(10)
