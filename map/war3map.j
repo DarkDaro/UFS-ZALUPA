@@ -393,7 +393,7 @@ globals
     unit gg_unit_ncp2_0016 = null
     unit gg_unit_ncp2_0017 = null
     unit gg_unit_edos_0053 = null
-    hashtable HashS = InitHashtable( )
+    hashtable udg_Hash = InitHashtable( )
     hashtable HT = InitHashtable( )
     hashtable udg_SystemHash = InitHashtable()
     string Color_Soft_Green = "|cFF404040"
@@ -682,6 +682,29 @@ function SimError takes player ForPlayer, string msg returns nothing
         call DisplayTimedTextToPlayer( ForPlayer, 0.52, -1.00, 2.00, "|cffffcc00" + msg + "|r" )
         call StartSound( snd_Error )
     endif
+endfunction
+
+
+function DropItemLiver takes unit a returns nothing
+    local integer i = 0
+    local item it = null
+    local player p = GetOwningPlayer(a)
+    local real x =GetUnitX(a)
+    local real y = GetUnitY(a)
+    loop
+        exitwhen i > 5
+        set it = UnitItemInSlot(a, i)
+        if it != null then
+            call UnitRemoveItem(a, it)
+    
+            call SetItemDroppable(it, true)
+            call SetItemPosition(it, x, y)
+            call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl", x, y))
+        endif
+        
+        set i = i + 1
+    endloop
+    set it = null
 endfunction
 
 function ItemDestroyUpdate takes nothing returns nothing
@@ -2856,6 +2879,7 @@ function LeaveLib__Act takes nothing returns nothing
     call StartSound( gg_snd_LeaveSound )
      if s__Hero[GetConvertedPlayerId( p )] != null then
         call RemoveUnit(s__Hero[GetConvertedPlayerId( p )])
+        call DropItemLiver(s__Hero[GetConvertedPlayerId( p )])
         set s__Hero[GetConvertedPlayerId( p )] = null
     endif
  
@@ -3613,14 +3637,8 @@ function StunUnit takes unit target,real last returns real
     local unit dummy
     local integer HID=0
     local boolean boolean01=false
-    if IsUnitType(target, UNIT_TYPE_HERO) then 
-    
     set last = last
-    //call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun reduce" + R2S(ItemStunReduceCal(target)) )
-    
-    endif
-    
-      //ItemRezCal
+
     //своя хештаблица для стана
     if GetUnitAbilityLevel(target,'BPSE')==0 and LoadTimerHandle(udg_Hash,UID,100)==null then
     set t=CreateTimer()
