@@ -4288,9 +4288,9 @@ function DMKillsLib__WinPlayer takes integer pid returns nothing
     call SetGameSpeed( MAP_SPEED_SLOWEST )
     set DMKillsLib_Game_Ended = TRUE
     //call PauseGame(true)
-    call ClearTextMessages( )
+   // call ClearTextMessages( )
     call BJDebugMsg( s__Color_Hex[pid] + GetPlayerName( Player( pid - 1 ) ) + " одержал победу! Игра заканчивается через " + I2S( R2I( 30. ) ) + " секунд. " + s__Color_Hex[5] + "Спасибо!|r" )
-    call StopMusic( FALSE )
+   // call StopMusic( FALSE )
     call FogEnable( false )
     call FogMaskEnable( false )
    // set p = GetLocalPlayer( )
@@ -4303,7 +4303,7 @@ function DMKillsLib__WinPlayer takes integer pid returns nothing
     loop
         exitwhen( time <= 0. )
         call TriggerSleepAction( 1. )
-        call PauseGame( true )
+    //    call PauseGame( true )
         set time = time - ( 1.0 )
     endloop
     call EndGame( true )
@@ -6200,7 +6200,7 @@ function TDMKillsLib__WinTeam takes integer t returns nothing
    // call PauseGame(true)
     call ClearTextMessages( )
     call BJDebugMsg( "Команда '" + s__Team_Name[t] + "'|r одержала победу! Игра заканчивается через " + I2S( R2I( 30. ) ) + " секунд. " + s__Color_Hex[5] + "Спасибо!|r" )
-    call StopMusic( false )
+  //  call StopMusic( false )
     call FogEnable( false )
     call FogMaskEnable( false )
    // set p = GetLocalPlayer( )
@@ -6223,7 +6223,7 @@ function TDMKillsLib__WinTeam takes integer t returns nothing
     loop
         exitwhen( time <= 0. )
         call TriggerSleepAction( 1. )
-        call PauseGame( true )
+       // call PauseGame( true )
         set time = time - ( 1.0 )
     endloop
 
@@ -10068,7 +10068,7 @@ function FLOS3__CreatePartOfWave takes nothing returns nothing
     local unit arrow = LoadUnitHandle( HT, GetHandleId( t ), StringHash( "H_1" ) )
     local timer ti
     local unit cjlocgn_00000000
-    if dist <= 1000.then
+    if dist <= 1200.then
         set FLOS3__ch_p = p
         call Dest_KillDestInRange( x, y, 250. )
         call GroupEnumUnitsInRange( FLOS3__gr, x, y, 250., Condition( function FLOS3__Cond1 ) )
@@ -10090,10 +10090,11 @@ function FLOS3__CreatePartOfWave takes nothing returns nothing
         endloop
         set x = x + 70. * Cos( angle * bj_DEGTORAD )
         set y = y + 70. * Sin( angle * bj_DEGTORAD )
-        call DestroyEffect( AddSpecialEffect( "Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl", x, y ) )
         set dist = dist + ( 70. )
         call SetUnitX( arrow, x )
         call SetUnitY( arrow, y )
+        call DestroyEffect( AddSpecialEffect( "Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl", x, y ) )
+
         call SaveReal( HT, GetHandleId( t ), StringHash( "x" ), x )
         call SaveReal( HT, GetHandleId( t ), StringHash( "y" ), y )
         call SaveReal( HT, GetHandleId( t ), StringHash( "dist" ), dist )
@@ -10125,9 +10126,9 @@ function FLOS3__Act takes nothing returns nothing
         set cjlocgn_00000001 = GetUnitX( cjlocgn_00000000 )
         set cjlocgn_00000002 = GetUnitY( cjlocgn_00000000 )
         set cjlocgn_00000003 = bj_RADTODEG * Atan2( GetSpellTargetY( ) - cjlocgn_00000002, GetSpellTargetX( ) - cjlocgn_00000001 )
-        set cjlocgn_00000004 = cjlocgn_00000001 + 1000. * Cos( cjlocgn_00000003 * bj_DEGTORAD )
-        set cjlocgn_00000005 = cjlocgn_00000002 + 1000. * Sin( cjlocgn_00000003 * bj_DEGTORAD )
-        set cjlocgn_00000006 = GetHeroInt( cjlocgn_00000000, true ) * 1.5
+        set cjlocgn_00000004 = cjlocgn_00000001 + 1200. * Cos( cjlocgn_00000003 * bj_DEGTORAD )
+        set cjlocgn_00000005 = cjlocgn_00000002 + 1200. * Sin( cjlocgn_00000003 * bj_DEGTORAD )
+        set cjlocgn_00000006 = GetHeroInt( cjlocgn_00000000, true ) * 1.8
         set cjlocgn_00000007 = CreateTimer( )
         set cjlocgn_00000008 = CreateUnit( GetOwningPlayer( cjlocgn_00000000 ), 'hfoo', cjlocgn_00000001, cjlocgn_00000002, cjlocgn_00000003 )
         call TriggerSleepAction( 0.2 )
