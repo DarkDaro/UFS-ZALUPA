@@ -4303,7 +4303,7 @@ function DMKillsLib__WinPlayer takes integer pid returns nothing
     loop
         exitwhen( time <= 0. )
         call TriggerSleepAction( 1. )
-    //    call PauseGame( true )
+           call PauseGame( true )
         set time = time - ( 1.0 )
     endloop
     call EndGame( true )
@@ -6223,7 +6223,7 @@ function TDMKillsLib__WinTeam takes integer t returns nothing
     loop
         exitwhen( time <= 0. )
         call TriggerSleepAction( 1. )
-       // call PauseGame( true )
+        call PauseGame( true )
         set time = time - ( 1.0 )
     endloop
 
