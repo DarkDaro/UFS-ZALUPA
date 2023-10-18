@@ -361,3 +361,69 @@ function InitTrig_PitOfMaliceProc takes nothing returns nothing
     call TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_ATTACKED)
     call TriggerAddCondition(t, Condition(function PitOfMaliceProc))
 endfunction
+
+
+//===========================================================================
+// Moon Glaive - Пассивный навык
+//===========================================================================
+
+// Функция, которая будет вызываться при атаке героя
+function MoonGlaiveAttack takes nothing returns nothing
+    local unit attacker = GetAttacker() // Получаем атакующего героя
+    local unit target = GetTriggerUnit() // Получаем цель атаки
+    local real attackRange = GetUnitAttackRange(attacker, true) // Получаем дальность атаки героя
+    local real glaiveRange = 500.0 // Дальность полета лунного клинка
+    local real glaiveDamage = GetHeroAgi(attacker, true) // Получаем бонусный урон героя (от Agility)
+    local integer glaiveBounces = 3 // Количество отскоков лунного клинка
+
+    // Если атакующий герой является дальнобойным и цель находится в пределах дальности атаки
+    if IsUnitRanged(attacker) and IsUnitInRange(target, attacker, attackRange) then
+        local group glaiveTargets = CreateGroup() // Создаем группу для хранения целей лунного клинка
+        local unit glaiveTarget = null // Переменная для хранения текущей цели лунного клинка
+        local real glaiveAngle = 0.0 // Угол между целями лунного клинка
+
+        // Добавляем цель атаки в группу целей лунного клинка
+        call GroupAddUnit(glaiveTargets, target)
+
+        // Проходим по всем целям лунного клинка
+        loop
+            // Получаем текущую цель лунного клинка
+            set glaiveTarget = FirstOfGroup(glaiveTargets)
+            exitwhen glaiveTarget == null // Если больше целей нет, то выходим из цикла
+
+            // Наносим урон текущей цели лунного клинка
+            call UnitDamageTarget(
+                attacker, // Атакующий герой
+                glaiveTarget, // Цель лунного клинка
+                glaiveDamage, // Урон лунного клинка
+                ATTACK_TYPE_NORMAL, // Тип атаки - обычный
+                DAMAGE_TYPE_NORMAL, // Тип урона - обычный
+                WEAPON_TYPE_WHOKNOWS // Базовый тип оружия - WHO KNOWS
+            )
+
+            // Удаляем текущую цель лунного клинка из группы целей лунного клинка
+            call GroupRemoveUnit(glaiveTargets, glaiveTarget)
+
+            // Если остались еще цели лунного клинка и количество отскоков не достигло максимума
+            if not IsGroupEmpty(glaiveTargets) and glaiveBounces > 0 then
+                // Получаем случайную цель для следующего отскока лунного клинка
+                set glaiveTarget = FirstOfGroup(glaiveTargets)
+
+                // Вычисляем угол между текущей целью лунного клинка и атакующим героем
+                set glaiveAngle = Atan2(GetUnitY(glaiveTarget) - GetUnitY(attacker), GetUnitX(glaiveTarget) - GetUnitX(attacker))
+
+                // Создаем точку назначения для следующего отскока лунного клинка
+                set glaiveTarget = CreateUnit(GetOwningPlayer(attacker), 'h00D', GetUnitX(glaiveTarget) + glaiveRange * Cos(glaiveAngle), GetUnitY(glaiveTarget) + glaiveRange * Sin(glaiveAngle), 0.0)
+
+                // Уменьшаем количество отскоков
+                set glaiveBounces = glaiveBounces - 1
+
+                // Добавляем точку назначения в группу целей лунного клинка
+                call GroupAddUnit(glaiveTargets, glaiveTarget)
+            endif
+        endloop
+
+        // Удаляем группу целей лунного клинка
+        call DestroyGroup(glaiveTargets)
+    endif
+endfunction
