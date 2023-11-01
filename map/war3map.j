@@ -3600,8 +3600,6 @@ function SetUnitMax__I takes nothing returns nothing
 endfunction
 
 
-
-
 function StunUnitAct takes nothing returns nothing
     local timer t=GetExpiredTimer()
     local integer HID=GetHandleId(t)
@@ -3794,6 +3792,7 @@ function Set_TDM_MB_Act takes nothing returns nothing
     endif
     set team2set = FALSE
     set i = 1
+
     loop
         exitwhen( i > Online_Players )
         if GetConvertedPlayerId( s__Online_Player[i] ) < 6 then
@@ -3988,7 +3987,7 @@ endfunction
 function X__ThrowUpTwo takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local unit u = LoadUnitHandle( HT, GetHandleId( t ), X__h_2 )
-    call UnitRemoveAbility( u, 'Arav' )
+   // call UnitRemoveAbility( u, 'Arav' )
     call PauseUnit( u, FALSE )
     call IssueImmediateOrderById( u, 851972 )
     call FlushChildHashtable( HT, GetHandleId( t ) )
@@ -4013,6 +4012,8 @@ function X_ThrowUp takes unit u, real height, real time returns nothing
     local real ti = ( 1. / time ) * height * 2.
     call PauseUnit( u, TRUE )
     call UnitAddAbility( u, 'Arav' )
+    call UnitRemoveAbility( u, 'Arav' )
+
     call SetUnitFlyHeight( u, height, ti )
     call SaveReal( HT, GetHandleId( t ), X__h_1, ti )
     call SaveUnitHandle( HT, GetHandleId( t ), X__h_2, u )
@@ -4303,7 +4304,7 @@ function DMKillsLib__WinPlayer takes integer pid returns nothing
     loop
         exitwhen( time <= 0. )
         call TriggerSleepAction( 1. )
-           call PauseGame( true )
+        call PauseGame( true )
         set time = time - ( 1.0 )
     endloop
     call EndGame( true )
@@ -4382,6 +4383,7 @@ function DMKillsLib__L takes nothing returns nothing
     set DMKillsLib__Multi_Img[5] = "war3mapImported\\Multi_5.blp"
     set DMKillsLib__Multi_Img[6] = "war3mapImported\\Multi_6.blp"
 endfunction
+
 function DMKillsLib__DMKillsLib_Init takes nothing returns nothing
     local trigger Load
     set DMKillsLib_DMKills_Trg_Var = CreateTrigger( )
@@ -4599,7 +4601,6 @@ function DamageLib_AddToDamageGroup takes unit u returns nothing
         call TriggerRegisterUnitEvent( DPSLib_DPS_Trg, u, EVENT_UNIT_DAMAGED ) //дпс либа
         // оставля. в дпс либе
 
-       
         call TriggerRegisterUnitEvent( PALS7_Trg, u, EVENT_UNIT_DAMAGED )
         call TriggerRegisterUnitEvent( PALS6_Trg_Attack, u, EVENT_UNIT_DAMAGED )
         call TriggerRegisterUnitEvent( GLAS4_Trg, u, EVENT_UNIT_DAMAGED )
@@ -5171,7 +5172,6 @@ function GLAS6___Act_A takes nothing returns nothing
 
     if GetEventDamageSource() != null and dmg > 1. and IsUnitEnemy(att, GetOwningPlayer(target)) and IsUnitType(target, UNIT_TYPE_MAGIC_IMMUNE) == false then
 
-
         if dmg > 0 and LoadBoolean( HT, GetHandleId( att ), StringHash( "i_hate_rewenger" ) ) then
 
             call DisableTrigger( GetTriggeringTrigger( ) )
@@ -5187,8 +5187,6 @@ function GLAS6___Act_A takes nothing returns nothing
     set att = null
     set target = null
 endfunction
-
-
 
 
 function GLAS6___Off takes nothing returns nothing
@@ -12937,7 +12935,7 @@ function main takes nothing returns nothing
 endfunction
 
 function config takes nothing returns nothing
-    call SetMapName( "|cFF404040UFS Arena v1.1|r" )
+    call SetMapName( "|cFF404040UFS Arena v1.4|r" )
     call SetMapDescription( "UFS Arena" )
     call SetPlayers(10)
     call SetTeams(10)
