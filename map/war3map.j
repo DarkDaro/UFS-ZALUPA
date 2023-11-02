@@ -7096,12 +7096,11 @@ function DRASp1Lib__DRASp1_Act takes nothing returns nothing
         set damage = GetHeroInt( caster, TRUE ) * 1.8
         set j = LoadInteger( HT, GetHandleId( caster ), StringHash( "H_DRAS1_lol" ) )
         set DRASp1Lib__ch_p = GetOwningPlayer( caster )
-      //  call TriggerSleepAction( 0.3 )
         call SetUnitAnimation( caster, "throw" )
         set g = CreateGroup()
         call GroupEnumUnitsInRange( g, x, y, 700., Condition( function DRASp1Lib__Cond1 ) )
        // set FoG = FirstOfGroup( g ) Не работает
-      
+    
         //
         loop
             set FoG = FirstOfGroup( g )
@@ -7150,7 +7149,6 @@ function DRASp1Lib__DRASp1Lib_Init takes nothing returns nothing
     set DRASp1_Trg = null
     set DRASp1_Death = null
 endfunction
-
 
 function DRASp3Lib_preload takes nothing returns nothing
     call X_PreloadAbility( 'A00M' )
@@ -7435,7 +7433,7 @@ function DRASp5Lib__Proj takes nothing returns nothing
 
         call SetUnitX( FoG, GetUnitX( FoG ) + 18. * Cos( Atan2( tY - GetUnitY( FoG ), tX - GetUnitX( FoG ) ) ) )
         call SetUnitY( FoG, GetUnitY( FoG ) + 18. * Sin( Atan2( tY - GetUnitY( FoG ), tX - GetUnitX( FoG ) ) ) )
-     //   call IssueImmediateOrderById( FoG, 851972 )
+        call IssueImmediateOrderById( FoG, 851972 )
         call SaveReal( HT, GetHandleId( t ), StringHash( "H_5" ), ti + 0.04 )
     else
         call FlushChildHashtable( HT, GetHandleId( t ) )
