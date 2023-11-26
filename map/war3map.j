@@ -2654,6 +2654,9 @@ function InitializationLib__InitializationLib_In takes nothing returns nothing
         set p = Player( i )
         if GetPlayerSlotState( p ) == PLAYER_SLOT_STATE_PLAYING then
             //Добавил блок условие на хоста!!!
+            set Online_Players = Online_Players + 1
+            set s__Online_Player[Online_Players] = p
+            //ПОДНЯЛ ПОД УСЛОВИЕ
             if GetPlayerSlotState( p ) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController( p ) == MAP_CONTROL_USER then
                 if Host_Player == null then
                     set Host_Player = p
@@ -2674,8 +2677,7 @@ function InitializationLib__InitializationLib_In takes nothing returns nothing
                 endif
             endif
 
-            set Online_Players = Online_Players + 1
-            set s__Online_Player[Online_Players] = p
+           
             //отнимать игроков при ливе кто будет?Смещать плеера онлайн плеер?
             call CreateUnit( p, 'h002', 818., 1321., 0. )
             call SetPlayerAbilityAvailable( p, 'A01L', FALSE )
@@ -2877,9 +2879,11 @@ function LeaveLib__Act takes nothing returns nothing
     call ClearTextMessages( )
     call DisplayTextToForce( bj_FORCE_ALL_PLAYERS, "|cFFFF0000Игрок|r " + s__Color_Hex[i] + GetPlayerName( p ) + "|r |cFFFF0000покинул игру!!!|r" )
     call StartSound( gg_snd_LeaveSound )
+
      if s__Hero[GetConvertedPlayerId( p )] != null then
-        call RemoveUnit(s__Hero[GetConvertedPlayerId( p )])
+    
         call DropItemLiver(s__Hero[GetConvertedPlayerId( p )])
+        call RemoveUnit(s__Hero[GetConvertedPlayerId( p )])
         set s__Hero[GetConvertedPlayerId( p )] = null
     endif
  
@@ -3966,8 +3970,8 @@ function X__RemoveEffect takes nothing returns nothing
     set e = null
 endfunction
 
-function X_AddTimedEff takes string l__gg_snd_DEA_horn, real x, real y, real time returns nothing
-    local effect e = AddSpecialEffect( l__gg_snd_DEA_horn, x, y )
+function X_AddTimedEff takes string sfx, real x, real y, real time returns nothing
+    local effect e = AddSpecialEffect( sfx, x, y )
     local timer t = CreateTimer( )
     call SaveEffectHandle( HT, GetHandleId( t ), StringHash( "EF" ), e )
     call TimerStart( t, time, false, function X__RemoveEffect )
@@ -4013,7 +4017,7 @@ function X_ThrowUp takes unit u, real height, real time returns nothing
     call PauseUnit( u, TRUE )
     call UnitAddAbility( u, 'Arav' )
     call UnitRemoveAbility( u, 'Arav' )
-
+    //МОЖНО СРАЗУ ДОБАВИТЬ И УДАЛИТЬ ВОРОНА
     call SetUnitFlyHeight( u, height, ti )
     call SaveReal( HT, GetHandleId( t ), X__h_1, ti )
     call SaveUnitHandle( HT, GetHandleId( t ), X__h_2, u )
@@ -10352,12 +10356,14 @@ function StartGameLib__ReallyStart takes nothing returns nothing
     set TimeLib_CD_Time = FALSE
     set TimeLib_GO_Time = TRUE
     set GoldLib_enabled = TRUE
+    
     call ResumeMusic( )
     call PlayMusic( "UFSbGmQVULSzqPCRbdetPuuCorebGmQVULSzqPCRbdetPuuMusicbGmQVULSzqPCRbdetPuuMusic1.mp3" )
     if Choosed_Creeps then
         call CreepsLib_Creeps_Act( )
         call EnableTrigger( Creeps_Creating_Trg )
     endif
+
     set RunesLib_RunesOn = Choosed_Runes
     set t = CreateTimer( )
     call TimerStart( t, 2., TRUE, function AI_A_Do )
@@ -12933,7 +12939,7 @@ function main takes nothing returns nothing
 endfunction
 
 function config takes nothing returns nothing
-    call SetMapName( "|cFF404040UFS Arena v1.4|r" )
+    call SetMapName( "|cFF404040UFS Arena v1.4fix|r" )
     call SetMapDescription( "UFS Arena" )
     call SetPlayers(10)
     call SetTeams(10)
