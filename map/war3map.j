@@ -311,8 +311,8 @@ globals
     constant real FirstMultiboardLib__FullScreen_Width = 0.99
     constant integer FirstMultiboardLib__Delta_DM_Score = 5
     constant integer FirstMultiboardLib__Delta_TDM_Score = 5
-    constant integer FirstMultiboardLib__Max_DM_Score = 205
-    constant integer FirstMultiboardLib__Max_TDM_Score = 205
+    constant integer FirstMultiboardLib__Max_DM_Score = 255
+    constant integer FirstMultiboardLib__Max_TDM_Score = 255
     integer FirstMultiboardLib__DM_Winpoints = 20
     integer FirstMultiboardLib__TDM_Winpoints = 30
     boolean FirstMultiboardLib__RAID_HardMode = FALSE
@@ -10356,7 +10356,7 @@ function StartGameLib__ReallyStart takes nothing returns nothing
     set TimeLib_CD_Time = FALSE
     set TimeLib_GO_Time = TRUE
     set GoldLib_enabled = TRUE
-    
+
     call ResumeMusic( )
     call PlayMusic( "UFSbGmQVULSzqPCRbdetPuuCorebGmQVULSzqPCRbdetPuuMusicbGmQVULSzqPCRbdetPuuMusic1.mp3" )
     if Choosed_Creeps then
@@ -12380,22 +12380,26 @@ endfunction
 
 function Trig_PartyFrame_Share_Actions takes nothing returns nothing
    // call SetReservedLocalHeroButtons( 1 ) //не знаю что это такое
-
+   //добавил тут еще союзы
     call SetPlayerAllianceBJ( Player( 0 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 1 ) )
     call SetPlayerAllianceBJ( Player( 0 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 2 ) )
     call SetPlayerAllianceBJ( Player( 0 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 3 ) )
+    call SetPlayerAllianceBJ( Player( 0 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 4 ) )
 
     call SetPlayerAllianceBJ( Player( 1 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 0 ) )
     call SetPlayerAllianceBJ( Player( 1 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 2 ) )
     call SetPlayerAllianceBJ( Player( 1 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 3 ) )
+    call SetPlayerAllianceBJ( Player( 1 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 4 ) )
 
     call SetPlayerAllianceBJ( Player( 2 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 0 ) )
     call SetPlayerAllianceBJ( Player( 2 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 1 ) )
     call SetPlayerAllianceBJ( Player( 2 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 3 ) )
+    call SetPlayerAllianceBJ( Player( 2 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 4 ) )
 
     call SetPlayerAllianceBJ( Player( 3 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 0 ) )
     call SetPlayerAllianceBJ( Player( 3 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 1 ) )
     call SetPlayerAllianceBJ( Player( 3 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 2 ) )
+    call SetPlayerAllianceBJ( Player( 3 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 4 ) )
 
     call SetPlayerAllianceBJ( Player( 4 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 0 ) )
     call SetPlayerAllianceBJ( Player( 4 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 1 ) )
@@ -12406,23 +12410,32 @@ function Trig_PartyFrame_Share_Actions takes nothing returns nothing
     call SetPlayerAllianceBJ( Player( 5 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 6 ) )
     call SetPlayerAllianceBJ( Player( 5 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 7 ) )
     call SetPlayerAllianceBJ( Player( 5 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 8 ) )
+    call SetPlayerAllianceBJ( Player( 5 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 9 ) )
+
 
     call SetPlayerAllianceBJ( Player( 6 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 5 ) )
     call SetPlayerAllianceBJ( Player( 6 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 7 ) )
     call SetPlayerAllianceBJ( Player( 6 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 8 ) )
+    call SetPlayerAllianceBJ( Player( 6 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 9 ) )
+
 
     call SetPlayerAllianceBJ( Player( 7 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 5 ) )
     call SetPlayerAllianceBJ( Player( 7 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 6 ) )
     call SetPlayerAllianceBJ( Player( 7 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 8 ) )
+    call SetPlayerAllianceBJ( Player( 7 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 9 ) )
+
 
     call SetPlayerAllianceBJ( Player( 8 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 5 ) )
     call SetPlayerAllianceBJ( Player( 8 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 6 ) )
     call SetPlayerAllianceBJ( Player( 8 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 7 ) )
+    call SetPlayerAllianceBJ( Player( 8 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 9 ) )
+
 
     call SetPlayerAllianceBJ( Player( 9 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 5 ) )
     call SetPlayerAllianceBJ( Player( 9 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 6 ) )
     call SetPlayerAllianceBJ( Player( 9 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 7 ) )
     call SetPlayerAllianceBJ( Player( 9 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 8 ) )
+
 endfunction
 
 function InitTrig_PartyFrame_Share takes nothing returns nothing
