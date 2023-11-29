@@ -9851,6 +9851,7 @@ function TKLS3___onTimer takes nothing returns nothing
         endif
        
 
+        
     else
 
         if TKLS3___slowness[id] > 0 then
@@ -12642,42 +12643,52 @@ function InitCustomTeams takes nothing returns nothing
     call SetPlayerAllianceStateAllyBJ(Player(0), Player(2), true)
     call SetPlayerAllianceStateAllyBJ(Player(0), Player(3), true)
     call SetPlayerAllianceStateAllyBJ(Player(0), Player(4), true)
+
     call SetPlayerAllianceStateAllyBJ(Player(1), Player(0), true)
     call SetPlayerAllianceStateAllyBJ(Player(1), Player(2), true)
     call SetPlayerAllianceStateAllyBJ(Player(1), Player(3), true)
     call SetPlayerAllianceStateAllyBJ(Player(1), Player(4), true)
+
     call SetPlayerAllianceStateAllyBJ(Player(2), Player(0), true)
     call SetPlayerAllianceStateAllyBJ(Player(2), Player(1), true)
     call SetPlayerAllianceStateAllyBJ(Player(2), Player(3), true)
     call SetPlayerAllianceStateAllyBJ(Player(2), Player(4), true)
+
     call SetPlayerAllianceStateAllyBJ(Player(3), Player(0), true)
     call SetPlayerAllianceStateAllyBJ(Player(3), Player(1), true)
     call SetPlayerAllianceStateAllyBJ(Player(3), Player(2), true)
     call SetPlayerAllianceStateAllyBJ(Player(3), Player(4), true)
+
     call SetPlayerAllianceStateAllyBJ(Player(4), Player(0), true)
     call SetPlayerAllianceStateAllyBJ(Player(4), Player(1), true)
     call SetPlayerAllianceStateAllyBJ(Player(4), Player(2), true)
     call SetPlayerAllianceStateAllyBJ(Player(4), Player(3), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(0), Player(1), true)
     call SetPlayerAllianceStateVisionBJ(Player(0), Player(2), true)
     call SetPlayerAllianceStateVisionBJ(Player(0), Player(3), true)
     call SetPlayerAllianceStateVisionBJ(Player(0), Player(4), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(1), Player(0), true)
     call SetPlayerAllianceStateVisionBJ(Player(1), Player(2), true)
     call SetPlayerAllianceStateVisionBJ(Player(1), Player(3), true)
     call SetPlayerAllianceStateVisionBJ(Player(1), Player(4), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(2), Player(0), true)
     call SetPlayerAllianceStateVisionBJ(Player(2), Player(1), true)
     call SetPlayerAllianceStateVisionBJ(Player(2), Player(3), true)
     call SetPlayerAllianceStateVisionBJ(Player(2), Player(4), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(3), Player(0), true)
     call SetPlayerAllianceStateVisionBJ(Player(3), Player(1), true)
     call SetPlayerAllianceStateVisionBJ(Player(3), Player(2), true)
     call SetPlayerAllianceStateVisionBJ(Player(3), Player(4), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(4), Player(0), true)
     call SetPlayerAllianceStateVisionBJ(Player(4), Player(1), true)
     call SetPlayerAllianceStateVisionBJ(Player(4), Player(2), true)
     call SetPlayerAllianceStateVisionBJ(Player(4), Player(3), true)
+
     call SetPlayerTeam(Player(5), 1)
     call SetPlayerState(Player(5), PLAYER_STATE_ALLIED_VICTORY, 1)
     call SetPlayerTeam(Player(6), 1)
@@ -12688,42 +12699,52 @@ function InitCustomTeams takes nothing returns nothing
     call SetPlayerState(Player(8), PLAYER_STATE_ALLIED_VICTORY, 1)
     call SetPlayerTeam(Player(9), 1)
     call SetPlayerState(Player(9), PLAYER_STATE_ALLIED_VICTORY, 1)
+
     call SetPlayerAllianceStateAllyBJ(Player(5), Player(6), true)
     call SetPlayerAllianceStateAllyBJ(Player(5), Player(7), true)
     call SetPlayerAllianceStateAllyBJ(Player(5), Player(8), true)
     call SetPlayerAllianceStateAllyBJ(Player(5), Player(9), true)
+
     call SetPlayerAllianceStateAllyBJ(Player(6), Player(5), true)
     call SetPlayerAllianceStateAllyBJ(Player(6), Player(7), true)
     call SetPlayerAllianceStateAllyBJ(Player(6), Player(8), true)
     call SetPlayerAllianceStateAllyBJ(Player(6), Player(9), true)
+
     call SetPlayerAllianceStateAllyBJ(Player(7), Player(5), true)
     call SetPlayerAllianceStateAllyBJ(Player(7), Player(6), true)
     call SetPlayerAllianceStateAllyBJ(Player(7), Player(8), true)
     call SetPlayerAllianceStateAllyBJ(Player(7), Player(9), true)
+
     call SetPlayerAllianceStateAllyBJ(Player(8), Player(5), true)
     call SetPlayerAllianceStateAllyBJ(Player(8), Player(6), true)
     call SetPlayerAllianceStateAllyBJ(Player(8), Player(7), true)
     call SetPlayerAllianceStateAllyBJ(Player(8), Player(9), true)
+
     call SetPlayerAllianceStateAllyBJ(Player(9), Player(5), true)
     call SetPlayerAllianceStateAllyBJ(Player(9), Player(6), true)
     call SetPlayerAllianceStateAllyBJ(Player(9), Player(7), true)
     call SetPlayerAllianceStateAllyBJ(Player(9), Player(8), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(5), Player(6), true)
     call SetPlayerAllianceStateVisionBJ(Player(5), Player(7), true)
     call SetPlayerAllianceStateVisionBJ(Player(5), Player(8), true)
     call SetPlayerAllianceStateVisionBJ(Player(5), Player(9), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(6), Player(5), true)
     call SetPlayerAllianceStateVisionBJ(Player(6), Player(7), true)
     call SetPlayerAllianceStateVisionBJ(Player(6), Player(8), true)
     call SetPlayerAllianceStateVisionBJ(Player(6), Player(9), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(7), Player(5), true)
     call SetPlayerAllianceStateVisionBJ(Player(7), Player(6), true)
     call SetPlayerAllianceStateVisionBJ(Player(7), Player(8), true)
     call SetPlayerAllianceStateVisionBJ(Player(7), Player(9), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(8), Player(5), true)
     call SetPlayerAllianceStateVisionBJ(Player(8), Player(6), true)
     call SetPlayerAllianceStateVisionBJ(Player(8), Player(7), true)
     call SetPlayerAllianceStateVisionBJ(Player(8), Player(9), true)
+
     call SetPlayerAllianceStateVisionBJ(Player(9), Player(5), true)
     call SetPlayerAllianceStateVisionBJ(Player(9), Player(6), true)
     call SetPlayerAllianceStateVisionBJ(Player(9), Player(7), true)
@@ -12870,7 +12891,7 @@ function main takes nothing returns nothing
     call ExecuteFunc( "PALS7__I" )
     call ExecuteFunc( "PingLib__PingLib_Init" )
     call ExecuteFunc( "REAS4___I" )
-    call ExecuteFunc( "REAS6___I" ) //скороть татки рипер
+    call ExecuteFunc( "REAS6___I" ) //скороть атаки рипер
     call ExecuteFunc( "RunesLib__RunesLib_Init" )
     call ExecuteFunc( "SHAS3A___I" )
     call ExecuteFunc( "SetUnitMax__I" )
