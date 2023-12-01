@@ -2396,13 +2396,13 @@ function EscShops__init takes nothing returns nothing
     local integer i = 0
     local player p = null
     loop
-        exitwhen( i == 12 )
+        exitwhen( i > 12 )
         set p = Player( i )
         call TriggerRegisterPlayerEvent( EscShops_Trg, p, EVENT_PLAYER_END_CINEMATIC )
         set i = i + 1
     endloop
     call TriggerAddAction( EscShops_Trg, function EscShops__Act )
-    call DisableTrigger( EscShops_Trg )
+    //call DisableTrigger( EscShops_Trg )
     set EscShops__Shop = gg_unit_edos_0053
 endfunction
 
@@ -2530,11 +2530,11 @@ function GLAS4__AttackAct takes nothing returns nothing
     local unit target = GetTriggerUnit( )
     local integer chance = GetRandomInt( 1, 100 )
     local real damage = GetEventDamage( )
-
+    call DisableTrigger( GetTriggeringTrigger( ) )
    
     if GetEventDamageSource() != null and damage > 1. and IsUnitEnemy(att, GetOwningPlayer(target)) and IsUnitType(target, UNIT_TYPE_MAGIC_IMMUNE) == false then
     
-        call DisableTrigger( GetTriggeringTrigger( ) )
+      
     //добавлено условие на 200 дистанции ,чтоб не было бесконечный стак
         if GetEventDamage( ) > 0 and GetUnitAbilityLevel( att, 'A029' ) > 0 and SquareRoot( ( GetUnitX( att ) - GetUnitX( target ) ) * ( GetUnitX( att ) - GetUnitX( target ) ) + ( GetUnitY( att ) - GetUnitY( target ) ) * ( GetUnitY( att ) - GetUnitY( target ) ) ) <= 200. then
   
@@ -2577,7 +2577,7 @@ function GoldLib__GoldLib_Init takes nothing returns nothing
     local integer i = 0
     call TriggerRegisterTimerEvent( Gold_Trg, 1, true )
     call TriggerAddAction( Gold_Trg, function GoldLib__Gold_Act )
-    call TriggerSleepAction( 0.01 )
+  //  call TriggerSleepAction( 0.01 )
     loop
         exitwhen i > 10
         call SetPlayerState( Player( i ), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState( Player( i ), PLAYER_STATE_RESOURCE_GOLD ) + R2I( 500. ) )
@@ -2623,6 +2623,7 @@ endfunction
 function InitializationLib__L takes nothing returns nothing
     local unit d
     call StartSound( gg_snd_startstart )
+    call StopMusic( FALSE )
     set s__Circle[1] = gg_unit_ncp2_0008
     set s__Circle[2] = gg_unit_ncp2_0009
     set s__Circle[3] = gg_unit_ncp2_0010
@@ -2635,7 +2636,7 @@ function InitializationLib__L takes nothing returns nothing
     set s__Circle[10] = gg_unit_ncp2_0017
     set s__Team_Name[1] = "Команда #1"
     set s__Team_Name[2] = "Команда #2"
-    call StopMusic( FALSE )
+  
     set d = CreateUnit( Player( 13 ), 'hfoo', 0., 0., 0. ) //пехотинец без москитов
     call UnitAddAbility( d, 'A006' )
     call UnitAddAbility( d, 'Arav' )
@@ -2689,7 +2690,8 @@ function InitializationLib__InitializationLib_In takes nothing returns nothing
         set i = i + 1
     endloop
   //отключил
-    //call SetPlayerState( Player( 10 ), PLAYER_STATE_GIVES_BOUNTY, 1 ) //что за игрок?
+    call SetPlayerState( Player( 10 ), PLAYER_STATE_GIVES_BOUNTY, 1 ) //что за игрок?
+
     set Load = CreateTrigger( )
     call TriggerRegisterTimerEvent( Load, 0.01, FALSE )
     call TriggerAddAction( Load, function InitializationLib__L )
@@ -2736,13 +2738,13 @@ function ItemsLib__DropItems takes nothing returns nothing
     local unit u = GetTriggerUnit( )
     local item cjlocgn_00000000
     local item cjlocgn_00000001
-    local integer cjlocgn_00000002
-    local integer cjlocgn_00000003
-    local integer cjlocgn_00000004
-    local real cjlocgn_00000005
-    local real cjlocgn_00000006
+    local integer cjlocgn_00000002 =0
+    local integer cjlocgn_00000003=0
+    local integer cjlocgn_00000004=0
+    local real cjlocgn_00000005=0.
+    local real cjlocgn_00000006=0.
     local player cjlocgn_00000007
-    local integer cjlocgn_00000008
+    local integer cjlocgn_00000008=0
     if IsUnitIllusion( u ) == FALSE then
         set cjlocgn_00000000 = GetManipulatedItem( )
         set cjlocgn_00000001 = null
@@ -2876,7 +2878,7 @@ function LeaveLib__Act takes nothing returns nothing
         endloop
     endif
 
-    call ClearTextMessages( )
+   // call ClearTextMessages( )
     call DisplayTextToForce( bj_FORCE_ALL_PLAYERS, "|cFFFF0000Игрок|r " + s__Color_Hex[i] + GetPlayerName( p ) + "|r |cFFFF0000покинул игру!!!|r" )
     call StartSound( gg_snd_LeaveSound )
 
