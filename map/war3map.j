@@ -294,7 +294,7 @@ globals
     constant real TKLS4___dist = 200.
     trigger TKLS4_Trg = CreateTrigger( )
     constant integer TKLS5___ab_id = 'A03Y'
-    constant real TKLS5___percent_int = 1.2
+    constant real TKLS5___percent_int = 1.4
     constant real TKLS5___stun_time = 2.0
     constant real TKLS5___radius = 300.
     constant integer TKLS5___slowing = 8
@@ -4556,9 +4556,9 @@ function DamageLib__NoExplode takes nothing returns nothing
     if u != null then
         call SetUnitExploded( u, FALSE )
         call SaveBoolean( HT, GetHandleId( u ), StringHash( "H_explodeB" ), FALSE )
-        call DisplayTextToForce( GetPlayersAll( ), GetUnitName( u ) + "_explode_false" )
+      //  call DisplayTextToForce( GetPlayersAll( ), GetUnitName( u ) + "_explode_false" )
     else
-        call DisplayTextToForce( GetPlayersAll( ), GetUnitName( u ) + "_explode_Null" )
+        //call DisplayTextToForce( GetPlayersAll( ), GetUnitName( u ) + "_explode_Null" )
     endif
     call FlushChildHashtable( HT, GetHandleId( t ) )
     call PauseTimer( t )
@@ -6882,7 +6882,7 @@ function CreepsLib__CreepDrop takes real x, real y returns nothing
     endif
     if id != 0 then
         set it = CreateItem( id, x, y )
-        call ItemDestroy(it,120.) // время жизни выпадющих предметов
+        call ItemDestroy(it,180.) // время жизни выпадющих предметов
         set it = null
     endif
     set it = null
@@ -8913,9 +8913,10 @@ function PALS3__Act takes nothing returns nothing
             set cjlocgn_00000006 = FirstOfGroup( cjlocgn_00000005 )
             exitwhen( cjlocgn_00000006 == null )
             call IssueTargetOrderById( cjlocgn_00000009, 852075, cjlocgn_00000006 )
-          //  call TriggerSleepAction( 0.01 )
+            
             call GroupRemoveUnit( cjlocgn_00000005, cjlocgn_00000006 )
         endloop
+        call TriggerSleepAction( 0.1 )
         call RemoveUnit( cjlocgn_00000009 )
         call GroupClear( cjlocgn_00000005 )
         call DestroyGroup( cjlocgn_00000005 )
