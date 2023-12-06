@@ -8907,13 +8907,14 @@ function PALS3__Act takes nothing returns nothing
         endloop
         call GroupClear( cjlocgn_00000005 )
         call GroupEnumUnitsInRange( cjlocgn_00000005, cjlocgn_00000001, cjlocgn_00000002, 300., Condition( function PALS3__Cond1 ) )
-        set cjlocgn_00000009 = CreateUnit( GetOwningPlayer( cjlocgn_00000000 ), 'hfoo', cjlocgn_00000001, cjlocgn_00000002, 0. )
-        call UnitAddAbility( cjlocgn_00000009, 'A006' ) //замедление дааммик
+        
         loop
             set cjlocgn_00000006 = FirstOfGroup( cjlocgn_00000005 )
             exitwhen( cjlocgn_00000006 == null )
+            set cjlocgn_00000009 = CreateUnit( GetOwningPlayer( cjlocgn_00000000 ), 'hfoo', cjlocgn_00000001, cjlocgn_00000002, 0. )
+            call UnitAddAbility( cjlocgn_00000009, 'A006' ) //замедление дааммик
+            call X_ApplyLife( cjlocgn_00000009 )
             call IssueTargetOrderById( cjlocgn_00000009, 852075, cjlocgn_00000006 )
-            
             call GroupRemoveUnit( cjlocgn_00000005, cjlocgn_00000006 )
         endloop
         call TriggerSleepAction( 0.1 )
