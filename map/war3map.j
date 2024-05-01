@@ -199,6 +199,7 @@ globals
     constant integer TKLS6___e_abil_id = 'A03N'
     constant integer TKLS6___p_abil_id = 'A03P'
     constant integer TKLS6___h_cst = StringHash( "h_cst" )
+    
     weathereffect TKLS6___we = null
     rect TKLS6___r = null
     boolean TKLS6_metel = FALSE
@@ -582,9 +583,6 @@ function cjLibw560nbs9b8nse46703948__init takes nothing returns nothing
     set cj_true_bool_4896bnao87 = Condition( function cj_true_a497bnsor7 )
 endfunction
 
-
-
-
 function IsUnitInvul takes unit u returns boolean
     return LoadBoolean( HT, GetHandleId( u ), StringHash( "Has_Invul" ) )
 endfunction
@@ -675,7 +673,6 @@ function InitTrig_AddToGroupDamage takes nothing returns nothing
     call TimerStart(CreateTimer(), 1, false, function AddToGroupDamage_Start)
 endfunction
 
-
 function SimError takes player ForPlayer, string msg returns nothing
     if ( GetLocalPlayer( ) == ForPlayer ) then
         call ClearTextMessages( )
@@ -683,7 +680,6 @@ function SimError takes player ForPlayer, string msg returns nothing
         call StartSound( snd_Error )
     endif
 endfunction
-
 
 function DropItemLiver takes unit a returns nothing
     local integer i = 0
@@ -713,11 +709,10 @@ function ItemDestroyUpdate takes nothing returns nothing
     local item it = LoadItemHandle( HT, id, 0 )
     local real time = LoadReal( HT, id, 1 )
    
-    if time > 0 and IsItemOwned( it ) == false and GetWidgetLife( it ) > 0 then
+    if time > 0.0 and IsItemOwned( it ) == false and GetWidgetLife( it ) > 0 then
 
     //поменял сохрание внутрь условия
-    set time = time - 1.0
-    call SaveReal( HT, id, 1, time )
+    call SaveReal( HT, id, 1, time - 1.0 )
     // call DisplayTextToForce( GetPlayersAll( ), GetItemName(it) + " время жизни_"  + R2S(time) )
 
     else
@@ -730,10 +725,7 @@ function ItemDestroyUpdate takes nothing returns nothing
             call PauseTimer( t )
             call DestroyTimer( t )
         endif
-
-    
     endif
-
 
     if IsItemOwned( it ) == true then
       //  call DisplayTextToForce( GetPlayersAll( ), GetItemName(it) + " подобран" )
@@ -811,7 +803,6 @@ function RemoveUnitPerTimer takes unit u, real time returns nothing
     set u = null
 endfunction
 
-
 function Dist takes real x, real y, real x1, real y1 returns real
     return SquareRoot( ( x - x1 ) * ( x - x1 ) + ( y - y1 ) * ( y - y1 ) )
 endfunction
@@ -838,7 +829,7 @@ function LightningUnit_Move takes nothing returns nothing
     local real x2 = GetUnitX( target )
     local real y2 = GetUnitY( target )
     local real z2 = GetUnitFlyHeight( target ) + 60 //FuncLocationZ( x2, y2 ) //
-    if Time <= 0 or caster == null or target == null or GetUnitState( caster, UNIT_STATE_LIFE ) <= 0.405 or GetUnitState(target, UNIT_STATE_LIFE ) <= 0.405 or Dist( x1 , y1 , x2 , y2 ) >= maxdist then
+    if Time <= 0.0 or caster == null or target == null or GetUnitState( caster, UNIT_STATE_LIFE ) <= 0.405 or GetUnitState(target, UNIT_STATE_LIFE ) <= 0.405 or Dist( x1 , y1 , x2 , y2 ) >= maxdist then
         call DestroyLightning( Light )
         call FlushChildHashtable( HT, i )
         call PauseTimer( t )
@@ -882,7 +873,6 @@ function LightningUnit takes unit caster, unit target, string lightningtype, rea
     set target = null
     set Light = null
 endfunction
-
 
 function LightningRemove takes nothing returns nothing
     local timer t = GetExpiredTimer()
@@ -970,7 +960,7 @@ endfunction
 function InitTrig_DeleteRune takes nothing returns nothing
     local trigger trg = CreateTrigger()
     call TriggerRegisterAnyUnitEventBJ(trg, EVENT_PLAYER_UNIT_PICKUP_ITEM )
-//    call TriggerAddCondition(trg, Condition( function Trig_DeleteRune_Conditions ) )
+//  call TriggerAddCondition(trg, Condition( function Trig_DeleteRune_Conditions ) )
     call TriggerAddAction(trg, function Trig_DeleteRune_Actions )
     set trg = null
 endfunction
@@ -984,7 +974,6 @@ function AAK__Act2 takes nothing returns nothing
             call IssueImmediateOrderById( cjlocgn_00000000, 851972 )
           //  call DisplayTextToForce( GetPlayersAll( ), "стоп приказа атаки" )
         endif
- 
     endif
     set cjlocgn_00000000 = null
     set cjlocgn_00000001 = null
@@ -1057,11 +1046,9 @@ function Get_Target_Unit takes unit u, real x, real y returns unit
     return ut_creep
 endfunction
 
-
 function IsGroupEmpty takes group g returns boolean
     return FirstOfGroup(g) == null
 endfunction
-
 
 function AI__FilterHeroAndEnemy takes nothing returns boolean
     local unit u = GetFilterUnit( )
@@ -1143,9 +1130,6 @@ function AI__A_Buy takes nothing returns nothing
     endloop
     set u = null
 endfunction
-//LOWS FUNC
-
-
 
 function AI__A_Death takes nothing returns nothing
     local unit u = GetTriggerUnit( )
@@ -1464,11 +1448,9 @@ function AI_A_Spam takes nothing returns nothing
     loop
         exitwhen( j > 10 )
        // set p = s__Online_Player[i]
-
         set p = Player(j - 1)
         set id = GetPlayerId(p) + 1
       
-
        // call DisplayTextToForce( GetPlayersAll( ),GetPlayerName( p) +  "_игрок в цикле_spam" + I2S(j) )
 
         if GetPlayerController( p ) == MAP_CONTROL_COMPUTER and GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING then
@@ -1558,7 +1540,6 @@ function AI_A_Do takes nothing returns nothing
     local real c_x
     local real c_y
     local unit t_unit
-   // local real min_hp = 10000000.
     local real min_hp = 999999.0
     local integer a = 0
     local rect r = null
@@ -1567,7 +1548,6 @@ function AI_A_Do takes nothing returns nothing
     local real t_t = 0.
     local timer t
     local integer j = 1
-
     local unit f
     local group g
     local group gRR = CreateGroup()
@@ -1615,6 +1595,7 @@ function AI_A_Do takes nothing returns nothing
                         endif
                         call GroupRemoveUnit(g, f)
                     endloop
+
                     call DestroyGroup(g)
 
                     if not IsGroupEmpty(gRR) then
@@ -1754,11 +1735,11 @@ function AI_A_Do takes nothing returns nothing
 
 
                             if TimerGetRemaining( s__AI__Move_Timer[id] ) == 0.then
-                         //  call SaveUnitHandle( HT, GetHandleId( u ), StringHash( "H_TARGET" ), null ) //добавил нулл ОНО тут было???
+                         //     call SaveUnitHandle( HT, GetHandleId( u ), StringHash( "H_TARGET" ), null ) //добавил нулл ОНО тут было???
 
-                             //   call DisplayTextToForce( GetPlayersAll( ), "Бродить 2_" + GetUnitName(u) )
-                         //   call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + "мы помним цель хеш" + GetUnitName(LoadUnitHandle( HT, GetHandleId( u ), StringHash( "H_TARGET" )) ) )
-                           // call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + "мы помним цель2" + GetUnitName(t_unit ) )
+                        //call  DisplayTextToForce( GetPlayersAll( ), "Бродить 2_" + GetUnitName(u) )
+                         //     call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + "мы помним цель хеш" + GetUnitName(LoadUnitHandle( HT, GetHandleId( u ), StringHash( "H_TARGET" )) ) )
+                           //   call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + "мы помним цель2" + GetUnitName(t_unit ) )
 
                                 set x = GetRandomReal( GetRectMinX( bj_mapInitialPlayableArea ), GetRectMaxX( bj_mapInitialPlayableArea ) )
                                 set y = GetRandomReal( GetRectMinY( bj_mapInitialPlayableArea ), GetRectMaxY( bj_mapInitialPlayableArea ) )
@@ -1798,11 +1779,9 @@ function AI_A_Do takes nothing returns nothing
     set t_unit = null
 endfunction
 
-
 function Ai_wait takes nothing returns nothing
     call TimerStart(CreateTimer(), 5., TRUE, function AI__A_Buy )
 endfunction
-
 
 function AI__I takes nothing returns nothing
     local timer t = CreateTimer( )
@@ -5855,7 +5834,6 @@ function REAS2___RemBonus takes nothing returns nothing
     set u = null
 endfunction
 
-
 function REAS2___Act takes nothing returns nothing
     local unit caster
     local integer strcst
@@ -5935,7 +5913,6 @@ function REAS3___Cond1 takes nothing returns boolean
     set u = null
     return b
 endfunction
-
 
 function REAS3___CheckMagRes takes nothing returns nothing
     local timer t = GetExpiredTimer( )
