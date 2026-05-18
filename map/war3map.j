@@ -584,10 +584,10 @@ function cjLibw560nbs9b8nse46703948__init takes nothing returns nothing
 endfunction
 
 
-
-//Изменения , воскрешение героев 2 до 3 сек. грозовой щит ульт, исправлен плав текст. Плав текст урона.лечения. крит. доработаны. лпав тест от ищадья показывается если юнит видим
+//Изменения , воскрешение героев время увеличено 2 до 3 сек. грозовой щит ульт, исправлен плав текст. Плав текст урона.лечения. крит. доработаны. Текст от ищадья тьмы, при похищении разума показывается если юнит видим
 //паладин мощь вернул на 2 ед с 1 ед силы
 //исщадье тьмы -2 разума текст фик. и повышение хп от крипов фикс текст
+
 function IsUnitInvul takes unit u returns boolean
     return LoadBoolean( HT, GetHandleId( u ), StringHash( "Has_Invul" ) ) or GetUnitAbilityLevel( u, 'Avul' ) > 0
 endfunction
@@ -727,7 +727,7 @@ function ItemDestroyUpdateNew takes nothing returns nothing
             call SaveReal(HT, id, 1, time - 1.0)
         else
             // Удаляем предмет, если его никто не поднял в течение заданного времени
-            call DisplayTextToForce(GetPlayersAll(), "|cffff0000Предмет удален:|r " + GetItemName(it))
+           // call DisplayTextToForce(GetPlayersAll(), "|cffff0000Предмет удален:|r " + GetItemName(it))
             call SetWidgetLife(it, 1.0) // защита от багов на разрушение
             call RemoveItem(it)
             call FlushChildHashtable(HT, id)
