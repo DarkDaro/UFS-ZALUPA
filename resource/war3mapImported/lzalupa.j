@@ -64,7 +64,6 @@ function InitTrig_ItemFireCloak takes nothing returns nothing
 endfunction
 
 
-
 function Spell_ImpaleJumper_D2 takes nothing returns nothing
   local timer t = GetExpiredTimer()
   local real x1 = LoadReal(udg_HashS,GetHandleId(t),10)
@@ -659,3 +658,234 @@ function InitTrig_AI takes nothing returns nothing
 endfunction
 
 
+
+//Общий блок условий ледяный мечи
+if IsPassOff( caster ) == false and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+
+  if ThisHeroHaveItem( caster, 'I02T' ) == then //ледянйо меч 1
+      if IsUnitIllusion( caster ) == true then
+          
+          if Random <= ChanseLucky(caster , 10 / 2) and not IsPassItemCooldown( caster, 'I02T' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 1, "frostnova")
+              call SetPassItemCooldown(caster, 'I02T' , 0.34)
+          endif
+        
+      else
+          if Random <= ChanseLucky(caster , 10) and not IsPassItemCooldown( caster, 'I02T' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 1, "frostnova")
+              call SetPassItemCooldown(caster, 'I02T' , 0.34)
+          endif
+        
+      endif
+
+  endif
+          
+    
+endif
+
+
+
+
+
+
+
+
+    // ice 1
+    if ThisHeroHaveItem( caster, 'I02T' ) == true and IsPassOff( caster ) == false  and IsUnitIllusion( caster ) == false  and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+ 
+      if Random  <= ChanseLucky(caster ,10) and not IsPassItemCooldown( caster, 'I02T' ) then
+          call CastSpellToTarget(caster, target, 'A04C', 1, "frostnova")
+          call SetPassItemCooldown(caster, 'I02T' ,0.34)
+      endif
+  
+  endif
+
+     // ice 2
+  if ThisHeroHaveItem( caster, 'I00U' ) == true and IsPassOff( caster ) == false and IsUnitIllusion( caster ) == false   and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+
+      if Random   <= ChanseLucky(caster ,15) and not IsPassItemCooldown( caster, 'I00U' )  then
+          call CastSpellToTarget(caster, target, 'A04C', 2, "frostnova")
+          call SetPassItemCooldown(caster, 'I00U' ,0.34)
+
+      endif
+  
+  endif
+  
+     // ice 3
+  if ThisHeroHaveItem( caster, 'I02U' ) == true and IsPassOff( caster ) == false and IsUnitIllusion( caster ) == false  and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+
+      if Random   <=  ChanseLucky(caster ,20) and not IsPassItemCooldown( caster, 'I02U' )  then
+          call CastSpellToTarget(caster, target, 'A04C', 3, "frostnova")
+          call SetPassItemCooldown(caster, 'I02U' ,0.34)
+
+      endif
+  
+  endif
+  
+     // ice 4
+  if ThisHeroHaveItem( caster, 'I03E' ) == true  and IsPassOff( caster ) == false and IsUnitIllusion( caster ) == false  and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+
+      if Random  <=  ChanseLucky(caster ,25) and not IsPassItemCooldown( caster, 'I03E' )  then
+          call CastSpellToTarget(caster, target, 'A04C', 4, "frostnova")
+          call SetPassItemCooldown(caster, 'I03E' ,0.34)
+      endif
+  
+  endif
+  
+     // ice 5
+  if ThisHeroHaveItem( caster, 'I03F' ) == true  and IsPassOff( caster ) == false and IsUnitIllusion( caster ) == false and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+
+      if Random   <=  ChanseLucky(caster ,30) and not IsPassItemCooldown( caster, 'I02T' )  then
+          call CastSpellToTarget(caster, target, 'A04C', 5, "frostnova")
+          call SetPassItemCooldown(caster, 'I03E' ,0.34)
+
+      endif
+  
+  endif
+  
+     // ice 6 chost
+  if ThisHeroHaveItem( caster, 'I09R' ) == true and IsPassOff( caster ) == false and IsUnitIllusion( caster ) == false and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+
+      if Random <=  ChanseLucky(caster ,35) and not IsPassItemCooldown( caster, 'I09R' )  then
+          call CastSpellToTarget(caster, target, 'A04C', 6, "frostnova")
+          call SetPassItemCooldown(caster, 'I09R' ,0.34)
+      endif
+  
+  endif
+  
+     // ice 7 frost
+  if ThisHeroHaveItem( caster, 'I03L' ) == true and IsPassOff( caster ) == false and IsUnitIllusion( caster ) == false  and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+
+      if Random <=  ChanseLucky(caster ,50) and not IsPassItemCooldown( caster, 'I03L' )  then
+          call CastSpellToTarget(caster, target, 'A04C', 7, "frostnova")
+          call SetPassItemCooldown(caster, 'I03L' ,0.34)
+      endif
+  
+  endif
+
+
+//Общий блок условий ледяный мечи
+
+if IsPassOff( caster ) == false and IsUnitType( target , UNIT_TYPE_MAGIC_IMMUNE ) == false then
+
+
+
+  if ThisHeroHaveItem( caster, 'I03L' ) then // ice 7 frost
+      if IsUnitIllusion( caster ) then
+
+          if Random <= ChanseLucky(caster , 50 / 2) and not IsPassItemCooldown( caster, 'I03L' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 7, "frostnova")
+              call SetPassItemCooldown(caster, 'I03L' , 0.34)
+          endif
+
+      else
+          if Random <= ChanseLucky(caster , 50) and not IsPassItemCooldown( caster, 'I03L' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 7, "frostnova")
+              call SetPassItemCooldown(caster, 'I03L' , 0.34)
+          endif
+
+      endif
+
+
+  elseif ThisHeroHaveItem( caster, 'I09R' ) then//ice 6 chost
+
+      if IsUnitIllusion( caster ) then
+          if Random <= ChanseLucky(caster , 35 / 2) and not IsPassItemCooldown( caster, 'I09R' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 6, "frostnova")
+              call SetPassItemCooldown(caster, 'I09R' , 0.34)
+          endif
+      else
+          if Random <= ChanseLucky(caster , 35) and not IsPassItemCooldown( caster, 'I09R' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 6, "frostnova")
+              call SetPassItemCooldown(caster, 'I09R' , 0.34)
+          endif
+
+      endif
+
+  elseif ThisHeroHaveItem( caster, 'I03F' ) then // 5
+
+      if IsUnitIllusion( caster ) then
+          if Random <= ChanseLucky(caster , 30 / 2) and not IsPassItemCooldown( caster, 'I02T' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 5, "frostnova")
+              call SetPassItemCooldown(caster, 'I03E' , 0.34)
+
+          endif
+      else
+
+          if Random <= ChanseLucky(caster , 30) and not IsPassItemCooldown( caster, 'I02T' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 5, "frostnova")
+              call SetPassItemCooldown(caster, 'I03E' , 0.34)
+
+          endif
+
+      endif
+
+  elseif ThisHeroHaveItem( caster, 'I03E' ) then//4
+
+      if IsUnitIllusion( caster ) then
+          if Random <= ChanseLucky(caster , 25 / 2) and not IsPassItemCooldown( caster, 'I03E' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 4, "frostnova")
+              call SetPassItemCooldown(caster, 'I03E' , 0.34)
+          endif
+
+      else
+
+          if Random <= ChanseLucky(caster , 25) and not IsPassItemCooldown( caster, 'I03E' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 4, "frostnova")
+              call SetPassItemCooldown(caster, 'I03E' , 0.34)
+          endif
+
+      endif
+
+  elseif ThisHeroHaveItem( caster, 'I02U' ) then//3
+
+      if IsUnitIllusion( caster ) then
+          if Random <= ChanseLucky(caster , 20 / 2) and not IsPassItemCooldown( caster, 'I02U' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 3, "frostnova")
+              call SetPassItemCooldown(caster, 'I02U' , 0.34)
+
+          endif
+      else
+          if Random <= ChanseLucky(caster , 20) and not IsPassItemCooldown( caster, 'I02U' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 3, "frostnova")
+              call SetPassItemCooldown(caster, 'I02U' , 0.34)
+
+          endif
+
+      endif
+
+  elseif ThisHeroHaveItem( caster, 'I00U' ) then //2
+      if IsUnitIllusion( caster ) then
+          if Random <= ChanseLucky(caster , 15 / 2) and not IsPassItemCooldown( caster, 'I00U' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 2, "frostnova")
+              call SetPassItemCooldown(caster, 'I00U' , 0.34)
+
+          endif
+      else
+          if Random <= ChanseLucky(caster , 15) and not IsPassItemCooldown( caster, 'I00U' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 2, "frostnova")
+              call SetPassItemCooldown(caster, 'I00U' , 0.34)
+
+          endif
+
+      endif
+
+  elseif ThisHeroHaveItem( caster, 'I02T' ) then //1
+      if IsUnitIllusion( caster ) then
+          if Random <= ChanseLucky(caster , 10 / 2) and not IsPassItemCooldown( caster, 'I02T' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 1, "frostnova")
+              call SetPassItemCooldown(caster, 'I02T' , 0.34)
+          endif
+
+      else
+          if Random <= ChanseLucky(caster , 10 ) and not IsPassItemCooldown( caster, 'I02T' ) then
+              call CastSpellToTarget(caster, target, 'A04C', 1, "frostnova")
+              call SetPassItemCooldown(caster, 'I02T' , 0.34)
+          endif
+
+      endif
+
+  endif
+
+
+endif

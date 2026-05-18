@@ -583,8 +583,13 @@ function cjLibw560nbs9b8nse46703948__init takes nothing returns nothing
     set cj_true_bool_4896bnao87 = Condition( function cj_true_a497bnsor7 )
 endfunction
 
+
+
+//Изменения , воскрешение героев 2 до 3 сек. грозовой щит ульт, исправлен плав текст. Плав текст урона.лечения. крит. доработаны. лпав тест от ищадья показывается если юнит видим
+//паладин мощь вернул на 2 ед с 1 ед силы
+//исщадье тьмы -2 разума текст фик. и повышение хп от крипов фикс текст
 function IsUnitInvul takes unit u returns boolean
-    return LoadBoolean( HT, GetHandleId( u ), StringHash( "Has_Invul" ) )
+    return LoadBoolean( HT, GetHandleId( u ), StringHash( "Has_Invul" ) ) or GetUnitAbilityLevel( u, 'Avul' ) > 0
 endfunction
 
 function SetUnitInvul takes unit Target, boolean Flag returns nothing
@@ -692,16 +697,72 @@ function DropItemLiver takes unit a returns nothing
         set it = UnitItemInSlot(a, i)
         if it != null then
             call UnitRemoveItem(a, it)
-    
             call SetItemDroppable(it, true)
             call SetItemPosition(it, x, y)
-            call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl", x, y))
         endif
         
         set i = i + 1
     endloop
+    call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl", x, y))
     set it = null
 endfunction
+
+
+function ItemDestroyUpdateNew takes nothing returns nothing
+    local timer t = GetExpiredTimer()
+    local integer id = GetHandleId(t)
+    local item it = LoadItemHandle(HT, id, 0)
+    local real time = LoadReal(HT, id, 1)
+
+    if it == null then
+        call FlushChildHashtable(HT, id)
+        call PauseTimer(t)
+        call DestroyTimer(t)
+        set t = null
+        return
+    endif
+
+    if GetWidgetLife(it) > 0 and not IsItemOwned(it) then
+        if time > 0.0 then
+            call SaveReal(HT, id, 1, time - 1.0)
+        else
+            // Удаляем предмет, если его никто не поднял в течение заданного времени
+            call DisplayTextToForce(GetPlayersAll(), "|cffff0000Предмет удален:|r " + GetItemName(it))
+            call SetWidgetLife(it, 1.0) // защита от багов на разрушение
+            call RemoveItem(it)
+            call FlushChildHashtable(HT, id)
+            call PauseTimer(t)
+            call DestroyTimer(t)
+        endif
+    elseif IsItemOwned(it) then
+        // Предмет был подобран, очищаем таймер и данные
+        call FlushChildHashtable(HT, id)
+        call PauseTimer(t)
+        call DestroyTimer(t)
+    endif
+
+    set t = null
+    set it = null
+endfunction
+
+function ItemDestroyNew takes item it, real time returns nothing
+    local timer t = CreateTimer()
+    local integer id = GetHandleId(t)
+
+    if it == null or time <= 0.0 then
+        return
+    endif
+
+    call SaveItemHandle(HT, id, 0, it)
+    call SaveReal(HT, id, 1, time)
+    call TimerStart(t, 1.0, true, function ItemDestroyUpdateNew)
+
+    set t = null
+    set it = null
+endfunction
+
+
+
 
 function ItemDestroyUpdate takes nothing returns nothing
     local timer t = GetExpiredTimer( )
@@ -944,11 +1005,10 @@ function Trig_DeleteRune_Actions takes nothing returns nothing
     local integer r_r = GetItemTypeId( it )
    // call DisplayTextToForce( GetPlayersAll( ), GetItemName(it) +"-id_"+ I2S(r_r) )
 
-    call TriggerSleepAction(1.)
       //вейт тут нужен НЕДОДЕЛАЛ НЕТ РАЗДЕЛЕНИЯ НА РУНЫ
     if (r_r == 'tdex') or (r_r == 'tint') or (r_r == 'tstr') or (r_r == 'tkno') then
         //удалить руну
-        
+        call TriggerSleepAction(1.)
         call SetWidgetLife(it, 1.)
       //  call DisplayTextToForce( GetPlayersAll( ), GetItemName(it) + " _предмет удален_" )
 
@@ -1050,6 +1110,24 @@ function IsGroupEmpty takes group g returns boolean
     return FirstOfGroup(g) == null
 endfunction
 
+function UnitOccupiedSlotsNumber takes unit target returns integer
+    local integer i = -1
+    local item itemID
+    local integer index = 0
+    loop
+        set i = i + 1
+        exitwhen i > 5
+        set itemID = UnitItemInSlot( target, i )
+        if itemID != null then
+            set index = index + 1
+        endif
+        set itemID = null
+    endloop
+    set target = null
+    set itemID = null
+    return index
+endfunction
+
 function AI__FilterHeroAndEnemy takes nothing returns boolean
     local unit u = GetFilterUnit( )
     local boolean b = IsUnitType( u, UNIT_TYPE_HERO )and IsPlayerEnemy( AI__ch_p, GetOwningPlayer( u ) )and GetUnitState( u, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( u, 'Avul' ) > 0 ) and IsUnitVisible( u, AI__ch_p ) //and GetUnitAbilityLevel( u, 'Aloc' ) == 0
@@ -1130,6 +1208,7 @@ function AI__A_Buy takes nothing returns nothing
     endloop
     set u = null
 endfunction
+
 
 function AI__A_Death takes nothing returns nothing
     local unit u = GetTriggerUnit( )
@@ -1501,23 +1580,7 @@ function AI_A_Spam takes nothing returns nothing
 endfunction
 
 
-function UnitOccupiedSlotsNumber takes unit target returns integer
-    local integer i = -1
-    local item itemID
-    local integer index = 0
-    loop
-        set i = i + 1
-        exitwhen i > 5
-        set itemID = UnitItemInSlot( target, i )
-        if itemID != null then
-            set index = index + 1
-        endif
-        set itemID = null
-    endloop
-    set target = null
-    set itemID = null
-    return index
-endfunction
+
 
 function AI__GetItems takes nothing returns nothing
     local item it = GetEnumItem( )
@@ -2055,9 +2118,11 @@ function Crit_IsCrit takes unit source returns boolean
     local real chance = I2R( GetHeroInt( source, true ) ) * Crit__Crit_Per_Int * ( Crit__Decrease_Chance_Modifer + GetUnitLevel( source ) * Crit__Decrease_Per_Lvl )
     local real dice = GetRandomReal( 1., 100. )
     if dice <= chance then
+
         return TRUE
     else
         return FALSE
+
     endif
 endfunction
 
@@ -4469,7 +4534,33 @@ function DRASp6Lib__Cond1 takes nothing returns boolean
     return b
 endfunction
 
+
 function DRASp6Lib__TT takes unit u, string t, boolean plus returns nothing
+    local texttag tt = CreateTextTagUnitBJ(t, u, -3., 6., 0., 0., 0., 0.)
+    
+    if plus then
+        call SetTextTagColor(tt, 128, 255, 128, 200)
+    else
+        call SetTextTagColor(tt, 255, 128, 128, 200)
+    endif
+
+    if IsUnitVisible(u, GetLocalPlayer()) then
+        call SetTextTagVisibility(tt, true)
+    else
+        call SetTextTagVisibility(tt, false)
+    endif
+
+    call SetTextTagVelocity(tt, 0.00, 0.03)
+    call SetTextTagFadepoint(tt, 0.5)
+    call SetTextTagLifespan(tt, 1.)
+    call SetTextTagPermanent(tt, false)
+    
+    set tt = null
+endfunction
+
+
+
+function DRASp6Lib__TTOld takes unit u, string t, boolean plus returns nothing
     local texttag tt = CreateTextTagUnitBJ( t, u, -3., 6., 0., 0., 0., 0. )
     if plus then
         call SetTextTagColor( tt, 128, 255, 128, 200 )
@@ -4513,6 +4604,8 @@ function DRASp6Lib__Act takes nothing returns nothing
     set g = null
     set d = null
 endfunction
+
+
 function DRASp6Lib__DRASp6Lib_Init takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_DEATH )
@@ -4602,9 +4695,124 @@ function DamageLib_AddToDamageGroup takes unit u returns nothing
 endfunction
 
 
+function Damage_CreateTextTagNew takes unit u, real value, integer dmgOwnPlayerId, boolean crit, boolean isHeal returns nothing
+    local real size = DamageLib__Normal_Size
+    local real time = 0.6
+    local texttag tt
+    local integer i = 1
+    local string text
+
+    if crit then
+        set size = DamageLib__Crit_Size
+        set time = time * 2
+    endif
+
+    if isHeal then
+        set text = "+" + I2S(R2I(value)) // Для исцеления
+    else
+        set text = I2S(R2I(value)) // Для урона
+    endif
+
+    set tt = CreateTextTagUnitBJ(text, u, DamageLib__Spell_Damage_Height, size, 255, 255, 255, 255)
+
+    if value < 1. then
+        call SetTextTagText(tt, "", size * 2)
+    endif
+
+    if LoadBoolean(HT, GetHandleId(u), StringHash("PalShield")) then
+        call SetTextTagText(tt, "", size * 2)
+    endif
+
+    // Отображение текста только для игроков, которые могут видеть цель
+    if GetLocalPlayer() == Player(dmgOwnPlayerId) or GetLocalPlayer() == GetOwningPlayer(u) then
+        call SetTextTagVisibility(tt, TRUE)
+    else
+        call SetTextTagVisibility(tt, FALSE)
+    endif
+
+    call SetTextTagVelocity(tt, 0.03, 0.03)
+    
+    if isHeal then
+        call SetTextTagColor(tt, 0, 255, 0, 255) // Зеленый для исцеления
+    else
+        call SetTextTagColor(tt, 255, 255, 255, 255) // Белый для урона
+    endif
+
+    call SetTextTagFadepoint(tt, time / 2)
+    call SetTextTagLifespan(tt, time)
+    call SetTextTagPermanent(tt, false)
+
+    set tt = null
+endfunction
+
+
+function DamageLib_DamageTextTag2 takes unit u, real dmg, integer dmgOwnPlayerId, boolean crit returns nothing
+    call Damage_CreateTextTagNew(u, dmg, dmgOwnPlayerId, crit, false)
+endfunction
+
+function DamageLib_HealTextTag2 takes unit u, real heal, integer dmgOwnPlayerId, boolean crit returns nothing
+    call Damage_CreateTextTagNew(u, heal, dmgOwnPlayerId, crit, true)
+endfunction
+
+
+
+
+function DamageLib__UsualDamageTextTagOPT takes unit u, real dmg, integer dmgOwnPlayerId returns nothing
+    local texttag tt
+    local integer i = 1
+    local integer handleId = GetHandleId(u)
+
+    // Проверка на пустой урон
+    if dmg < 1. then
+        return
+    endif
+
+    // Создание тексттега с уроном
+    set tt = CreateTextTagUnitBJ(I2S(R2I(dmg)), u, DamageLib__Usual_Damage_Height, DamageLib__Normal_Size, 255, 255, 255, 0)
+
+    // Проверка на щит
+    if LoadBoolean(HT, handleId, StringHash("PalShield")) then
+        call SetTextTagText(tt, "", DamageLib__Normal_Size * 2)
+    endif
+
+    // Определяем видимость для игроков
+    loop
+        exitwhen i > 10
+        if s__ComLib_Show_Dmg[i] then
+            if Player(i - 1) == GetOwningPlayer(u) or Player(i - 1) == Player(dmgOwnPlayerId - 1) then
+                if GetLocalPlayer() == Player(i - 1) then
+                    call SetTextTagVisibility(tt, true)
+                endif
+            else
+                if GetLocalPlayer() == Player(i - 1) then
+                    call SetTextTagVisibility(tt, false)
+                endif
+            endif
+        endif
+        set i = i + 1
+    endloop
+
+    // Настройки анимации тексттега
+    call SetTextTagVelocity(tt, 0.03, 0.03)
+    call SetTextTagFadepoint(tt, 0.3)
+    call SetTextTagLifespan(tt, 0.6)
+    call SetTextTagPermanent(tt, false)
+
+    // Освобождаем тексттег
+    set tt = null
+endfunction
+
+
+
 
 function DamageLib__DamagePerSecondNulling takes nothing returns nothing
 endfunction
+
+
+
+
+
+
 
 function DamageLib__UsualDamageTextTag takes unit u, real dmg, integer dmgOwnPlayerId returns nothing
     local texttag tt = CreateTextTagUnitBJ( I2S( R2I( dmg ) ), u, DamageLib__Usual_Damage_Height, DamageLib__Normal_Size, 0., 0., 0., 0. )
@@ -4728,7 +4936,7 @@ function DamageLib_SpellDamage takes unit cst, unit target, real dmg returns not
     //система спелл урона
     call UnitDamageTarget( cst, target, r_dmg, true, false, ATTACK_TYPE_HERO, DAMAGE_TYPE_DIVINE, WEAPON_TYPE_WHOKNOWS )
     call EnableTrigger( DamageLib__Damage_Trg_Var )
-    call DamageLib_DamageTextTag( target, life - GetUnitState( target, UNIT_STATE_LIFE ), GetConvertedPlayerId( GetOwningPlayer( cst ) ), crit )
+    call DamageLib_DamageTextTag2( target, life - GetUnitState( target, UNIT_STATE_LIFE ), GetConvertedPlayerId( GetOwningPlayer( cst ) ), crit )
 endfunction
 
 function DamageLib_SpellHeal takes unit cst, unit target, real heal returns nothing
@@ -4742,7 +4950,7 @@ function DamageLib_SpellHeal takes unit cst, unit target, real heal returns noth
     //Не понял тут что кого хилит или дамажит отниманием хп
     if GetWidgetLife( target ) > 0.405 and IsUnitType( target, UNIT_TYPE_DEAD ) == false then //добавил проверки чтоб не хилить мертвого
         call SetWidgetLife( target, GetWidgetLife( target ) - r_heal )
-        call DamageLib_HealTextTag( target, life - GetUnitState( target, UNIT_STATE_LIFE ), GetConvertedPlayerId( GetOwningPlayer( cst ) ), crit )
+        call DamageLib_HealTextTag2( target, life - GetUnitState( target, UNIT_STATE_LIFE ), GetConvertedPlayerId( GetOwningPlayer( cst ) ), crit )
     endif
 
 endfunction
@@ -4753,7 +4961,9 @@ function DamageLib__Damage_Act takes nothing returns nothing
     local real d = GetEventDamage( )
     if d > 0 then
         call DisableTrigger( GetTriggeringTrigger( ) )
-        call DamageLib__UsualDamageTextTag( u, d, GetConvertedPlayerId( GetOwningPlayer( a ) ) )
+        call DamageLib__UsualDamageTextTagOPT( u, d, GetConvertedPlayerId( GetOwningPlayer( a ) ) )
+
+        
         call EnableTrigger( GetTriggeringTrigger( ) )
     endif
     set a = null
@@ -4785,6 +4995,64 @@ endfunction
 
 function GROS4_preload takes nothing returns nothing
 endfunction
+
+
+function GROS4___DamageTextTagOPT takes unit u, real dmg, integer dmgOwnPlayerId returns nothing
+    local real size = 8.
+    local real time = 0.6
+    local texttag tt
+    local integer i = 0
+    local player dmgOwnerPlayer = Player(dmgOwnPlayerId)
+    local player unitOwner = GetOwningPlayer(u)
+
+    // Проверка на валидность игрока
+    if dmgOwnPlayerId < 0 or dmgOwnPlayerId > 11 then
+        return
+    endif
+
+    // Проверка на минимальный урон
+    if dmg < 1. then
+        return
+    endif
+
+    // Создание текстового тега с уроном
+    set tt = CreateTextTagUnitBJ(I2S(R2I(dmg)), u, 0., size, 255, 255, 255, 255)
+
+    // Проверка на щит паладина
+    if LoadBoolean(HT, GetHandleId(u), StringHash("PalShield")) then
+        call SetTextTagText(tt, "", size * 2)
+    endif
+
+    // Проверка на видимость урона для игроков
+    loop
+        exitwhen i > 9  // Теперь i от 0 до 9 (избегаем -1)
+        if s__ComLib_Show_Dmg[i + 1] then
+            if Player(i) == unitOwner or Player(i) == dmgOwnerPlayer then
+                if GetLocalPlayer() == Player(i) then
+                    call SetTextTagVisibility(tt, true)
+                endif
+            else
+                if GetLocalPlayer() == Player(i) then
+                    call SetTextTagVisibility(tt, false)
+                endif
+            endif
+        endif
+        set i = i + 1
+    endloop
+
+    // Настройки анимации тексттега
+    call SetTextTagVelocity(tt, 0.03, 0.03)
+    call SetTextTagColor(tt, s__Color_Dec_1[5], s__Color_Dec_2[5], s__Color_Dec_3[5], 255)
+    call SetTextTagFadepoint(tt, time / 2)
+    call SetTextTagLifespan(tt, time)
+    call SetTextTagPermanent(tt, false)
+
+    // Очистка ссылки
+    set tt = null
+endfunction
+
+
+
 
 function GROS4___DamageTextTag takes unit u, real dmg, integer dmgOwnPlayerId returns nothing
     local real size = 0.
@@ -4873,7 +5141,7 @@ function GROS4spell takes unit damageSource, unit target , real eventDamage retu
         //  call EnableTrigger(DamageLib__Damage_Trg_Var)
         //   EnableTrigger(DPSLib_DPS_Trg)
 
-          //  call GROS4___DamageTextTag( u, cjlocgn_00000001 - GetWidgetLife( a ), GetPlayerId( GetOwningPlayer( u ) ) )
+        call GROS4___DamageTextTagOPT( u, cjlocgn_00000001 - GetWidgetLife( a ), GetPlayerId( GetOwningPlayer( u ) ) )
         call DestroyEffect( AddSpecialEffectTarget( "Abilities\\Spells\\Orc\\LightningShield\\LightningShieldBuff.mdl", a, "origin" ) )
            // call EnableTrigger(GetTriggeringTrigger())
 
@@ -7005,7 +7273,33 @@ function DRASp1Lib_preload takes nothing returns nothing
     call X_PreloadAbility( 'A00H' )
 endfunction
 
+
 function DRASp1Lib__TT takes unit u, string t, boolean plus returns nothing
+    local texttag tt = CreateTextTagUnitBJ(t, u, -3., 8., 0., 0., 0., 0.)
+    local player p = GetLocalPlayer()
+
+    if plus then
+        call SetTextTagColor(tt, 128, 255, 128, 200)
+    else
+        call SetTextTagColor(tt, 255, 128, 128, 200)
+    endif
+
+    call SetTextTagVelocity(tt, 0.00, 0.03)
+    call SetTextTagFadepoint(tt, 0.5)
+    call SetTextTagLifespan(tt, 1.0)
+    call SetTextTagPermanent(tt, false)
+
+    // Устанавливаем видимость тексттага только локально
+    if p != null then
+        call SetTextTagVisibility(tt, IsUnitVisible(u, p))
+    endif
+
+    set tt = null
+endfunction
+
+
+
+function DRASp1Lib__TTOLD takes unit u, string t, boolean plus returns nothing
     local texttag tt = CreateTextTagUnitBJ( t, u, -3., 8., 0., 0., 0., 0. )
     if plus then
         call SetTextTagColor( tt, 128, 255, 128, 200 )
@@ -7636,7 +7930,9 @@ function GLAS1__proj takes nothing returns nothing
     set nd = nd + ( 70. )
     set cX = cX + 70. * Cos( an * bj_DEGTORAD )
     set cY = cY + 70. * Sin( an * bj_DEGTORAD )
-    if ( nd < di )and not( IsTerrainPathable( cX, cY, PATHING_TYPE_WALKABILITY ) ) then
+
+    if ( nd < di ) and not( IsTerrainPathable( cX, cY, PATHING_TYPE_WALKABILITY ) ) then
+
         call DestroyEffect( AddSpecialEffect( "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl", cX, cY ) )
         call SetUnitX( u, cX )
         call SetUnitY( u, cY )
@@ -7661,6 +7957,7 @@ function GLAS1__proj takes nothing returns nothing
                 call SaveUnitHandle( HT, GetHandleId( cjlocgn_00000001 ), StringHash( "H_FOG" ), cjlocgn_00000000 )
                 call TimerStart( cjlocgn_00000001, 1., false, function GLAS1__Att )
                 set cjlocgn_00000001 = null
+                
             endif
             call GroupRemoveUnit( GLAS1__gr, cjlocgn_00000000 )
         endloop
@@ -7749,8 +8046,9 @@ function GLAS2__proj takes nothing returns nothing
     set cstX = cstX + 75. * Cos( angle )
     set cstY = cstY + 75. * Sin( angle )
     set dist = dist - ( 75. )
+    //добавил исловия что кастер жив
+    if dist > 0. and GetUnitState( cst, UNIT_STATE_LIFE ) > 0.405 and IsUnitType( cst, UNIT_TYPE_DEAD ) == false then
 
-    if dist > 0.then
         if not( IsTerrainPathable( cstX, cstY, PATHING_TYPE_WALKABILITY ) ) then
             call SetUnitX( cst, cstX )
             call SetUnitY( cst, cstY )
@@ -7931,7 +8229,7 @@ function GLAS3__Att takes nothing returns nothing
 endfunction
 function GLAS3__Act takes nothing returns nothing
     local unit caster
-    local group cjlocgn_00000001
+//   local group cjlocgn_00000001 не используется 
     local real cjlocgn_00000002
     local timer cjlocgn_00000003
 
@@ -9212,6 +9510,7 @@ function SHAS2___Cond1 takes nothing returns boolean
     set u = null
     return b
 endfunction
+
 function SHAS2___Act takes nothing returns nothing
     local unit cjlocgn_00000000
     local real cjlocgn_00000001
@@ -9342,6 +9641,7 @@ function TEHS1___Cond1 takes nothing returns boolean
     set u = null
     return b
 endfunction
+
 function TEHS1___ReleazeMissile takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local player o = LoadPlayerHandle( HT, GetHandleId( t ), StringHash( "owner" ) )
@@ -9373,6 +9673,7 @@ function TEHS1___ReleazeMissile takes nothing returns nothing
     set c = null
     set t = null
 endfunction
+
 
 function TEHS1___CreateMissile takes real cX, real cY, real tX, real tY, player owner, real dmg, unit c returns nothing
     local timer t = CreateTimer( )
@@ -9795,35 +10096,25 @@ function TKLS3___onTimer takes nothing returns nothing
     local integer id = LoadInteger( HT, GetHandleId( t ), TKLS3___h_id )
 
     if TKLS3___slowness[id] <= 0 then
-        //call DisplayTextToForce( GetPlayersAll(), "slownes_id" + GetUnitName(u) + I2S(TKLS3___slowness[id]) )
 
         if TKLS3___count_units > 0 then
             set TKLS3___count_units = TKLS3___count_units - 1
-        //    call DisplayTextToForce( GetPlayersAll(), "кол-во заморозки -1_" + I2S(TKLS3___count_units ) )
 
         endif
 
         set TKLS3___slowed[id] = null
 
         if GetWidgetLife( u ) > 0.405 and IsUnitType( u, UNIT_TYPE_DEAD ) == false and IsUnitType( u, UNIT_TYPE_HERO) == true then
-
-       
             call UnitRemoveAbility( u, 'A04E' )
-            call UnitRemoveAbility( u, TKLS3___buff_id ) //хуй знает
-       // call DisplayTextToForce( GetPlayersAll(), "удалилить замороку у живого героя " + GetUnitName(u) )
-        // едиф опустил посте дестрой таймера
+            call UnitRemoveAbility( u, TKLS3___buff_id )
             call GroupRemoveUnit( TKLS3___slowed_units, u )
-     // call DisplayTextToForce( GetPlayersAll(), "юнит удален из группы_slow  " +GetUnitName(u) )
             call FlushChildHashtable( HT, GetHandleId( t ) )
             call PauseTimer( t )
             call DestroyTimer( t )
 
         endif
 
-
-
         if IsUnitType( u, UNIT_TYPE_HERO) == false and ( GetWidgetLife( u ) <= 0.405 or IsUnitType( u, UNIT_TYPE_DEAD ) == false ) then
-           // call DisplayTextToForce( GetPlayersAll(), "юнит удален из группы_slow  " +GetUnitName(u) )
             //call UnitRemoveAbility( u, 'A04E' )
             call GroupRemoveUnit( TKLS3___slowed_units, u )
             call FlushChildHashtable( HT, GetHandleId( t ) )
@@ -9831,7 +10122,6 @@ function TKLS3___onTimer takes nothing returns nothing
             call DestroyTimer( t )
         endif
        
-
         
     else
 
@@ -9843,15 +10133,11 @@ function TKLS3___onTimer takes nothing returns nothing
             if GetUnitAbilityLevel( u, 'A04E' ) == 0 then
                 call UnitAddAbility( u, 'A04E' )
             endif
-        //    call DisplayTextToForce( GetPlayersAll(), "заморозка юнита_ " +GetUnitName(u) + I2S(TKLS3___slowness[id]) )
-
             call SetUnitAbilityLevel( u, 'A04E', TKLS3___slowness[id] )
             call SetUnitAbilityLevel( u, TKLS3___buff_id, TKLS3___slowness[id] )
             //меняет уровень бафа может быть фатал
         else
-        
             set TKLS3___slowness[id] = 0
-          //  call DisplayTextToForce( GetPlayersAll(), "slownes 0" +GetUnitName(u) + I2S(TKLS3___slowness[id]) )
 
         endif
 
@@ -9863,7 +10149,6 @@ endfunction
 
 function TKLS3_Act takes unit u, integer modifer returns nothing
     local timer t = CreateTimer( )
-    //СТАКИ ХУЙНИ ЗАМДЕЛЕНИЯ4
     local unit temp
     local integer i = 0
     local integer a = 0
@@ -10858,7 +11143,7 @@ function DMRevive_Act takes nothing returns nothing
     if IsUnitType( u, UNIT_TYPE_HERO )and ( u != killer ) and not DMKillsLib_Game_Ended and not( GetPlayerSlotState( GetOwningPlayer( u ) ) == PLAYER_SLOT_STATE_LEFT ) then
         set qxA = GetConvertedPlayerId( GetOwningPlayer( u ) )
         set s__Deaths[qxA] = s__Deaths[qxA] + 1
-        call TriggerSleepAction( 2. ) //респ героев другой мод
+        call TriggerSleepAction( 3. ) //респ героев другой мод
         set cjlocgn_00000000 = GetRandomInt( 1, 10 )
         loop
             exitwhen not s__DMRevivingLib__Is_Loc_Occupied[cjlocgn_00000000]
@@ -11690,7 +11975,7 @@ function TDMRevive_Act takes nothing returns nothing
         else
             set s__Deaths_Team[2] = s__Deaths_Team[2] + 1
         endif
-        call TriggerSleepAction( 2. ) //2 воскрешение героя
+        call TriggerSleepAction( 3. ) //2 воскрешение героя
         set cjlocgn_00000000 = GetRandomInt( 1, 5 )
         if qxA < 6 then
             call ReviveHeroLoc( u, s__TDMRevivingLib__Team_1_Loc[cjlocgn_00000000], FALSE )
@@ -12954,7 +13239,7 @@ function main takes nothing returns nothing
 endfunction
 
 function config takes nothing returns nothing
-    call SetMapName( "|cFF404040UFS Arena v1.4fix|r" )
+    call SetMapName( "|cFF404040UFS Arena v1.6|r" )
     call SetMapDescription( "UFS Arena" )
     call SetPlayers(10)
     call SetTeams(10)
