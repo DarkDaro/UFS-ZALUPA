@@ -2293,141 +2293,142 @@ function Eff_AddThenRemoveEffectOnUnit takes string l__gg_snd_DEA_horn, unit u, 
     set t = null
 endfunction
 
-
+// Функция для получения коэффициента на основе текущей энергии
 function Energy_Get takes unit u, real heal returns real
-    local integer i = GetPlayerId( GetOwningPlayer( u ) ) + 1
-    local real pc = ( 20. + 1.6 * s__now_energy[i] ) / 100.
-    return heal * pc
+    local integer playerId = GetPlayerId(GetOwningPlayer(u)) + 1
+    local real energyFactor = (20.0 + 1.6 * s__now_energy[playerId]) / 100.0
+    return heal * energyFactor
 endfunction
 
-function Energy_Minus takes unit u, integer e returns nothing
-    local integer qxA = 0
+// Функция для уменьшения энергии у игрока
+function Energy_Minus takes unit u, integer energyAmount returns nothing
+    local integer playerId = GetPlayerId(GetOwningPlayer(u)) + 1
+    local integer currentEnergy = s__now_energy[playerId]
 
-    if s__now_energy[GetPlayerId( GetOwningPlayer( u ) ) + 1] >= e then
-
-        if ( s__now_energy[GetPlayerId( GetOwningPlayer( u ) ) + 1] - e ) <= Energy_max_energy then
-            set qxA = GetPlayerId( GetOwningPlayer( u ) ) + 1
-            set s__now_energy[qxA] = s__now_energy[qxA] - ( e )
+    if currentEnergy >= energyAmount then
+        // Проверяем, не превышает ли результат максимальное значение
+        if currentEnergy - energyAmount <= Energy_max_energy then
+            set s__now_energy[playerId] = currentEnergy - energyAmount
         else
-            set s__now_energy[GetPlayerId( GetOwningPlayer( u ) ) + 1] = 50 //макс энергий
+            set s__now_energy[playerId] = Energy_max_energy // Ограничение максимального значения
         endif
     else
-        set s__now_energy[GetPlayerId( GetOwningPlayer( u ) ) + 1] = 0
+        set s__now_energy[playerId] = 0 // Если энергии не хватает, сбрасываем в 0
     endif
 endfunction
 
+// Функция для создания тексттега, который отображает энергию игрока
 function Energy_AcceptEB takes unit u returns nothing
-    local integer id = GetUnitTypeId( u )
-    local integer i = 1
-    local boolean b = TRUE
-    local integer cjlocgn_00000000
-    local texttag cjlocgn_00000001
-    local string cjlocgn_00000002
-    local integer cjlocgn_00000003
-    call DisplayTextToPlayer( GetOwningPlayer( u ), 0., 0., Energy__SELECT_ENERGY )
-    if b then
-        set cjlocgn_00000000 = GetPlayerId( GetOwningPlayer( u ) ) + 1
-        set cjlocgn_00000001 = CreateTextTag( )
-        set cjlocgn_00000002 = ""
-        set cjlocgn_00000003 = 0
-        set s__Energy__EB_tt[cjlocgn_00000000] = cjlocgn_00000001
-        call SetTextTagPos( cjlocgn_00000001, GetUnitX( u ) + Energy__x_offset, GetUnitY( u ) + Energy__y_offset, Energy__z_offset + GetUnitFlyHeight(u) )
-        call SetTextTagColor( cjlocgn_00000001, 0, 0, 0, 0 )
-        call SetTextTagPermanent( cjlocgn_00000001, TRUE )
-        set s__now_energy[cjlocgn_00000000] = Energy_max_energy
-        set i = s__now_energy[cjlocgn_00000000]
-        set b = FALSE
-        if i > 0 then
-            set cjlocgn_00000002 = Energy__green
+    local integer playerId = GetPlayerId(GetOwningPlayer(u)) + 1
+    local texttag energyTextTag
+    local string energyString = ""
+    local integer energyBarCount = 0
+
+    // Создание тексттега для энергии
+    set energyTextTag = CreateTextTag()
+    call SetTextTagPos(energyTextTag, GetUnitX(u) + Energy__x_offset, GetUnitY(u) + Energy__y_offset, Energy__z_offset + GetUnitFlyHeight(u))
+    call SetTextTagPermanent(energyTextTag, true)
+    call SetTextTagColor(energyTextTag, 0, 255, 0, 255) // Зеленый цвет по умолчанию
+
+    // Инициализация энергии игрока
+    set s__now_energy[playerId] = Energy_max_energy
+    set s__Energy__EB_tt[playerId] = energyTextTag
+
+    // Генерация строки энергии
+    loop
+        exitwhen energyBarCount > Energy_max_energy
+        set energyString = energyString + Energy__one_bar
+        if energyBarCount >= s__now_energy[playerId] then
+            set energyString = energyString + Energy__end
+            exitwhen true
         endif
+        set energyBarCount = energyBarCount + 1
+    endloop
 
-        loop
-            exitwhen( cjlocgn_00000003 > Energy_max_energy )
-            set cjlocgn_00000002 = cjlocgn_00000002 + ( Energy__one_bar )
-            if cjlocgn_00000003 > i and not b then
-                set cjlocgn_00000002 = cjlocgn_00000002 + ( Energy__end )
-                set b = TRUE
-            endif
-            set cjlocgn_00000003 = cjlocgn_00000003 + 1
-        endloop
-        call SetTextTagText( cjlocgn_00000001, cjlocgn_00000002, Energy__size )
-        call SetTextTagVisibility( cjlocgn_00000001, FALSE )
-        set cjlocgn_00000003 = 1
-        loop
-            exitwhen( cjlocgn_00000003 > 10 )
-            if GetLocalPlayer( ) == s__Online_Player[cjlocgn_00000003] then
+    // Устанавливаем текст и видимость
+    call SetTextTagText(energyTextTag, energyString, Energy__size)
+    call SetTextTagVisibility(energyTextTag, IsPlayerAlly(GetLocalPlayer(), GetOwningPlayer(u)))
 
-                if IsPlayerAlly( s__Online_Player[cjlocgn_00000003], Player( cjlocgn_00000000 - 1 ) )or s__Online_Player[cjlocgn_00000003] == Player( cjlocgn_00000000 - 1 ) then
-                    call SetTextTagVisibility( cjlocgn_00000001, TRUE )
-                endif
-            endif
-            set cjlocgn_00000003 = cjlocgn_00000003 + 1
-        endloop
-        set cjlocgn_00000001 = null
-    endif
+    // Очистка
+    set energyTextTag = null
 endfunction
 
+// Функция обновления позиций тексттегов и их отображения
 function Energy__SetTTPos takes nothing returns nothing
-    local integer i = 1
-    local texttag tt
-    local unit u
-    local integer a = 0
-    local integer c = 0
-    local boolean b = FALSE
-    local string l__gg_snd_DEA_horn
-    loop
-        exitwhen( i > 10 )
-        if s__Energy__EB_tt[i] != null then
+    local integer playerId = 1
+    local texttag energyTextTag
+    local unit hero
+    local string energyString
+    local integer energyBarCount
 
-            set tt = s__Energy__EB_tt[i]
-            set c = s__now_energy[i]
-            set b = FALSE
-            set l__gg_snd_DEA_horn = null
-            set a = 0
-            call SetTextTagColor( tt, 0, 0, 0, 0 )
-            set u = s__Hero[i]
-            if GetWidgetLife( u ) < 0.405 then
-                set c = 0
+    loop
+        exitwhen playerId > 10 // Обновление для 10 игроков
+
+        // Получаем тексттег и героя
+        set energyTextTag = s__Energy__EB_tt[playerId]
+        set hero = s__Hero[playerId]
+
+        if energyTextTag != null and hero != null then
+            set energyString = ""
+            set energyBarCount = 0
+
+            // Сбрасываем энергию, если герой мертв
+            if GetWidgetLife(hero) < 0.405 then
+                set s__now_energy[playerId] = 0
             endif
-            if c > 0 then
-                set l__gg_snd_DEA_horn = Energy__green
-            endif
+
+            // Генерация строки энергии
             loop
-                exitwhen( a > Energy_max_energy )
-                set l__gg_snd_DEA_horn = l__gg_snd_DEA_horn + ( Energy__one_bar )
-                if a > c and not b then
-                    set l__gg_snd_DEA_horn = l__gg_snd_DEA_horn + ( Energy__end )
-                    set b = TRUE
+                exitwhen energyBarCount > Energy_max_energy
+                set energyString = energyString + Energy__one_bar
+                if energyBarCount >= s__now_energy[playerId] then
+                    set energyString = energyString + Energy__end
+                    exitwhen true
                 endif
-                set a = a + 1
+                set energyBarCount = energyBarCount + 1
             endloop
-            call SetTextTagText( tt, l__gg_snd_DEA_horn, Energy__size )
-            call SetTextTagPos( tt, GetUnitX( u ) + Energy__x_offset, GetUnitY( u ) + Energy__y_offset, Energy__z_offset + GetUnitFlyHeight(u) )
+
+            // Обновляем текст и позицию тексттега
+            call SetTextTagText(energyTextTag, energyString, Energy__size)
+            call SetTextTagPos(energyTextTag, GetUnitX(hero) + Energy__x_offset, GetUnitY(hero) + Energy__y_offset, Energy__z_offset + GetUnitFlyHeight(hero))
         endif
-        set i = i + 1
+
+        set playerId = playerId + 1
     endloop
-    set u = null
-    set tt = null
-    set l__gg_snd_DEA_horn = null
+
+    // Очистка ссылок
+    set energyTextTag = null
+    set hero = null
 endfunction
 
+// Функция для регенерации энергии всех игроков
 function Energy__Regen takes nothing returns nothing
-    local integer i = 1
+    local integer playerId = 1
+
     loop
-        exitwhen( i > 10 )
-        if s__now_energy[i] < Energy_max_energy then
-            set s__now_energy[i] = s__now_energy[i] + 1
+        exitwhen playerId > 10
+        if s__now_energy[playerId] < Energy_max_energy then
+            set s__now_energy[playerId] = s__now_energy[playerId] + 1
         endif
-        set i = i + 1
+        set playerId = playerId + 1
     endloop
 endfunction
 
+
+// Инициализация таймеров для обновления тексттегов и регенерации энергии
 function Energy__I takes nothing returns nothing
-    local timer t = CreateTimer( )
-    call TimerStart( t, 0.04, TRUE, function Energy__SetTTPos )
-    set t = CreateTimer( )
-    call TimerStart( t, Energy__regen_period, TRUE, function Energy__Regen )
-    set t = null
+    local timer energyTextTimer = CreateTimer()
+    local timer energyRegenTimer = CreateTimer()
+
+    // Таймер для обновления позиций тексттегов
+    call TimerStart(energyTextTimer, 0.04, true, function Energy__SetTTPos)
+
+    // Таймер для регенерации энергии
+    call TimerStart(energyRegenTimer, Energy__regen_period, true, function Energy__Regen)
+
+    // Очистка
+    set energyTextTimer = null
+    set energyRegenTimer = null
 endfunction
 
 function EscShops__Act takes nothing returns nothing
