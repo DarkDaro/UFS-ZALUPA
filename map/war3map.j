@@ -583,7 +583,6 @@ function cjLibw560nbs9b8nse46703948__init takes nothing returns nothing
     set cj_true_bool_4896bnao87 = Condition( function cj_true_a497bnsor7 )
 endfunction
 
-
 //Изменения , воскрешение героев время увеличено 2 до 3 сек. грозовой щит ульт, исправлен плав текст. Плав текст урона.лечения. крит. доработаны. Текст от ищадья тьмы, при похищении разума показывается если юнит видим
 //паладин мощь вернул на 2 ед с 1 ед силы
 //исщадье тьмы -2 разума текст фик. и повышение хп от крипов фикс текст
@@ -779,7 +778,7 @@ function ItemDestroyUpdate takes nothing returns nothing
     else
         if GetWidgetLife( it ) > 0 and IsItemOwned( it ) == false then
          //   call PingMinimapLocForForceEx( GetPlayersAll(), GetItemLoc(it), 0.50, bj_MINIMAPPINGSTYLE_ATTACK, 100, 100, 100 )
-            call DisplayTextToForce( GetPlayersAll( ), "|cffff0000предмет удален:|r "+ GetItemName(it))
+         //   call DisplayTextToForce( GetPlayersAll( ), "|cffff0000предмет удален:|r "+ GetItemName(it))
             call SetWidgetLife(it, 1.)
             call RemoveItem( it )
             call FlushChildHashtable( HT, id )
@@ -2025,6 +2024,7 @@ function ComLib__Act takes nothing returns nothing
     endif
 
     if ( chat == "-bug" ) then
+        
         set i = 1
         loop
             exitwhen( i > Online_Players )
@@ -2051,6 +2051,7 @@ function ComLib__Act takes nothing returns nothing
     endif
 
     if ComLib__Is_Test then
+
         set ss = SubString( chat, 0, 5 )
         if ( ss == "-gold" ) then
             set ss2 = SubString( chat, 6, StringLength( chat ) )
