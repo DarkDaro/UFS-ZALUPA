@@ -704,8 +704,6 @@ function DropItemLiver takes unit a returns nothing
     endloop
     call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl", x, y))
     set it = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function ItemDestroyUpdateNew takes nothing returns nothing
@@ -804,8 +802,6 @@ function ItemDestroy takes item it, real time returns nothing
     call SaveReal( HT, id, 1, time )
     call TimerStart( t, 1, true, function ItemDestroyUpdate )
     set it = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set t = null
 endfunction
 
 function ItemDropBossUpdate takes nothing returns nothing
@@ -1018,8 +1014,6 @@ function Trig_DeleteRune_Actions takes nothing returns nothing
         call RemoveItem(it)
     endif
     set it = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set u = null
 endfunction
 
 function InitTrig_DeleteRune takes nothing returns nothing
@@ -1108,11 +1102,6 @@ function Get_Target_Unit takes unit u, real x, real y returns unit
         set ut_creep = null
         return ut_hero
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set uf = null
-    set ut_hero = null
-    set G = null
-    set p = null
     return ut_creep
 endfunction
 
@@ -1203,8 +1192,6 @@ function AI__A_Buy takes nothing returns nothing
         set j = j + 1
     endloop
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function AI__A_Death takes nothing returns nothing
@@ -1574,8 +1561,6 @@ function AI_A_Spam takes nothing returns nothing
     endloop
     set target = null
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function AI__GetItems takes nothing returns nothing
@@ -1835,10 +1820,6 @@ function AI_A_Do takes nothing returns nothing
     set gRR = null
     set u = null
     set t_unit = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set FoG = null
-    set f = null
 endfunction
 
 function Ai_wait takes nothing returns nothing
@@ -1864,8 +1845,6 @@ function AI__I takes nothing returns nothing
 
         set i = i + 1
     endloop
-    // 05.09: anti-leak (obnulenie lokalov)
-    set T_Death = null
 endfunction
 
 function MakingAlpha takes nothing returns nothing
@@ -1927,8 +1906,6 @@ endfunction
 function Anims__I takes nothing returns nothing
     local timer t = CreateTimer( )
     call TimerStart( t, 1., FALSE, function Anims__A )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set t = null
 endfunction
 
 function AntiBJ_MultiboardSetItemWidthBJN takes multiboard mb, integer col, integer row, real width returns nothing
@@ -2102,8 +2079,6 @@ function ComLib__Act takes nothing returns nothing
     set ss = null
     set ss2 = null
     set chat = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function ComLib__ComLib_Init takes nothing returns nothing
@@ -2274,8 +2249,6 @@ function DPSLib__DPSLib_Init takes nothing returns nothing
     set Trg = CreateTrigger( )
     call TriggerRegisterTimerEvent( Trg, DPSLib__Period, true )
     call TriggerAddAction( Trg, function DPSLib__PeriodicEvent )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function Eff__RemoveEffect takes nothing returns nothing
@@ -2454,8 +2427,6 @@ function EscShops__init takes nothing returns nothing
     call TriggerAddAction( EscShops_Trg, function EscShops__Act )
     //call DisableTrigger( EscShops_Trg )
     set EscShops__Shop = gg_unit_edos_0053
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function Filters__Filter_Timer takes nothing returns nothing
@@ -2629,8 +2600,6 @@ function GoldLib__GoldLib_Init takes nothing returns nothing
         set i = i + 1
     endloop
 
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Gold_Trg = null
 endfunction
 
 function IF_CountItemInInventory takes unit u, integer it returns integer
@@ -2743,9 +2712,6 @@ function InitializationLib__InitializationLib_In takes nothing returns nothing
     call SetMapFlag( MAP_CHEATS, false )
     call SetCreepCampFilterState( false )
     call EnableMinimapFilterButtons( true, false )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set Load = null
 endfunction
 
 function ItemsLib__GetItems takes nothing returns nothing
@@ -2780,8 +2746,6 @@ function ItemsLib__GetItems takes nothing returns nothing
     set it = null
     set u = null
     set it2 = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function ItemsLib__DropItems takes nothing returns nothing
@@ -2822,8 +2786,6 @@ function ItemsLib__DropItems takes nothing returns nothing
         set new_it = null
     endif
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set owner = null
 endfunction
 
 function ItemsLib__SellItems takes nothing returns nothing
@@ -2895,11 +2857,6 @@ function ItemsLib__ItemsLib_Init takes nothing returns nothing
     set s__ItemsLib__stack_i_r[5] = 'stwp' //Свиток телепортации в магазин оригинал
     set s__ItemsLib__stack_r_r[6] = 'I00Q' //Тотем исцеления
     set s__ItemsLib__stack_i_r[6] = 'whwd'//Тотем исцеления оригинал
-    // 05.09: anti-leak (obnulenie lokalov)
-    set GetItems_Trg = null
-    set DropItems_Trg = null
-    set SellItems_Trg = null
-    set UseItems_Trg = null
 endfunction
 
 function LeaveLib__Act takes nothing returns nothing
@@ -2948,9 +2905,6 @@ function LeaveLib__Act takes nothing returns nothing
 
     //добавил удаление героя
     // когда игрок ливает число игроков не  пересчитывается, а только меняются лидеры команды
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set p2 = null
 endfunction
 
 function LeaveLib__LeaveLib_Init takes nothing returns nothing
@@ -2962,8 +2916,6 @@ function LeaveLib__LeaveLib_Init takes nothing returns nothing
         set i = i + 1
     endloop
     call TriggerAddAction( Trg, function LeaveLib__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function MoonRiderQuestLib__Death_Act takes nothing returns nothing
@@ -3036,8 +2988,6 @@ function MoonRiderQuestLib__Init takes nothing returns nothing
     set MoonRiderQuestLib__MR_Trg = CreateTrigger( )
     call TriggerRegisterEnterRectSimple( MoonRiderQuestLib__MR_Trg, gg_rct_MR )
     call TriggerAddAction( MoonRiderQuestLib__MR_Trg, function MoonRiderQuestLib__MR_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function PALS4__Act takes nothing returns nothing
@@ -3138,8 +3088,6 @@ function PALS6__I takes nothing returns nothing
     set Trg_Ch = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg_Ch, EVENT_PLAYER_UNIT_ISSUED_ORDER )
     call TriggerAddAction( Trg_Ch, function PALS6__Trg_Ch_A )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg_Ch = null
 endfunction
 
 // UNUSED: не вызывается нигде
@@ -3312,16 +3260,12 @@ function PingLib__Ping_Act takes nothing returns nothing
         endif
         set i = i + 1
     endloop
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function PingLib__PingLib_Init takes nothing returns nothing
     local trigger Ping_Trg = CreateTrigger( )
     call TriggerRegisterTimerEvent( Ping_Trg, 10., true )
     call TriggerAddAction( Ping_Trg, function PingLib__Ping_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Ping_Trg = null
 endfunction
 
 function REAS4_preload takes nothing returns nothing
@@ -3455,16 +3399,11 @@ function REAS4___Act takes nothing returns nothing
         set caster = null
         set target = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set ef = null
-    set t = null
 endfunction
 function REAS4___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function REAS4___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function REAS6_preload takes nothing returns nothing
@@ -3514,8 +3453,6 @@ function REAS6___Act takes nothing returns nothing
     endif
     set t = null
     set attacker = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set target = null
 endfunction
 
 function REAS6___I takes nothing returns nothing
@@ -3569,8 +3506,6 @@ function RunesLib__Act_2 takes nothing returns nothing
     set dummy = null
     set it = null
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function RunesLib__Act takes nothing returns nothing
@@ -3601,9 +3536,6 @@ function RunesLib__RunesLib_Init takes nothing returns nothing
     set s__RunesLib__Rune_Id[3] = 'rreb'
     set s__RunesLib__Rune_Id[4] = 'rdis'
     set s__RunesLib__Rune_Id[5] = 'rwat'
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
-    set Trg_2 = null
 endfunction
 
 function SHAS3A___Act takes nothing returns nothing
@@ -3678,8 +3610,6 @@ function SetUnitMax__I takes nothing returns nothing
     call SetUnitMax_Life( dummy, 100 )
     call TriggerSleepAction( 0.1 )
     call RemoveUnit( dummy )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set dummy = null
 endfunction
 
 function StunUnitAct takes nothing returns nothing
@@ -3709,8 +3639,6 @@ function StunUnitAct takes nothing returns nothing
 
     set t =null
     set t=null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set target = null
 endfunction
 
 function StunUnit takes unit target,real last returns real
@@ -4025,8 +3953,6 @@ function TimeLib__TimeLib_Init takes nothing returns nothing
     local trigger Time_Trg = CreateTrigger( )
     call TriggerRegisterTimerEvent( Time_Trg, 1., true )
     call TriggerAddAction( Time_Trg, function TimeLib__Time_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Time_Trg = null
 endfunction
 
 function X_ApplyLife takes unit d returns nothing
@@ -4317,8 +4243,6 @@ function ASSS5___Check takes nothing returns nothing
         set i = i + 1
     endloop
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set r = null
 endfunction
 function ASSS5___I takes nothing returns nothing
     local timer t = CreateTimer( )
@@ -4395,8 +4319,6 @@ function DMKillsLib__WinPlayer takes integer pid returns nothing
         set time = time - ( 1.0 )
     endloop
     call EndGame( true )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function DMKillsLib__DMKills_Act takes nothing returns nothing
@@ -4482,8 +4404,6 @@ function DMKillsLib__DMKillsLib_Init takes nothing returns nothing
     set Load = CreateTrigger( )
     call TriggerRegisterTimerEvent( Load, 0.01, FALSE )
     call TriggerAddAction( Load, function DMKillsLib__L )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Load = null
 endfunction
 
 function DRASp2Lib_preload takes nothing returns nothing
@@ -5016,9 +4936,6 @@ function DamageLib__DamageLib_Init takes nothing returns nothing
     set DamageLib__Cond_Type[7] = 'ndrv'
     set DamageLib__Cond_Type[8] = 'nlrv'
 
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Damage_Trg = null
-    set DamagePerSecondNulling_Trg = null
 endfunction
 
 function GROS4_preload takes nothing returns nothing
@@ -5076,9 +4993,6 @@ function GROS4___DamageTextTagOPT takes unit u, real dmg, integer dmgOwnPlayerId
 
     // Очистка ссылки
     set tt = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set dmgOwnerPlayer = null
-    set unitOwner = null
 endfunction
 
 // UNUSED: не вызывается нигде
@@ -5295,8 +5209,6 @@ function GROS_Sfera_In takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_ATTACKED )
     call TriggerAddAction( Trg, function GROS_Sfera__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function DamageCategory0_Actions takes nothing returns nothing
@@ -5534,8 +5446,6 @@ function GLAS6___I takes nothing returns nothing
     call TriggerAddAction( Trg, function GLAS6___Act )
     call TriggerAddAction( GLAS6_Trg_A, function GLAS6___Act_A )
     call DisableTrigger( GLAS6_Trg_A )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 // UNUSED: не вызывается нигде
@@ -5575,8 +5485,6 @@ function GLAS7___Rem takes nothing returns nothing
 
     endif
     set ta = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set t = null
 endfunction
 
 function GLAS7___Act takes nothing returns nothing
@@ -5611,8 +5519,6 @@ function GLAS7___Act takes nothing returns nothing
    // call EnableTrigger( GetTriggeringTrigger( ) )
     set att = null
     set target = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set t = null
 endfunction
 
 function GLAS7___I takes nothing returns nothing
@@ -5977,9 +5883,6 @@ function MRAS6__MRAS6_In takes nothing returns nothing
     call TriggerAddAction( Trg_1, function MRAS6__Act_Night )
     call TriggerRegisterGameStateEvent( Trg_2, GAME_STATE_TIME_OF_DAY, EQUAL, 6 )
     call TriggerAddAction( Trg_2, function MRAS6__Act_Day )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg_1 = null
-    set Trg_2 = null
 endfunction
 
 function MRAS4Lib_preload takes nothing returns nothing
@@ -6024,8 +5927,6 @@ function MRAS4Lib__MRAS4Lib_In takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_ATTACKED )
     call TriggerAddAction( Trg, function MRAS4Lib__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function PALS5_preload takes nothing returns nothing
@@ -6078,8 +5979,6 @@ function PALS5__I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function PALS5__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function REAS2_preload takes nothing returns nothing
@@ -6201,8 +6100,6 @@ function REAS2___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function REAS2___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function REAS3_preload takes nothing returns nothing
@@ -6285,9 +6182,6 @@ function REAS3___CheckSlow takes nothing returns nothing
         call DestroyTimer( t )
     endif
     set t = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set FoG = null
 endfunction
 
 function REAS3___Act takes nothing returns nothing
@@ -6327,8 +6221,6 @@ function REAS3___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function REAS3___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function SHAS4_preload takes nothing returns nothing
@@ -6373,8 +6265,6 @@ function SHAS4___Attacked takes nothing returns nothing
     endif
 
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set damager = null
 endfunction
 
 function SHAS4___RemoveShield takes nothing returns nothing
@@ -6512,8 +6402,6 @@ function TDMKillsLib__WinTeam takes integer t returns nothing
     endloop
 
     call EndGame( true )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function TDMKillsLib__TDMKills_Act takes nothing returns nothing
@@ -6612,9 +6500,6 @@ function TDMKillsLib__TDMKillsLib_Init takes nothing returns nothing
     set Load = CreateTrigger( )
     call TriggerRegisterTimerEvent( Load, 0.01, FALSE )
     call TriggerAddAction( Load, function TDMKillsLib__L )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set TDMKills_Trg = null
-    set Load = null
 endfunction
 
 function TKLS6_preload takes nothing returns nothing
@@ -6752,8 +6637,6 @@ function UseItem__I takes nothing returns nothing
     set s__UseItem__it_order[1] = 852225 //frostarmor
     set s__UseItem__abil_id[1] = 'A02N'
     set s__UseItem__point[1] = FALSE
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function ASSS1_preload takes nothing returns nothing
@@ -6834,9 +6717,6 @@ function ASSS1___CreatePartOfWave takes nothing returns nothing
     set t = null
     set cst = null
     set arrow = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set target = null
 endfunction
 
 function ASSS1___Act takes nothing returns nothing
@@ -6880,16 +6760,12 @@ function ASSS1___Act takes nothing returns nothing
         call RemoveLocation( target_loc )
         set target_loc = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set missile = null
 endfunction
 
 function ASSS1___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function ASSS1___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function ASSS2_preload takes nothing returns nothing
@@ -6913,8 +6789,6 @@ function ASSS2___Remove takes nothing returns nothing
     endif
     set t = null
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set e = null
 endfunction
 
 function ASSS2___Act takes nothing returns nothing
@@ -6942,8 +6816,6 @@ function ASSS2___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function ASSS2___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function ASSS3_preload takes nothing returns nothing
@@ -7037,8 +6909,6 @@ function ASSS3___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function ASSS3___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function creepsInit takes nothing returns nothing
@@ -7316,10 +7186,6 @@ function CreepsLib__CreepsLib_Init takes nothing returns nothing
     call TriggerRegisterTimerEvent( Load, 0.01, FALSE )
     call TriggerAddAction( Load, function CreepsLib__L )
     call CreepsLib__Loading( )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Creeps_Trg = null
-    set CreepsCount_Trg = null
-    set Load = null
 endfunction
 
 function DRASp1Lib_preload takes nothing returns nothing
@@ -7347,8 +7213,6 @@ function DRASp1Lib__TT takes unit u, string t, boolean plus returns nothing
     endif
 
     set tt = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 // UNUSED: не вызывается нигде
@@ -7466,8 +7330,6 @@ function DRASp1Lib__DRASp1_Act takes nothing returns nothing
         set caster = null
         set FoG = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set g = null
 endfunction
 
 function DRASp1Lib__DRASp1Lib_Init takes nothing returns nothing
@@ -7523,9 +7385,6 @@ function DRASp3Lib__ReleazeMissile takes nothing returns nothing
     call DestroyTimer( t )
     set c = null
     set t = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set o = null
-    set FoG = null
 endfunction
 
 function DRASp3Lib__CreateMissile takes real cX, real cY, real tX, real tY, player owner, real dmg, unit c returns nothing
@@ -7580,8 +7439,6 @@ function DRASp3Lib__DRASp3Lib_Init takes nothing returns nothing
     local trigger DRAS3_Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( DRAS3_Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( DRAS3_Trg, function DRASp3Lib__DRAS3_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set DRAS3_Trg = null
 endfunction
 
 function DRASp4Lib_preload takes nothing returns nothing
@@ -7655,9 +7512,6 @@ function DRASp4Lib__CreatePartOfWave takes nothing returns nothing
     set t = null
     set cst = null
     set arrow = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set FoG = null
 endfunction
 function DRASp4Lib__DRAS4_Act takes nothing returns nothing
     local unit caster
@@ -7698,15 +7552,11 @@ function DRASp4Lib__DRAS4_Act takes nothing returns nothing
         set caster = null
     endif
 
-    // 05.09: anti-leak (obnulenie lokalov)
-    set missile = null
 endfunction
 function DRASp4Lib__DRASp4Lib_Init takes nothing returns nothing
     local trigger DRAS4_Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( DRAS4_Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( DRAS4_Trg, function DRASp4Lib__DRAS4_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set DRAS4_Trg = null
 endfunction
 
 function DRASp5Lib_preload takes nothing returns nothing
@@ -7752,9 +7602,6 @@ function DRASp5Lib__TimerExp takes nothing returns nothing
     call PauseTimer( t )
     call DestroyTimer( t )
     set t = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set cst = null
-    set u = null
 endfunction
 
 function DRASp5Lib__PauseCstAnimation takes nothing returns nothing
@@ -7799,8 +7646,6 @@ function DRASp5Lib__RemProj takes nothing returns nothing
     call PauseTimer( t )
     call DestroyTimer( t )
     set t = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
 endfunction
 
 function DRASp5Lib__DRAS5_Act takes nothing returns nothing
@@ -7871,15 +7716,11 @@ function DRASp5Lib__DRAS5_Act takes nothing returns nothing
         set caster = null
     endif
 
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
 endfunction
 function DRASp5Lib__DRASp5Lib_Init takes nothing returns nothing
     local trigger DRAS5_Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( DRAS5_Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( DRAS5_Trg, function DRASp5Lib__DRAS5_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set DRAS5_Trg = null
 endfunction
 
 function FLOS2_preload takes nothing returns nothing
@@ -7958,16 +7799,12 @@ function FLOS6__Act takes nothing returns nothing
     endif
     set d = null
     set k = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
 endfunction
 
 function FLOS6__FLOS6_I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_DEATH )
     call TriggerAddAction( Trg, function FLOS6__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function GLAS1_preload takes nothing returns nothing
@@ -8055,8 +7892,6 @@ function GLAS1__proj takes nothing returns nothing
     set e = null
     set t = null
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set target = null
 endfunction
 function GLAS1__Act takes nothing returns nothing
     local unit caster
@@ -8104,8 +7939,6 @@ function GLAS1__In takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function GLAS1__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function GLAS2_preload takes nothing returns nothing
     call X_PreloadAbility( 'Arav' )
@@ -8182,9 +8015,6 @@ function GLAS2__Down_End takes nothing returns nothing
     call DestroyTimer( t )
     set t = null
     set cst = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
-    set dummy = null
 endfunction
 
 function GLAS2__Up_End takes nothing returns nothing
@@ -8267,8 +8097,6 @@ function GLAS2__I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function GLAS2__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function GLAS3_preload takes nothing returns nothing
@@ -8314,8 +8142,6 @@ function GLAS3__Att takes nothing returns nothing
 
     set cst = null
     set t = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
 endfunction
 function GLAS3__Act takes nothing returns nothing
     local unit caster
@@ -8341,8 +8167,6 @@ function GLAS3__I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function GLAS3__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function GROS1_preload takes nothing returns nothing
 endfunction
@@ -8426,9 +8250,6 @@ function GROS1___proj takes nothing returns nothing
     set arrow = null
     set t = null
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
-    set unused_u = null
 endfunction
 function GROS1___Act takes nothing returns nothing
     local unit caster
@@ -8485,8 +8306,6 @@ function GROS1___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function GROS1___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function GROS2_preload takes nothing returns nothing
     local unit d
@@ -8533,8 +8352,6 @@ function GROS2___TimerEnd takes nothing returns nothing
     set e = null
     set t = null
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
 endfunction
 
 function GROS2___RemAbil takes nothing returns nothing
@@ -8580,8 +8397,6 @@ function GROS2___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function GROS2___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function GROS3_preload takes nothing returns nothing
 endfunction
@@ -8648,8 +8463,6 @@ function GROS3___CreateLightning takes nothing returns nothing
     endif
     set t = null
     set cst = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
 endfunction
 
 function GROS3___Act takes nothing returns nothing
@@ -8685,8 +8498,6 @@ function GROS3___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function GROS3___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function GROS6_preload takes nothing returns nothing
@@ -8695,8 +8506,6 @@ endfunction
 function GROS6___Cond1 takes nothing returns boolean
     local unit u = GetFilterUnit( )
     local boolean b = IsPlayerEnemy( GetOwningPlayer( u ), GROS6___ch_p )and GetUnitTypeId( u ) == 'N005' and GetUnitAbilityLevel( u, 'Aloc' ) == 0 and IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) == false
-    // 05.09: anti-leak (obnulenie lokalov)
-    set u = null
     return b
 endfunction
 
@@ -8864,8 +8673,6 @@ function MRAS5Lib__MRAS5Lib_Init takes nothing returns nothing
     local trigger MRAS5_Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( MRAS5_Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( MRAS5_Trg, function MRAS5Lib__MRAS5_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set MRAS5_Trg = null
 endfunction
 
 function MRASp1Lib_preload takes nothing returns nothing
@@ -8943,9 +8750,6 @@ function MRASp1Lib__CreatePartOfWave takes nothing returns nothing
     set t = null
     set cst = null
     set arrow = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set FoG = null
 endfunction
 function MRASp1Lib__MRAS1_Act takes nothing returns nothing
     local unit u
@@ -8985,15 +8789,11 @@ function MRASp1Lib__MRAS1_Act takes nothing returns nothing
         set t = null
         set u = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set missile = null
 endfunction
 function MRASp1Lib__MRASp1Lib_Init takes nothing returns nothing
     local trigger MRAS1_Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( MRAS1_Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( MRAS1_Trg, function MRASp1Lib__MRAS1_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set MRAS1_Trg = null
 endfunction
 function MRASp2Lib__Cond1 takes nothing returns boolean
     local unit u = GetFilterUnit( )
@@ -9109,8 +8909,6 @@ function MRASp3Lib__MRASp3Lib_Init takes nothing returns nothing
     local trigger MRAS3_Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( MRAS3_Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( MRAS3_Trg, function MRASp3Lib__MRAS3_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set MRAS3_Trg = null
 endfunction
 function PALS1_preload takes nothing returns nothing
 endfunction
@@ -9176,15 +8974,11 @@ function PALS1__Act takes nothing returns nothing
         set gr = null
     endif
 
-    // 05.09: anti-leak (obnulenie lokalov)
-    set t = null
 endfunction
 function PALS1__I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function PALS1__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function PALS2__Cond1 takes nothing returns boolean
@@ -9263,8 +9057,6 @@ function PALS2__I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function PALS2__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function PALS3_preload takes nothing returns nothing
 endfunction
@@ -9331,8 +9123,6 @@ function PALS3__I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function PALS3__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function REAS1_preload takes nothing returns nothing
@@ -9410,9 +9200,6 @@ function REAS1___CreatePartOfWave takes nothing returns nothing
     set t = null
     set cst = null
     set arrow = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set target = null
 endfunction
 function REAS1___Act takes nothing returns nothing
     local unit u
@@ -9455,15 +9242,11 @@ function REAS1___Act takes nothing returns nothing
         set t = null
         set u = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set missile = null
 endfunction
 function REAS1___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function REAS1___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function REAS5_preload takes nothing returns nothing
 endfunction
@@ -9515,16 +9298,12 @@ function REAS5___Act takes nothing returns nothing
     endif
     set killer = null
     set killed = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set target = null
 endfunction
 
 function REAS5___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_DEATH )
     call TriggerAddAction( Trg, function REAS5___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function SHAS1_preload takes nothing returns nothing
 
@@ -9594,9 +9373,6 @@ function SHAS1___CreatePartOfWave takes nothing returns nothing
     set t = null
     set cst = null
     set arrow = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set target = null
 endfunction
 
 function SHAS1___Act takes nothing returns nothing
@@ -9637,15 +9413,11 @@ function SHAS1___Act takes nothing returns nothing
         set t = null
         set u = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set missile = null
 endfunction
 function SHAS1___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function SHAS1___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function SHAS2_preload takes nothing returns nothing
 endfunction
@@ -9706,8 +9478,6 @@ function SHAS2___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function SHAS2___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function SHAS3_preload takes nothing returns nothing
@@ -9778,8 +9548,6 @@ function SHAS3___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function SHAS3___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function TEHS1_preload takes nothing returns nothing
     call X_PreloadAbility( 'A039' )
@@ -9821,9 +9589,6 @@ function TEHS1___ReleazeMissile takes nothing returns nothing
     call DestroyTimer( t )
     set c = null
     set t = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set o = null
-    set FoG = null
 endfunction
 
 function TEHS1___CreateMissile takes real cX, real cY, real tX, real tY, player owner, real dmg, unit c returns nothing
@@ -9880,8 +9645,6 @@ function TEHS1___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function TEHS1___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function TEHS2_preload takes nothing returns nothing
@@ -10017,8 +9780,6 @@ function TEHS3___DelChain takes nothing returns nothing
     set elem = null
     set head = null
     set ti = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set head2 = null
 endfunction
 
 function TEHS3___Chain takes nothing returns nothing
@@ -10223,8 +9984,6 @@ function TEHS3___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function TEHS3___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function TKLS3_preload takes nothing returns nothing
@@ -10444,8 +10203,6 @@ function FLOS1__FLOS1_I takes nothing returns nothing
     local trigger FLOS1_Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( FLOS1_Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( FLOS1_Trg, function FLOS1__FLOS1_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FLOS1_Trg = null
 endfunction
 
 function FLOS3_preload takes nothing returns nothing
@@ -10533,9 +10290,6 @@ function FLOS3__CreatePartOfWave takes nothing returns nothing
     set t = null
     set cst = null
     set arrow = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set target = null
 endfunction
 
 function FLOS3__Act takes nothing returns nothing
@@ -10571,16 +10325,12 @@ function FLOS3__Act takes nothing returns nothing
         set t = null
         set u = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set missile = null
 endfunction
 
 function FLOS3__FLOS3_I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function FLOS3__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function FLOS4_preload takes nothing returns nothing
@@ -10643,8 +10393,6 @@ function FLOS4__FLOS4_I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function FLOS4__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 
 function FLOS5_preload takes nothing returns nothing
@@ -10736,8 +10484,6 @@ function FLOS5__FLOS5_I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function FLOS5__Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function GLAPreload_Go takes nothing returns nothing
     call GLAS1_preload( )
@@ -10839,8 +10585,6 @@ function StartGameLib__Act takes nothing returns nothing
         call StartSound( StartGameLib__Go_Snd )
         call DisableTrigger( GetTriggeringTrigger( ) )
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set FoG = null
 endfunction
 
 function StartStartTimer takes nothing returns nothing
@@ -11094,9 +10838,6 @@ function TKLS1___CreatePartOfWave takes nothing returns nothing
     set t = null
     set cst = null
     set arrow = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set target = null
 endfunction
 function TKLS1___Act takes nothing returns nothing
     local unit u
@@ -11139,15 +10880,11 @@ function TKLS1___Act takes nothing returns nothing
         call RemoveLocation( target_loc )
         set target_loc = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set missile = null
 endfunction
 function TKLS1___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function TKLS1___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function TKLS2_preload takes nothing returns nothing
 endfunction
@@ -11239,8 +10976,6 @@ function TKLS2___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function TKLS2___Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Trg = null
 endfunction
 function TKLS4_preload takes nothing returns nothing
 endfunction
@@ -11345,8 +11080,6 @@ function DMRevive_Act takes nothing returns nothing
         set s__DMRevivingLib__Is_Loc_Occupied[loc_i] = FALSE
     endif
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set killer = null
 endfunction
 
 function DMRevivingLib__L takes nothing returns nothing
@@ -11371,8 +11104,6 @@ function DMRevivingLib__DMRevivingLib_Init takes nothing returns nothing
     set Load = CreateTrigger( )
     call TriggerRegisterTimerEvent( Load, 0.01, FALSE )
     call TriggerAddAction( Load, function DMRevivingLib__L )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Load = null
 endfunction
 
 function FLOPreload_Go takes nothing returns nothing
@@ -11509,8 +11240,6 @@ function StartInformation takes nothing returns nothing
     call DisplayTextToPlayer( p, 0., 0., Color_Soft_Green + "Хост:|r " + s__Color_Hex[GetPlayerId( Host_Player ) + 1] + GetPlayerName( Host_Player ) + "|r" )
     call DisplayTextToPlayer( p, 0., 0., s__Color_Hex[1] + "Хост должен использовать стрелки.|r" )
     call DisplayTextToPlayer( p, 0., 0., "" )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
 endfunction
 
 function SetFirstMB takes nothing returns nothing
@@ -12181,8 +11910,6 @@ function TDMRevive_Act takes nothing returns nothing
 
     endif
     set u = null
-    // 05.09: anti-leak (obnulenie lokalov)
-    set killer = null
 endfunction
 function TDMRevivingLib__L takes nothing returns nothing
     set s__TDMRevivingLib__Team_1_Loc[1] = Location( -1673., 1033. )
@@ -12206,8 +11933,6 @@ function TDMRevivingLib__TDMRevivingLib_Init takes nothing returns nothing
     set Load = CreateTrigger( )
     call TriggerRegisterTimerEvent( Load, 0.01, FALSE )
     call TriggerAddAction( Load, function TDMRevivingLib__L )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Load = null
 endfunction
 
 function TKLPreload_Go takes nothing returns nothing
@@ -12318,9 +12043,6 @@ function XPLib__XPLib_Init takes nothing returns nothing
     set Lvl_Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Lvl_Trg, EVENT_PLAYER_HERO_LEVEL )
     call TriggerAddAction( Lvl_Trg, function XPLib__Lvl_Act )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set XP_Trg = null
-    set Lvl_Trg = null
 endfunction
 
 function GoPreload takes integer id returns nothing
@@ -12483,8 +12205,6 @@ function BuyHeroes_Act takes nothing returns nothing
 
         set hero = null
     endif
-    // 05.09: anti-leak (obnulenie lokalov)
-    set Seller = null
 endfunction
 
 function BuyHeroesLib__L takes nothing returns nothing
@@ -12518,9 +12238,6 @@ function BuyHeroesLib__BuyHeroesLib_Init takes nothing returns nothing
     set Load = CreateTrigger( )
     call TriggerRegisterTimerEvent( Load, 0.01, FALSE )
     call TriggerAddAction( Load, function BuyHeroesLib__L )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set BuyHeroes_Trg = null
-    set Load = null
 endfunction
 
 function InitGlobals takes nothing returns nothing
@@ -12653,10 +12370,6 @@ function CreateBuildingsForPlayer0 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0008 = CreateUnit( p, 'ncp2', 2880.0, -3008.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 function CreateBuildingsForPlayer1 takes nothing returns nothing
     local player p = Player( 1 )
@@ -12665,10 +12378,6 @@ function CreateBuildingsForPlayer1 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0009 = CreateUnit( p, 'ncp2', 2944.0, -3008.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 function CreateBuildingsForPlayer2 takes nothing returns nothing
     local player p = Player( 2 )
@@ -12677,10 +12386,6 @@ function CreateBuildingsForPlayer2 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0010 = CreateUnit( p, 'ncp2', 3072.0, -3008.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 function CreateBuildingsForPlayer3 takes nothing returns nothing
     local player p = Player( 3 )
@@ -12689,10 +12394,6 @@ function CreateBuildingsForPlayer3 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0011 = CreateUnit( p, 'ncp2', 3136.0, -3008.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 
 function CreateBuildingsForPlayer4 takes nothing returns nothing
@@ -12702,10 +12403,6 @@ function CreateBuildingsForPlayer4 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0012 = CreateUnit( p, 'ncp2', 3136.0, -3008.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 
 function CreateBuildingsForPlayer5 takes nothing returns nothing
@@ -12715,10 +12412,6 @@ function CreateBuildingsForPlayer5 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0013 = CreateUnit( p, 'ncp2', 2880.0, -3264.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 
 function CreateBuildingsForPlayer6 takes nothing returns nothing
@@ -12728,10 +12421,6 @@ function CreateBuildingsForPlayer6 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0014 = CreateUnit( p, 'ncp2', 2944.0, -3264.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 function CreateBuildingsForPlayer7 takes nothing returns nothing
     local player p = Player( 7 )
@@ -12740,10 +12429,6 @@ function CreateBuildingsForPlayer7 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0015 = CreateUnit( p, 'ncp2', 3072.0, -3264.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 
 function CreateBuildingsForPlayer8 takes nothing returns nothing
@@ -12753,10 +12438,6 @@ function CreateBuildingsForPlayer8 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0016 = CreateUnit( p, 'ncp2', 3136.0, -3264.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 
 function CreateBuildingsForPlayer9 takes nothing returns nothing
@@ -12766,10 +12447,6 @@ function CreateBuildingsForPlayer9 takes nothing returns nothing
     local trigger t
     local real life
     set gg_unit_ncp2_0017 = CreateUnit( p, 'ncp2', 3136.0, -3264.0, 270.000 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 
 function CreateNeutralPassiveBuildings takes nothing returns nothing
@@ -12789,10 +12466,6 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     call SetUnitColor( gg_unit_n001_0007, ConvertPlayerColor( 6 ) )
     set gg_unit_edos_0053 = CreateUnit( p, 'edos', 832.0, 1344.0, 270.000 )
     call SetUnitColor( gg_unit_edos_0053, ConvertPlayerColor( 10 ) )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 function CreateNeutralPassive takes nothing returns nothing
     local player p = Player( PLAYER_NEUTRAL_PASSIVE )
@@ -12814,10 +12487,6 @@ function CreateNeutralPassive takes nothing returns nothing
     set u = CreateUnit( p, 'nfro', 1848.8, 1224.1, 118.634 )
     set u = CreateUnit( p, 'nfro', 2043.3, 1753.8, 191.552 )
     set u = CreateUnit( p, 'nfro', 240.5, -1682.1, 219.151 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set p = null
-    set u = null
-    set t = null
 endfunction
 function CreatePlayerBuildings takes nothing returns nothing
     call CreateBuildingsForPlayer0()
@@ -12845,8 +12514,6 @@ function CreateRegions takes nothing returns nothing
     local weathereffect we
     set gg_rct_OBEL = Rect( -2464.0, -2464.0, -2048.0, -2016.0 )
     set gg_rct_MR = Rect( -1760.0, 960.0, -1312.0, 1408.0 )
-    // 05.09: anti-leak (obnulenie lokalov)
-    set we = null
 endfunction
 
 function Trig_PartyFrame_Alliance_Actions takes nothing returns nothing
