@@ -199,7 +199,7 @@ globals
     constant integer TKLS6___e_abil_id = 'A03N'
     constant integer TKLS6___p_abil_id = 'A03P'
     constant integer TKLS6___h_cst = StringHash( "h_cst" )
-    
+
     weathereffect TKLS6___we = null
     rect TKLS6___r = null
     boolean TKLS6_metel = FALSE
@@ -587,6 +587,7 @@ endfunction
 //паладин мощь вернул на 2 ед с 1 ед силы
 //исщадье тьмы -2 разума текст фик. и повышение хп от крипов фикс текст
 
+// UNUSED: не вызывается нигде
 function IsUnitInvul takes unit u returns boolean
     return LoadBoolean( HT, GetHandleId( u ), StringHash( "Has_Invul" ) ) or GetUnitAbilityLevel( u, 'Avul' ) > 0
 endfunction
@@ -699,13 +700,12 @@ function DropItemLiver takes unit a returns nothing
             call SetItemDroppable(it, true)
             call SetItemPosition(it, x, y)
         endif
-        
+
         set i = i + 1
     endloop
     call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl", x, y))
     set it = null
 endfunction
-
 
 function ItemDestroyUpdateNew takes nothing returns nothing
     local timer t = GetExpiredTimer()
@@ -744,6 +744,7 @@ function ItemDestroyUpdateNew takes nothing returns nothing
     set it = null
 endfunction
 
+// UNUSED: не вызывается нигде
 function ItemDestroyNew takes item it, real time returns nothing
     local timer t = CreateTimer()
     local integer id = GetHandleId(t)
@@ -760,15 +761,12 @@ function ItemDestroyNew takes item it, real time returns nothing
     set it = null
 endfunction
 
-
-
-
 function ItemDestroyUpdate takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local integer id = GetHandleId( t )
     local item it = LoadItemHandle( HT, id, 0 )
     local real time = LoadReal( HT, id, 1 )
-   
+
     if time > 0.0 and IsItemOwned( it ) == false and GetWidgetLife( it ) > 0 then
 
     //поменял сохрание внутрь условия
@@ -827,6 +825,7 @@ function ItemDropBossUpdate takes nothing returns nothing
     set it = null
 endfunction
 
+// UNUSED: не вызывается нигде
 function ItemDropBoss takes integer itdrop, real time , real x , real y returns nothing
     local timer t = CreateTimer( )
     local integer id = GetHandleId( t )
@@ -867,6 +866,7 @@ function Dist takes real x, real y, real x1, real y1 returns real
     return SquareRoot( ( x - x1 ) * ( x - x1 ) + ( y - y1 ) * ( y - y1 ) )
 endfunction
 
+// UNUSED: не вызывается нигде
 function AngleXY takes real x, real y, real x1, real y1 returns real
     return 180.0 / 3.14159 * Atan2( y1 - y, x1 - x )
 endfunction
@@ -885,7 +885,7 @@ function LightningUnit_Move takes nothing returns nothing
     local lightning Light = LoadLightningHandle( HT, i, 3 )
     local real x1 = GetUnitX( caster )
     local real y1 = GetUnitY( caster )
-    local real z1 = GetUnitFlyHeight( caster ) + 60 //FuncLocationZ( x1, y1 ) // + 
+    local real z1 = GetUnitFlyHeight( caster ) + 60 //FuncLocationZ( x1, y1 ) // +
     local real x2 = GetUnitX( target )
     local real y2 = GetUnitY( target )
     local real z2 = GetUnitFlyHeight( target ) + 60 //FuncLocationZ( x2, y2 ) //
@@ -948,7 +948,7 @@ function LightningRemove takes nothing returns nothing
     set gl = null
     set t = null
 endfunction
- 
+
 function AddTimeLightning takes lightning gl, real time returns nothing
     local timer t = CreateTimer()
     call SaveLightningHandle(HT, GetHandleId(t), 0, gl)
@@ -957,6 +957,7 @@ function AddTimeLightning takes lightning gl, real time returns nothing
     set gl = null
 endfunction
 
+// UNUSED: не вызывается нигде
 function TriggerRegister takes trigger t, playerunitevent e returns nothing
     local integer i = 0
     loop
@@ -965,7 +966,6 @@ function TriggerRegister takes trigger t, playerunitevent e returns nothing
         exitwhen i > 15
     endloop
 endfunction
-
 
 function SetStrStatsSave takes unit caster, integer newStr, boolean permanent returns nothing
     local real stats = GetUnitState( caster, UNIT_STATE_LIFE ) / GetUnitState( caster, UNIT_STATE_MAX_LIFE )
@@ -982,6 +982,7 @@ function SetIntStatsSave takes unit caster, integer newInt, boolean permanent re
 endfunction
 
 //Проверка атрибута героя
+// UNUSED: не вызывается нигде
 function CheckStatsHero takes unit a returns integer
     if GetHeroStr( a, true ) > GetHeroAgi( a, true ) and GetHeroStr( a, true ) > GetHeroInt( a, true ) then
         return GetHeroStr( a, true )
@@ -993,7 +994,7 @@ function CheckStatsHero takes unit a returns integer
     return 0
 endfunction
 
-
+// UNUSED: не вызывается нигде
 function Trig_DeleteRune_Conditions takes nothing returns boolean
     return GetItemType(GetManipulatedItem()) == ITEM_TYPE_POWERUP
 endfunction
@@ -1024,7 +1025,7 @@ function InitTrig_DeleteRune takes nothing returns nothing
     set trg = null
 endfunction
 
-
+// UNUSED: не вызывается нигде
 function AAK__Act2 takes nothing returns nothing
     local unit cjlocgn_00000000 = GetTriggerUnit( )
     local unit cjlocgn_00000001 = GetOrderTargetUnit( )
@@ -1056,7 +1057,7 @@ function AAK__I takes nothing returns nothing
     set Trg = null
 endfunction
 
-
+// UNUSED: не вызывается нигде
 function Get_Target_Unit takes unit u, real x, real y returns unit
     local unit uf
     local unit ut_hero
@@ -1127,6 +1128,7 @@ function UnitOccupiedSlotsNumber takes unit target returns integer
     return index
 endfunction
 
+// UNUSED: не вызывается нигде
 function AI__FilterHeroAndEnemy takes nothing returns boolean
     local unit u = GetFilterUnit( )
     local boolean b = IsUnitType( u, UNIT_TYPE_HERO )and IsPlayerEnemy( AI__ch_p, GetOwningPlayer( u ) )and GetUnitState( u, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( u, 'Avul' ) > 0 ) and IsUnitVisible( u, AI__ch_p ) //and GetUnitAbilityLevel( u, 'Aloc' ) == 0
@@ -1134,6 +1136,7 @@ function AI__FilterHeroAndEnemy takes nothing returns boolean
     return b
 endfunction
 
+// UNUSED: не вызывается нигде
 function AI__FilterEnemy takes nothing returns boolean
     local unit u = GetFilterUnit( )
     local boolean b = IsPlayerEnemy( AI__ch_p, GetOwningPlayer( u ) )and GetUnitState( u, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( u, 'Avul' ) > 0 )and IsUnitVisible( u, AI__ch_p ) //and GetUnitAbilityLevel( u, 'Aloc' ) == 0
@@ -1180,7 +1183,7 @@ function AI__A_Buy takes nothing returns nothing
                 set ch = GetHeroInt( u, TRUE )
                 set state = 3
             endif
-            
+
             if state == 1 then
                 if AI__OrderBuyItem( u, AI__Shop, 'tstr' ) then
                  //   call BJDebugMsg( "buyed" )
@@ -1207,7 +1210,6 @@ function AI__A_Buy takes nothing returns nothing
     endloop
     set u = null
 endfunction
-
 
 function AI__A_Death takes nothing returns nothing
     local unit u = GetTriggerUnit( )
@@ -1528,16 +1530,15 @@ function AI_A_Spam takes nothing returns nothing
        // set p = s__Online_Player[i]
         set p = Player(j - 1)
         set id = GetPlayerId(p) + 1
-      
+
        // call DisplayTextToForce( GetPlayersAll( ),GetPlayerName( p) +  "_игрок в цикле_spam" + I2S(j) )
 
         if GetPlayerController( p ) == MAP_CONTROL_COMPUTER and GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING then
             set u = s__Hero[id]
-          
+
            //  call DisplayTextToForce( GetPlayersAll( ),GetPlayerName( p) +  "_игрок айди_spam" + I2S(id)+ "__.юнит  " + GetUnitName(u ))
 
             if not IsUnitPaused( u ) and GetUnitAbilityLevel( u, 'Arav' ) == 0 then
-
 
                 if TimerGetRemaining( s__AI__Spam_Timer[id] ) == 0.then
 
@@ -1555,7 +1556,7 @@ function AI_A_Spam takes nothing returns nothing
                          //  call DisplayTextToForce( GetPlayersAll( ),GetUnitName( u ) + "_id_"+ I2S(id) +  "цель потеряна кастует ИИ SPAM" )
                         endif
                     endif
-                    
+
                     if GetAIDifficulty( p ) == AI_DIFFICULTY_NEWBIE then
                         set t_t = 2.
                     endif
@@ -1570,16 +1571,13 @@ function AI_A_Spam takes nothing returns nothing
             endif
 
         endif
-      
+
         set j = j + 1
 
     endloop
     set target = null
     set u = null
 endfunction
-
-
-
 
 function AI__GetItems takes nothing returns nothing
     local item it = GetEnumItem( )
@@ -1614,21 +1612,19 @@ function AI_A_Do takes nothing returns nothing
     local group g
     local group gRR = CreateGroup()
 
-
     loop
         exitwhen ( j > 10 )
        // set p = s__Online_Player[i]
-  
+
         set p = Player(j - 1)
         set id = GetPlayerId(p) + 1
-      
 
         if GetPlayerController( p ) == MAP_CONTROL_COMPUTER and GetPlayerSlotState( p ) == PLAYER_SLOT_STATE_PLAYING then
        // call DisplayTextToForce( GetPlayersAll( ),GetPlayerName( p) +  "_игрок в цикле_do" + I2S(i) + I2S(GetPlayerId( p )) )
 
             set u = s__Hero[id]
             if not IsUnitPaused( u ) and GetUnitAbilityLevel( u, 'Arav' ) == 0 then
-            
+
            //call DisplayTextToForce( GetPlayersAll( ),GetPlayerName( p) +  "_игрок айди_do" + I2S(id)+ "__" + GetUnitName(u ))
 
                 if TimerGetRemaining( s__AI__Check_Timer[id] ) == 0.then
@@ -1642,7 +1638,7 @@ function AI_A_Do takes nothing returns nothing
                     set r = Rect( GetUnitX( u ) - 300., GetUnitY( u ) - 300., GetUnitX( u ) + 300., GetUnitY( u ) + 300. )
                     set AI__ch_u = u
                     set AI__ch_p = GetOwningPlayer(u)
-                
+
                     call EnumItemsInRect( r, null, function AI__GetItems )
                     call RemoveRect( r )
                     set r = null
@@ -1665,17 +1661,17 @@ function AI_A_Do takes nothing returns nothing
                         loop
                             set FoG = FirstOfGroup( gRR )
                             exitwhen ( FoG == null )
-                        
+
                             if GetUnitState( FoG, UNIT_STATE_LIFE ) < min_hp then
                                 set t_unit = FoG
                                 set min_hp = GetUnitState( FoG, UNIT_STATE_LIFE )
 
                             //поменял местами
                         //     call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + " ищем 1" + GetUnitName(FoG) + "мин хп_" + R2S(min_hp) )
- 
+
                             endif
                             call GroupRemoveUnit( gRR, FoG )
-                        
+
                         endloop
                         call DestroyGroup(gRR)
                     //set t_unit = Get_Target_Unit(u, GetUnitX( u ), GetUnitY( u ))
@@ -1699,31 +1695,29 @@ function AI_A_Do takes nothing returns nothing
                             endloop
                             call DestroyGroup(g)
 
-                        
                             if not IsGroupEmpty(gRR) then
 
                            //     call DisplayTextToForce( GetPlayersAll( ), "цель доп переборки ИИ2_" )
-   
+
                                 loop
                                     set FoG = FirstOfGroup( gRR )
                                     exitwhen( FoG == null )
                                     if GetUnitState( FoG, UNIT_STATE_LIFE ) < min_hp then
-                                   
+
                                         set t_unit = FoG
                                         set min_hp = GetUnitState( FoG, UNIT_STATE_LIFE )
                                    //     call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + " ищем 2" + GetUnitName(FoG) + "мин хп_" + R2S(min_hp) )
 
-
                                     endif
                                     call GroupRemoveUnit( gRR, FoG )
-                               
+
                                 endloop
                                 call DestroyGroup(gRR)
 
                                 call SaveUnitHandle( HT, GetHandleId( u ), StringHash( "H_TARGET" ), t_unit )
                             //    call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + "нашел цель ИИ2_" + GetUnitName(t_unit) )
                             // цели 2 никогда нет
-                            
+
                             else
 
                                 if TimerGetRemaining( s__AI__Move_Timer[id] ) == 0.then
@@ -1736,9 +1730,8 @@ function AI_A_Do takes nothing returns nothing
                                     endif
                                 endif
 
-
                             endif
-                        
+
                         endif
                     else
 
@@ -1753,14 +1746,14 @@ function AI_A_Do takes nothing returns nothing
                             call GroupRemoveUnit(g, f)
                         endloop
                         call DestroyGroup(g)
-    
+
                         if not IsGroupEmpty(gRR) then
                         //call DisplayTextToForce( GetPlayersAll( ), "цель доп переборки ИИ3_" )
                             loop
                                 set FoG = FirstOfGroup( gRR )
                                 exitwhen( FoG == null )
                                 if GetUnitState( FoG, UNIT_STATE_LIFE ) < min_hp then
-                                
+
                                     set t_unit = FoG
                                     set min_hp = GetUnitState( FoG, UNIT_STATE_LIFE )
                                //     call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + " ищем 3 " + GetUnitName(FoG) + "мин хп врага крип3_" + R2S(min_hp) )
@@ -1768,7 +1761,7 @@ function AI_A_Do takes nothing returns nothing
                                 endif
 
                                 call GroupRemoveUnit( gRR, FoG )
-                            
+
                             endloop
 
                             call DestroyGroup(gRR)
@@ -1795,7 +1788,6 @@ function AI_A_Do takes nothing returns nothing
                             endif
                         else
 
-
                             if TimerGetRemaining( s__AI__Move_Timer[id] ) == 0.then
                          //     call SaveUnitHandle( HT, GetHandleId( u ), StringHash( "H_TARGET" ), null ) //добавил нулл ОНО тут было???
 
@@ -1815,7 +1807,6 @@ function AI_A_Do takes nothing returns nothing
 
                         endif
                     endif
-
 
                     if GetAIDifficulty( p ) == AI_DIFFICULTY_NEWBIE then
                         set t_t = 3.
@@ -1865,7 +1856,6 @@ function AI__I takes nothing returns nothing
         set i = i + 1
     endloop
 endfunction
-
 
 function MakingAlpha takes nothing returns nothing
     local timer t = GetExpiredTimer( )
@@ -2024,7 +2014,7 @@ function ComLib__Act takes nothing returns nothing
     endif
 
     if ( chat == "-bug" ) then
-        
+
         set i = 1
         loop
             exitwhen( i > Online_Players )
@@ -2037,7 +2027,7 @@ function ComLib__Act takes nothing returns nothing
                         call UnitRemoveAbility( u, 'Arav' )
                         call PauseUnit( u, FALSE )
                         call IssueImmediateOrderById( u, 851972 )
-    
+
                         call DisplayTextToForce( bj_FORCE_ALL_PLAYERS, s__Color_Hex[1] + "•|r" )
                         set u = null
                         set chat = null
@@ -2100,7 +2090,6 @@ function ComLib__Act takes nothing returns nothing
     set ss2 = null
     set chat = null
 endfunction
-
 
 function ComLib__ComLib_Init takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
@@ -2272,7 +2261,6 @@ function DPSLib__DPSLib_Init takes nothing returns nothing
     call TriggerAddAction( Trg, function DPSLib__PeriodicEvent )
 endfunction
 
-
 function Eff__RemoveEffect takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local effect e = LoadEffectHandle( HT, GetHandleId( t ), StringHash( "EF" ) )
@@ -2414,7 +2402,6 @@ function Energy__Regen takes nothing returns nothing
     endloop
 endfunction
 
-
 // Инициализация таймеров для обновления тексттегов и регенерации энергии
 function Energy__I takes nothing returns nothing
     local timer energyTextTimer = CreateTimer()
@@ -2478,7 +2465,6 @@ function Filters_Multi takes string l__gg_snd_DEA_horn, player p returns nothing
     set t = null
 endfunction
 
-
 function X_GetMainChar takes unit u returns integer
     local integer id = GetUnitTypeId( u )
     if id == 'Hpal' then
@@ -2517,10 +2503,8 @@ function X_GetMainChar takes unit u returns integer
     return 0
 endfunction
 
-
-
 function GLAS4_preload takes nothing returns nothing
-    
+
 endfunction
 
 function GROS5_FilterWater takes real x, real y, real dmg returns real
@@ -2529,8 +2513,6 @@ function GROS5_FilterWater takes real x, real y, real dmg returns real
     endif
     return dmg
 endfunction
-
-
 
 function GLAS4__BloodDmg_Period takes nothing returns nothing
     local timer t = GetExpiredTimer( )
@@ -2551,9 +2533,9 @@ function GLAS4__BloodDmg_Period takes nothing returns nothing
         call FlushChildHashtable( HT, GetHandleId( t ) )
         call PauseTimer( t )
         call DestroyTimer( t )
-      
+
     endif
-   
+
     set t = null
     set u = null
     set cs = null
@@ -2577,21 +2559,19 @@ function GLAS4__AttackAct takes nothing returns nothing
     local integer chance = GetRandomInt( 1, 100 )
     local real damage = GetEventDamage( )
     call DisableTrigger( GetTriggeringTrigger( ) )
-   
+
     if GetEventDamageSource() != null and damage > 1. and IsUnitEnemy(att, GetOwningPlayer(target)) and IsUnitType(target, UNIT_TYPE_MAGIC_IMMUNE) == false then
-    
-      
+
     //добавлено условие на 200 дистанции ,чтоб не было бесконечный стак
         if GetEventDamage( ) > 0 and GetUnitAbilityLevel( att, 'A029' ) > 0 and SquareRoot( ( GetUnitX( att ) - GetUnitX( target ) ) * ( GetUnitX( att ) - GetUnitX( target ) ) + ( GetUnitY( att ) - GetUnitY( target ) ) * ( GetUnitY( att ) - GetUnitY( target ) ) ) <= 200. then
-  
+
             if chance <= 10 then
          //   call DisplayTextToForce( GetPlayersAll( ), "кровотечение орк 10 шанс" )
                 call GLAS4_BloodDmg( att, target, damage )
             endif
-        
+
         endif
 
-    
     endif
     call EnableTrigger( GetTriggeringTrigger( ) )
     set att = null
@@ -2608,7 +2588,7 @@ endfunction
 function GoldLib__Gold_Act takes nothing returns nothing
     local integer i = 0
     if GoldLib_enabled then
-        
+
         loop
             exitwhen( i > 11 )
             call SetPlayerState( Player( i ), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState( Player( i ), PLAYER_STATE_RESOURCE_GOLD ) + 1 )
@@ -2665,7 +2645,6 @@ function IF_IsItemInInventory takes unit u, item it returns boolean
     return i < 6
 endfunction
 
-
 function InitializationLib__L takes nothing returns nothing
     local unit d
     call StartSound( gg_snd_startstart )
@@ -2682,7 +2661,7 @@ function InitializationLib__L takes nothing returns nothing
     set s__Circle[10] = gg_unit_ncp2_0017
     set s__Team_Name[1] = "Команда #1"
     set s__Team_Name[2] = "Команда #2"
-  
+
     set d = CreateUnit( Player( 13 ), 'hfoo', 0., 0., 0. ) //пехотинец без москитов
     call UnitAddAbility( d, 'A006' )
     call UnitAddAbility( d, 'Arav' )
@@ -2724,7 +2703,6 @@ function InitializationLib__InitializationLib_In takes nothing returns nothing
                 endif
             endif
 
-           
             //отнимать игроков при ливе кто будет?Смещать плеера онлайн плеер?
             call CreateUnit( p, 'h002', 818., 1321., 0. )
             call SetPlayerAbilityAvailable( p, 'A01L', FALSE )
@@ -2765,7 +2743,7 @@ function ItemsLib__GetItems takes nothing returns nothing
            //     call DisplayTextToForce( GetPlayersAll( ),  GetItemName(it2) +"_складываем заряды+ " + I2S(GetItemCharges( it )))
 
             else
-                set it2 = UnitAddItemById( u, s__ItemsLib__stack_i_r[i] ) //вот тут не может отдать предмет герою 
+                set it2 = UnitAddItemById( u, s__ItemsLib__stack_i_r[i] ) //вот тут не может отдать предмет герою
                 call SetItemCharges( it2, GetItemCharges( it ) ) //если забит инвентарь зарядов будет 1
            //     call DisplayTextToForce( GetPlayersAll( ),  GetItemName(it2)+ "устанавливаем заряды" + I2S(GetItemCharges( it )))
 
@@ -2876,7 +2854,7 @@ function ItemsLib__ItemsLib_Init takes nothing returns nothing
     set i = 0
     call TriggerAddAction( UseItems_Trg, function ItemsLib__UseItems )
     set p = null
-    
+
     set s__ItemsLib__stack_r_r[1] = 'I00U' //Крест пустышка
     set s__ItemsLib__stack_i_r[1] = 'ankh' //Крест оригинал
     set s__ItemsLib__stack_r_r[2] = 'I00R' //Зелье прозрения всей карты
@@ -2929,14 +2907,14 @@ function LeaveLib__Act takes nothing returns nothing
     call StartSound( gg_snd_LeaveSound )
 
      if s__Hero[GetConvertedPlayerId( p )] != null then
-    
+
         call DropItemLiver(s__Hero[GetConvertedPlayerId( p )])
         call RemoveUnit(s__Hero[GetConvertedPlayerId( p )])
         set s__Hero[GetConvertedPlayerId( p )] = null
     endif
- 
+
     //добавил удаление героя
-    // когда игрок ливает число игроков не  пересчитывается, а только меняются лидеры команды 
+    // когда игрок ливает число игроков не  пересчитывается, а только меняются лидеры команды
 endfunction
 
 function LeaveLib__LeaveLib_Init takes nothing returns nothing
@@ -2964,7 +2942,7 @@ function MoonRiderQuestLib__MR_Act takes nothing returns nothing
     local real time = GetFloatGameState( GAME_STATE_TIME_OF_DAY )
     local unit cjlocgn_00000000 = GetEnteringUnit( )
     if time >= MoonRiderQuestLib__Start_Time and time <= MoonRiderQuestLib__End_Time and MoonRiderQuestLib__Quest_Started_P2 and not MoonRiderQuestLib__Quest_Finished_P2 then
-        
+
         if IsUnitType( cjlocgn_00000000, UNIT_TYPE_HERO )and UnitHasItemOfTypeBJ( cjlocgn_00000000, 'I01G' ) then
             call RemoveItem( GetItemOfTypeFromUnitBJ(cjlocgn_00000000, 'I01G' ) )
 
@@ -2985,7 +2963,7 @@ function MoonRiderQuestLib__Act takes nothing returns nothing
     local real time = GetFloatGameState( GAME_STATE_TIME_OF_DAY )
     local unit u = GetEnteringUnit( )
     if time >= MoonRiderQuestLib__Start_Time and time <= MoonRiderQuestLib__End_Time and not MoonRiderQuestLib__Unit_Marked and not MoonRiderQuestLib__Quest_Finished_P1 then
-        
+
         if IsUnitType( u, UNIT_TYPE_HERO ) then
             call Eff_AddThenRemoveEffectOnUnit( "Abilities\\Spells\\NightElf\\TargetArtLumber\\TargetArtLumber.mdl", u, "origin", 5. )
             call UnitAddAbility( u, 'A00E' )
@@ -2997,7 +2975,7 @@ function MoonRiderQuestLib__Act takes nothing returns nothing
             call TriggerRegisterUnitEvent( MoonRiderQuestLib__Deer_Death_Trg, MoonRiderQuestLib__Deer, EVENT_UNIT_DEATH )
             set MoonRiderQuestLib__Unit_Marked = TRUE
         endif
-        
+
     endif
     set u = null
 endfunction
@@ -3021,7 +2999,6 @@ function MoonRiderQuestLib__Init takes nothing returns nothing
     call TriggerRegisterEnterRectSimple( MoonRiderQuestLib__MR_Trg, gg_rct_MR )
     call TriggerAddAction( MoonRiderQuestLib__MR_Trg, function MoonRiderQuestLib__MR_Act )
 endfunction
-
 
 function PALS4__Act takes nothing returns nothing
     local integer i = 1
@@ -3068,7 +3045,6 @@ function PALS6__Act_Attack takes nothing returns nothing
     local unit a = GetTriggerUnit( )
     local timer t
     local real d = SquareRoot( ( GetUnitX( u ) - GetUnitX( a ) ) * ( GetUnitX( u ) - GetUnitX( a ) ) + ( GetUnitY( u ) - GetUnitY( a ) ) * ( GetUnitY( u ) - GetUnitY( a ) ) )
-    
 
     if GetEventDamage( ) > 0 and GetUnitAbilityLevel( u, 'A043' ) > 0 and d <= 140.and PALS6_m_type[GetConvertedPlayerId( GetOwningPlayer( u ) )] == 2 then
 
@@ -3104,7 +3080,6 @@ function PALS6__Act_Attack takes nothing returns nothing
     set a = null
 endfunction
 
-
 function PALS6__Trg_Ch_A takes nothing returns nothing
     local unit u = GetTriggerUnit( )
     if GetIssuedOrderId( ) == 852177 then
@@ -3125,6 +3100,7 @@ function PALS6__I takes nothing returns nothing
     call TriggerAddAction( Trg_Ch, function PALS6__Trg_Ch_A )
 endfunction
 
+// UNUSED: не вызывается нигде
 function PALS7_preload takes nothing returns nothing
 endfunction
 
@@ -3164,7 +3140,6 @@ function PALS7__B takes nothing returns nothing
     set e = null
 endfunction
 
-
 function PALS7__Act_S takes nothing returns nothing
     local unit caster
     local effect fx
@@ -3174,7 +3149,6 @@ function PALS7__Act_S takes nothing returns nothing
     if GetSpellAbilityId( ) == 'A008' then
        // call DisplayTextToForce( GetPlayersAll( ), "пал щит акт" )
         set caster = GetTriggerUnit( )
-        
 
         if LoadBoolean( HT, GetHandleId( caster ), StringHash( "PalShield" ) ) then
           //  call PauseTimer( t )
@@ -3186,7 +3160,7 @@ function PALS7__Act_S takes nothing returns nothing
             set t = LoadTimerHandle( HT, GetHandleId( caster ), StringHash( "H_TIMER_PAL" ) )
             call TimerStart( t, TimerGetRemaining( t ) + energy, FALSE, function PALS7__B )
                 //добавил хрень с энергией
-              
+
         else
             set fx = AddSpecialEffectTarget( PALS7__eff, caster, PALS7__attach )
             set t = CreateTimer( )
@@ -3231,7 +3205,7 @@ function PALS7__Act_T takes nothing returns nothing
             set t = LoadTimerHandle( HT, GetHandleId( target ), StringHash( "H_TIMER_PAL" ) )
             call TimerStart( t, TimerGetRemaining( t ) + energy, FALSE, function PALS7__B )
             //добавил хрень с энергией
-               
+
         else
             set fx = AddSpecialEffectTarget( PALS7__eff, target, PALS7__attach )
             set t = CreateTimer( )
@@ -3305,7 +3279,7 @@ function PingLib__PingLib_Init takes nothing returns nothing
 endfunction
 
 function REAS4_preload takes nothing returns nothing
-  
+
 endfunction
 
 function REAS4___TT takes unit u, integer bonus returns nothing
@@ -3395,7 +3369,7 @@ function REAS4___Act takes nothing returns nothing
         set cjlocgn_00000002 = 0.
         set str = R2I( GetHeroStr( target, FALSE ) * REAS4___percent )
         if not LoadBoolean( HT, GetHandleId( target ), REAS4___h_a ) then
-        
+
             //call SetHeroStr( caster, GetHeroStr( caster, FALSE ) + str, TRUE )
           //call SetHeroStr( target, GetHeroStr( target, FALSE ) - str, TRUE )
 
@@ -3491,11 +3465,9 @@ function REAS6___Act takes nothing returns nothing
     set attacker = null
 endfunction
 
-
 function REAS6___I takes nothing returns nothing
     call TriggerAddAction( REAS6_Trg, function REAS6___Act )
 endfunction
-
 
 function RunesLib__Act_2 takes nothing returns nothing
     local item it = GetManipulatedItem( )
@@ -3535,11 +3507,10 @@ function RunesLib__Act_2 takes nothing returns nothing
                 call RemoveUnit( dummy )
                 set dummy = null
             endif
-            
+
         endif
         set i = i + 1
     endloop
-
 
     set t_it = null
     set dummy = null
@@ -3651,7 +3622,6 @@ function SetUnitMax__I takes nothing returns nothing
     call RemoveUnit( dummy )
 endfunction
 
-
 function StunUnitAct takes nothing returns nothing
     local timer t=GetExpiredTimer()
     local integer HID=GetHandleId(t)
@@ -3659,15 +3629,15 @@ function StunUnitAct takes nothing returns nothing
     local integer UID=GetHandleId(target)
     local real last=LoadReal(udg_Hash,UID,300)
     call SaveReal(udg_Hash,UID,300,last-0.10)
-    
+
   //call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun time-"  + R2S(last) )
-  
+
     if last<0.10 or GetUnitAbilityLevel(target,'BPSE')==0 then
-    
+
       if IsUnitType(target,UNIT_TYPE_HERO)==false then
      //   call FlushChildHashtable(udg_Hash,UID)
       endif
-      
+
       call UnitRemoveAbility(target,'BPSE')
   //    call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun clear" )
       call RemoveSavedReal(udg_Hash,UID,300)
@@ -3676,7 +3646,7 @@ function StunUnitAct takes nothing returns nothing
       call PauseTimer(t)
       call DestroyTimer(t)
     endif
-    
+
     set t =null
     set t=null
 endfunction
@@ -3696,11 +3666,11 @@ function StunUnit takes unit target,real last returns real
     else
     set t=LoadTimerHandle(udg_Hash,UID,100)
     endif
-    
+
     set HID=GetHandleId(t)
     call SaveTimerHandle(udg_Hash,UID,100,t)
     call SaveUnitHandle(udg_Hash,HID,400, target)
-    
+
     if last>LoadReal(udg_Hash,UID,300) then
     set last=last
     call SaveReal(udg_Hash,UID,300,last)
@@ -3723,7 +3693,7 @@ function StunUnit takes unit target,real last returns real
     //call DisplayTextToForce( GetPlayersAll(), GetUnitName(target)+ "stun increase+" + R2S(last) )
     endif
     endif
-    
+
     if boolean01 then
     //call DisplayTextToForce( GetPlayersAll(), "Stun timer start" )
     call TimerStart(t,0.10,true,function StunUnitAct)
@@ -3732,7 +3702,6 @@ function StunUnit takes unit target,real last returns real
     set dummy=null
     return last
 endfunction
-
 
 function Stun__StopUnit takes nothing returns nothing
     local timer t = GetExpiredTimer( )
@@ -3753,6 +3722,7 @@ function Stun__StopUnit takes nothing returns nothing
     set u = null
 endfunction
 
+// UNUSED: не вызывается нигде
 function Stun_Target takes unit cst, unit u, real time returns nothing
     local integer stuns = LoadInteger( HT, GetHandleId( u ), StringHash( I2S( GetPlayerId( GetOwningPlayer( cst ) ) + 1 ) + "stuns" ) )
     local timer t
@@ -3773,6 +3743,7 @@ function Stun_Target takes unit cst, unit u, real time returns nothing
     set fx = null
 endfunction
 
+// UNUSED: не вызывается нигде
 function Stun_ClearStuns takes unit u returns nothing
     // почему с 10 считаем?
     local integer i = 10
@@ -3814,7 +3785,7 @@ function Set_TDM_MB_Act takes nothing returns nothing
     call MultiboardSetItemsStyle( TDMMultiboardLib_TDM_MB, true, false )
     call MultiboardSetTitleText( TDMMultiboardLib_TDM_MB, "Командная Арена || Лимит: " + I2S( Choosed_WP ) )
     set mbi = MultiboardGetItem( TDMMultiboardLib_TDM_MB, 0, 0 )
-    call AntiBJ_MultiboardSetItemWidthBJN( TDMMultiboardLib_TDM_MB, 1, 0, 12. ) //8 10 
+    call AntiBJ_MultiboardSetItemWidthBJN( TDMMultiboardLib_TDM_MB, 1, 0, 12. ) //8 10
     set mbi = MultiboardGetItem( TDMMultiboardLib_TDM_MB, 0, 1 )
     call MultiboardSetItemValue( mbi, s__Color_Hex[7] + "K" )
     call AntiBJ_MultiboardSetItemWidthBJN( TDMMultiboardLib_TDM_MB, 2, 0, 1.8 ) //1.5 1.7
@@ -3966,8 +3937,6 @@ function TDMMultiboardLib_Init takes nothing returns nothing
     call DisableTrigger( TDMMultiboardLib_Set_TDM_MB_Trg_Var )
 endfunction
 
-
-
 function TimeLib__Time_Act takes nothing returns nothing
     local integer i = 0
     if TimeLib_GO_Time then
@@ -4003,6 +3972,7 @@ function X_ApplyLifeSmall takes unit d returns nothing
     call UnitApplyTimedLife( d, 'BTLF', 0.5 )
 endfunction
 
+// UNUSED: не вызывается нигде
 function X_KillLightning takes lightning lt returns nothing
     call DestroyLightning( lt )
 endfunction
@@ -4026,8 +3996,6 @@ function X_AddTimedEff takes string sfx, real x, real y, real time returns nothi
     set e = null
     set t = null
 endfunction
-
-
 
 function X_PreloadAbility takes integer aid returns nothing
     local unit d = CreateUnit( Player( 13 ), 'hfoo', 0., 0., 0. )
@@ -4097,6 +4065,7 @@ function ADSLib_Init takes nothing returns nothing
     call TriggerAddAction( ADSLib_Trg, function Act )
 endfunction
 
+// UNUSED: не вызывается нигде
 function ASSS4_preload takes nothing returns nothing
     call X_PreloadAbility( ASSS4___invis_ab )
 endfunction
@@ -4161,7 +4130,7 @@ function ASSS4___IssueOrderToIllusion takes unit u returns nothing
 
         if w != null then
             call IssueTargetOrderById( FoG, LoadInteger( HT, GetHandleId( u ), ASSS4___h_order ), w )
-            
+
         //    call DisplayTextToForce( GetPlayersAll( ), "приказ иллюзий 1" )
         else
          //   call DisplayTextToForce( GetPlayersAll( ), "приказ иллюзий 2" )
@@ -4306,7 +4275,7 @@ endfunction
 function ASSS6___Act takes nothing returns nothing
     local unit u = GetEventDamageSource( )
     local timer t
-   
+
     if GetEventDamage( ) > 0 and GetUnitAbilityLevel( u, 'A032' ) > 0 and not IsUnitIllusion( u ) then
 
         if GetWidgetLife( u ) > 0.405 and IsUnitType( u, UNIT_TYPE_DEAD ) == false and u != null then
@@ -4494,17 +4463,17 @@ function DRASp2Lib__Act takes nothing returns nothing
     // call DisableTrigger(GetTriggeringTrigger())
     call DisableTrigger( GetTriggeringTrigger( ) )
     if GetUnitAbilityLevel( dmgd, 'A00G' ) > 0 and GetEventDamage( ) > 0 then
-        
+
         if SquareRoot( ( GetUnitX( dmgd ) - GetUnitX( damager ) ) * ( GetUnitX( dmgd ) - GetUnitX( damager ) ) + ( GetUnitY( dmgd ) - GetUnitY( damager ) ) * ( GetUnitY( dmgd ) - GetUnitY( damager ) ) ) <= 150.then
 
             if GetWidgetLife( damager ) > 0.405 and IsUnitType( damager, UNIT_TYPE_DEAD ) == false and damager != null then
                 if GetUnitAbilityLevel( damager, 'A00I' ) > 0 then
-                    
+
                     call IncUnitAbilityLevel( damager, 'A00I' )
                 else
                     call UnitAddAbility( damager, 'A00I' )
                 endif
-            
+
               //  call DisplayTextToForce( GetPlayersAll( ), "минус атака стаки_" + GetUnitName( damager ) )
                 set t = CreateTimer( )
                 call SaveUnitHandle( HT, GetHandleId( t ), StringHash( "darkpass" ), damager )
@@ -4512,9 +4481,9 @@ function DRASp2Lib__Act takes nothing returns nothing
                 set t = null
                 set damager = null
             endif
-        
+
         endif
-        
+
     endif
     call EnableTrigger( GetTriggeringTrigger( ) )
     set t = null
@@ -4536,10 +4505,9 @@ function DRASp6Lib__Cond1 takes nothing returns boolean
     return b
 endfunction
 
-
 function DRASp6Lib__TT takes unit u, string t, boolean plus returns nothing
     local texttag tt = CreateTextTagUnitBJ(t, u, -3., 6., 0., 0., 0., 0.)
-    
+
     if plus then
         call SetTextTagColor(tt, 128, 255, 128, 200)
     else
@@ -4556,12 +4524,11 @@ function DRASp6Lib__TT takes unit u, string t, boolean plus returns nothing
     call SetTextTagFadepoint(tt, 0.5)
     call SetTextTagLifespan(tt, 1.)
     call SetTextTagPermanent(tt, false)
-    
+
     set tt = null
 endfunction
 
-
-
+// UNUSED: не вызывается нигде
 function DRASp6Lib__TTOld takes unit u, string t, boolean plus returns nothing
     local texttag tt = CreateTextTagUnitBJ( t, u, -3., 6., 0., 0., 0., 0. )
     if plus then
@@ -4584,7 +4551,7 @@ function DRASp6Lib__Act takes nothing returns nothing
 
         set g = CreateGroup( )
         call GroupEnumUnitsInRange( g, GetUnitX( d ), GetUnitY( d ), 500., Condition( function DRASp6Lib__Cond1 ) )
-        
+
         loop
             set FoG = FirstOfGroup( g )
             exitwhen ( FoG == null )
@@ -4606,7 +4573,6 @@ function DRASp6Lib__Act takes nothing returns nothing
     set g = null
     set d = null
 endfunction
-
 
 function DRASp6Lib__DRASp6Lib_Init takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
@@ -4641,7 +4607,7 @@ function DamageLib__NoExplode takes nothing returns nothing
     set u = null
 endfunction
 
-
+// UNUSED: не вызывается нигде
 function DamageLib_Explode takes unit u returns nothing
     local integer j
     local boolean b
@@ -4696,7 +4662,6 @@ function DamageLib_AddToDamageGroup takes unit u returns nothing
     set u = null
 endfunction
 
-
 function Damage_CreateTextTagNew takes unit u, real value, integer dmgOwnPlayerId, boolean crit, boolean isHeal returns nothing
     local real size = DamageLib__Normal_Size
     local real time = 0.6
@@ -4733,7 +4698,7 @@ function Damage_CreateTextTagNew takes unit u, real value, integer dmgOwnPlayerI
     endif
 
     call SetTextTagVelocity(tt, 0.03, 0.03)
-    
+
     if isHeal then
         call SetTextTagColor(tt, 0, 255, 0, 255) // Зеленый для исцеления
     else
@@ -4747,7 +4712,6 @@ function Damage_CreateTextTagNew takes unit u, real value, integer dmgOwnPlayerI
     set tt = null
 endfunction
 
-
 function DamageLib_DamageTextTag2 takes unit u, real dmg, integer dmgOwnPlayerId, boolean crit returns nothing
     call Damage_CreateTextTagNew(u, dmg, dmgOwnPlayerId, crit, false)
 endfunction
@@ -4755,9 +4719,6 @@ endfunction
 function DamageLib_HealTextTag2 takes unit u, real heal, integer dmgOwnPlayerId, boolean crit returns nothing
     call Damage_CreateTextTagNew(u, heal, dmgOwnPlayerId, crit, true)
 endfunction
-
-
-
 
 function DamageLib__UsualDamageTextTagOPT takes unit u, real dmg, integer dmgOwnPlayerId returns nothing
     local texttag tt
@@ -4804,18 +4765,10 @@ function DamageLib__UsualDamageTextTagOPT takes unit u, real dmg, integer dmgOwn
     set tt = null
 endfunction
 
-
-
-
 function DamageLib__DamagePerSecondNulling takes nothing returns nothing
 endfunction
 
-
-
-
-
-
-
+// UNUSED: не вызывается нигде
 function DamageLib__UsualDamageTextTag takes unit u, real dmg, integer dmgOwnPlayerId returns nothing
     local texttag tt = CreateTextTagUnitBJ( I2S( R2I( dmg ) ), u, DamageLib__Usual_Damage_Height, DamageLib__Normal_Size, 0., 0., 0., 0. )
     local integer i = 1
@@ -4846,6 +4799,7 @@ function DamageLib__UsualDamageTextTag takes unit u, real dmg, integer dmgOwnPla
     set tt = null
 endfunction
 
+// UNUSED: не вызывается нигде
 function DamageLib_DamageTextTag takes unit u, real dmg, integer dmgOwnPlayerId, boolean crit returns nothing
     local real size = 0.
     local real time = 0.6
@@ -4889,6 +4843,7 @@ function DamageLib_DamageTextTag takes unit u, real dmg, integer dmgOwnPlayerId,
     set tt = null
 endfunction
 
+// UNUSED: не вызывается нигде
 function DamageLib_HealTextTag takes unit u, real heal, integer dmgOwnPlayerId, boolean crit returns nothing
     local real size = 0.
     local real time = 0.6
@@ -4965,7 +4920,6 @@ function DamageLib__Damage_Act takes nothing returns nothing
         call DisableTrigger( GetTriggeringTrigger( ) )
         call DamageLib__UsualDamageTextTagOPT( u, d, GetConvertedPlayerId( GetOwningPlayer( a ) ) )
 
-        
         call EnableTrigger( GetTriggeringTrigger( ) )
     endif
     set a = null
@@ -4994,10 +4948,8 @@ function DamageLib__DamageLib_Init takes nothing returns nothing
 
 endfunction
 
-
 function GROS4_preload takes nothing returns nothing
 endfunction
-
 
 function GROS4___DamageTextTagOPT takes unit u, real dmg, integer dmgOwnPlayerId returns nothing
     local real size = 8.
@@ -5053,9 +5005,7 @@ function GROS4___DamageTextTagOPT takes unit u, real dmg, integer dmgOwnPlayerId
     set tt = null
 endfunction
 
-
-
-
+// UNUSED: не вызывается нигде
 function GROS4___DamageTextTag takes unit u, real dmg, integer dmgOwnPlayerId returns nothing
     local real size = 0.
     local real time = 0.6
@@ -5110,9 +5060,8 @@ function GROS4spell takes unit damageSource, unit target , real eventDamage retu
     // and not( GetUnitTypeId( a ) == 'H00M' )  потрошитель
     // call DisableTrigger(GROS4_Trg_A)
 
-    
     if damage > 0 and damage > GROS4___min_dmg and d <= GROS4___max_dist and LoadBoolean( HT, GetHandleId( u ), StringHash( "H_IS_SHIELD_GRO" ) ) then
-           
+
         if X_GetMainChar( u ) == 1 then
             set cjlocgn_00000000 = GetHeroStr( u, TRUE ) * 1.5
         endif
@@ -5139,7 +5088,7 @@ function GROS4spell takes unit damageSource, unit target , real eventDamage retu
 
           //call UnitDamageTarget( u, a, cjlocgn_00000000, true, false, ATTACK_TYPE_HERO, DAMAGE_TYPE_DIVINE, WEAPON_TYPE_WHOKNOWS )
           //call UnitDamageTarget(a, a, GROS5_FilterWater( GetUnitX( a ), GetUnitY( a ), cjlocgn_00000000 ), true, false, ATTACK_TYPE_HERO, DAMAGE_TYPE_DIVINE, WEAPON_TYPE_WHOKNOWS )
-         
+
         //  call EnableTrigger(DamageLib__Damage_Trg_Var)
         //   EnableTrigger(DPSLib_DPS_Trg)
 
@@ -5148,8 +5097,6 @@ function GROS4spell takes unit damageSource, unit target , real eventDamage retu
            // call EnableTrigger(GetTriggeringTrigger())
 
     endif
-       
-    
 
    // call EnableTrigger(GROS4_Trg_A)
    // call EnableTrigger(GetTriggeringTrigger())
@@ -5157,7 +5104,7 @@ function GROS4spell takes unit damageSource, unit target , real eventDamage retu
     set u = null
 endfunction
 
-
+// UNUSED: не вызывается нигде
 function ForkedLightning_Act takes unit caster, unit target, real dmg, integer count returns nothing
     local timer t
     local integer tid
@@ -5197,7 +5144,7 @@ function ForkedLightning_Act takes unit caster, unit target, real dmg, integer c
                     set y = GetUnitY(enemy)
                     set dx = tx - x
                     set dy = ty - y
-                    
+
                     set distance = SquareRoot(dx * dx + dy * dy)
                     if distance < distance2 then
                         set distance2 = distance
@@ -5210,7 +5157,7 @@ function ForkedLightning_Act takes unit caster, unit target, real dmg, integer c
         else
             set tarter = target
         endif
-        
+
         if tarter != null then
             call GroupAddUnit(g2, tarter)
             set jump = jump - 1
@@ -5253,7 +5200,6 @@ function ForkedLightning_Act takes unit caster, unit target, real dmg, integer c
     set g2 = null
 endfunction
 
-
 function GROS_Sfera__Act takes nothing returns nothing
     local unit caster = GetAttacker( )
     local unit target = GetTriggerUnit()
@@ -5274,7 +5220,6 @@ function GROS_Sfera_In takes nothing returns nothing
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_ATTACKED )
     call TriggerAddAction( Trg, function GROS_Sfera__Act )
 endfunction
-
 
 function DamageCategory0_Actions takes nothing returns nothing
     local real eventDamage = GetEventDamage()
@@ -5309,7 +5254,6 @@ function InitTrig_DamageCategory0 takes nothing returns nothing
     call TriggerAddCondition(gg_trg_DamageCategory0, Condition(function DamageCategory0_Cond))
     call TriggerAddAction(gg_trg_DamageCategory0, function DamageCategory0_Actions)
 endfunction
-
 
 function Dest__Kill takes nothing returns nothing
     local destructable dt = GetEnumDestructable( )
@@ -5381,7 +5325,6 @@ function GLAS5___Act takes nothing returns nothing
     local unit dummy
     if att != null and dmg > 1. and IsUnitEnemy(att, GetOwningPlayer(target)) and IsUnitType(target, UNIT_TYPE_MAGIC_IMMUNE) == false then
 
-
         if GetEventDamage( ) > 0 and GetUnitAbilityLevel( att, 'A02A' ) > 0 and SquareRoot( ( GetUnitX( att ) - GetUnitX( target ) ) * ( GetUnitX( att ) - GetUnitX( target ) ) + ( GetUnitY( att ) - GetUnitY( target ) ) * ( GetUnitY( att ) - GetUnitY( target ) ) ) <= 128.then
        //Сало при атаке
 
@@ -5394,7 +5337,7 @@ function GLAS5___Act takes nothing returns nothing
                 set dummy = null
                 call EnableTrigger( GetTriggeringTrigger( ) )
             endif
-            
+
         endif
 
     endif
@@ -5408,10 +5351,12 @@ function GLAS5___I takes nothing returns nothing
     call TriggerAddAction( GLAS5_Trg, function GLAS5___Act )
 endfunction
 
+// UNUSED: не вызывается нигде
 function GLAS6_preload takes nothing returns nothing
     call X_PreloadAbility( 'A03T' )
 endfunction
 
+// UNUSED: не вызывается нигде
 function GLAS6___Cond1 takes nothing returns boolean
     local unit u = GetFilterUnit( )
     local boolean b = IsPlayerEnemy( GetOwningPlayer( u ), GLAS6___ch_p )and GetUnitState( u, UNIT_STATE_LIFE ) > 0.405 and GetUnitAbilityLevel( u, 'Aloc' ) == 0
@@ -5442,7 +5387,6 @@ function GLAS6___Act_A takes nothing returns nothing
     set att = null
     set target = null
 endfunction
-
 
 function GLAS6___Off takes nothing returns nothing
     local timer t = GetExpiredTimer( )
@@ -5476,7 +5420,7 @@ function GLAS6___Act takes nothing returns nothing
     local unit cjlocgn_00000004
 
     if GetSpellAbilityId( ) == 'A02D' then
-        
+
       //  call DisplayTextToForce( GetPlayersAll( ), "i_hate_rewenger start" )
         set cjlocgn_00000000 = GetTriggerUnit( )
         call DestroyEffect( AddSpecialEffectTarget( "Abilities\\Spells\\Human\\MarkOfChaos\\MarkOfChaosTarget.mdl", cjlocgn_00000000, "origin" ) )
@@ -5514,6 +5458,7 @@ function GLAS6___I takes nothing returns nothing
     call DisableTrigger( GLAS6_Trg_A )
 endfunction
 
+// UNUSED: не вызывается нигде
 function GLAS7_preload takes nothing returns nothing
     call X_PreloadAbility( 'A02E' )
 endfunction
@@ -5521,7 +5466,7 @@ endfunction
 function GLAS7___Rem takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local unit ta = LoadUnitHandle( HT, GetHandleId( t ), StringHash( "defminus" ) )
-    
+
     if GetUnitState( ta, UNIT_STATE_LIFE ) > 0.405 and IsUnitType( ta, UNIT_TYPE_DEAD ) == false then
 
         if GetUnitAbilityLevel( ta, 'A02E' ) > 1 then
@@ -5557,14 +5502,13 @@ function GLAS7___Act takes nothing returns nothing
     local unit target = GetTriggerUnit( )
     local real damage = GetEventDamage()
     local timer t
-    
+
     if GetEventDamageSource() != null and damage > 1. and IsUnitEnemy(att, GetOwningPlayer(target)) and IsUnitType(target, UNIT_TYPE_MAGIC_IMMUNE) == false then
     //call DisableTrigger( GetTriggeringTrigger( ) )
 
     //and GetUnitTypeId(target) != 'E000' and GetUnitTypeId(target) != 'Hgam' Ткач и Мрак
-    
-        if GetEventDamage( ) > 0 and GetUnitAbilityLevel( att, 'A02C' ) > 0 and SquareRoot( ( GetUnitX( att ) - GetUnitX( target ) ) * ( GetUnitX( att ) - GetUnitX( target ) ) + ( GetUnitY( att ) - GetUnitY( target ) ) * ( GetUnitY( att ) - GetUnitY( target ) ) ) <= 128. then
 
+        if GetEventDamage( ) > 0 and GetUnitAbilityLevel( att, 'A02C' ) > 0 and SquareRoot( ( GetUnitX( att ) - GetUnitX( target ) ) * ( GetUnitX( att ) - GetUnitX( target ) ) + ( GetUnitY( att ) - GetUnitY( target ) ) * ( GetUnitY( att ) - GetUnitY( target ) ) ) <= 128. then
 
             if GetUnitAbilityLevel( target, 'A02E' ) > 0 then
                 if GetUnitAbilityLevel( target, 'A02E' ) < 29 then
@@ -5578,7 +5522,7 @@ function GLAS7___Act takes nothing returns nothing
             set t = CreateTimer( )
             call SaveUnitHandle( HT, GetHandleId( t ), StringHash( "defminus" ), target )
             call TimerStart( t, 2., FALSE, function GLAS7___Rem )
-        
+
         endif
 
     endif
@@ -5591,8 +5535,6 @@ function GLAS7___I takes nothing returns nothing
     set GLAS7_Trg = CreateTrigger( )
     call TriggerAddAction( GLAS7_Trg, function GLAS7___Act )
 endfunction
-
-
 
 function GROS4___RemoveShield takes nothing returns nothing
     local timer t = GetExpiredTimer( )
@@ -5618,7 +5560,7 @@ function GROS4___Act_S takes nothing returns nothing
     local unit caster = GetTriggerUnit( )
     local timer t
     local effect fx
-   
+
     if GetSpellAbilityId( ) == 'A02S' then
         if LoadBoolean( HT, GetHandleId( caster ), StringHash( "H_IS_SHIELD_GRO" ) ) then
            // call DisplayTextToForce( GetPlayersAll( ), "щит молний обновление" )
@@ -5641,13 +5583,12 @@ function GROS4___Act_S takes nothing returns nothing
     endif
 endfunction
 
-
 function GROS4___Act_T takes nothing returns nothing
     local unit caster = GetSpellTargetUnit( )
     local timer t
     local effect e
     if GetSpellAbilityId( ) == 'A03U' then
-      
+
         if LoadBoolean( HT, GetHandleId( caster ), StringHash( "H_IS_SHIELD_GRO" ) ) then
             set t = LoadTimerHandle( HT, GetHandleId( caster ), StringHash( "H_TIMER_GRO" ) )
             call TimerStart( t, TimerGetRemaining( t ) + 6., FALSE, function GROS4___RemoveShield )
@@ -5671,13 +5612,12 @@ function GROS4___I takes nothing returns nothing
     local trigger Trg = CreateTrigger( )
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function GROS4___Act_S )
-  
+
     call TriggerAddAction( Trg, function GROS4___Act_T )
     //call TriggerAddAction(GROS4_Trg_A, function GROS4___Attacked)
    // call DisableTrigger(GROS4_Trg_A)
     set Trg = null
 endfunction
-
 
 function s__recept_create takes integer target, integer s1, integer s2, integer s3, integer s4, integer s5, integer s6, integer s7 returns integer
     local integer r = s__recept__allocate( )
@@ -5939,7 +5879,6 @@ function ISS__init takes nothing returns nothing
     endif
 endfunction
 
-
 function MRAS6__Act_Night takes nothing returns nothing
     call DecUnitAbilityLevel( MRAS6_Unit, 'A01Q' )
 endfunction
@@ -5955,7 +5894,6 @@ function MRAS6__MRAS6_In takes nothing returns nothing
     call TriggerRegisterGameStateEvent( Trg_2, GAME_STATE_TIME_OF_DAY, EQUAL, 6 )
     call TriggerAddAction( Trg_2, function MRAS6__Act_Day )
 endfunction
-
 
 function MRAS4Lib_preload takes nothing returns nothing
     call X_PreloadAbility( 'A01M' )
@@ -6005,7 +5943,7 @@ function PALS5_preload takes nothing returns nothing
     call X_PreloadAbility( 'A005' )
 endfunction
 
-
+// UNUSED: не вызывается нигде
 function PALS5__Act2 takes nothing returns nothing
 
 endfunction
@@ -6056,6 +5994,7 @@ endfunction
 function REAS2_preload takes nothing returns nothing
 endfunction
 
+// UNUSED: не вызывается нигде
 function REAS2___TT takes unit u, real hp returns nothing
     local texttag tt = CreateTextTagUnitBJ( "-" + I2S( R2I( hp ) ), u, -0., 9., 0., 0., 0., 0. )
     local integer id = GetPlayerId( GetOwningPlayer( u ) ) + 1
@@ -6204,7 +6143,7 @@ function REAS3___CheckMagRes takes nothing returns nothing
          //   call DisplayTextToForce( GetPlayersAll(), "удалил резист" + GetUnitName(cst) )
             endif
         endif
-        
+
     else
         if GetUnitAbilityLevel( cst, REAS3___s_a ) > 0 then
             call UnitRemoveAbility( cst, REAS3___s_a )
@@ -6240,7 +6179,7 @@ function REAS3___CheckSlow takes nothing returns nothing
                 call UnitAddAbility( d, 'A006' )
                 call IssueTargetOrderById( d, 852075, FoG )
             endif
-          //  call DisplayTextToForce( GetPlayersAll(), "каст замедла" + GetUnitName(FoG) )    
+          //  call DisplayTextToForce( GetPlayersAll(), "каст замедла" + GetUnitName(FoG) )
             set d = null
             call GroupRemoveUnit( REAS3___g, FoG )
         endloop
@@ -6305,13 +6244,12 @@ function SHAS4___Attacked takes nothing returns nothing
     local real cjlocgn_00000001 = 0.
     if damager != null and damage > 1. and IsUnitEnemy(u, GetOwningPlayer(damager)) then
 
-
         if LoadBoolean( HT, GetHandleId( u ), StringHash( "H_IS_SHIELD_SHA" ) ) then
 
             if LoadInteger( HT, GetHandleId( u ), StringHash( "H_SHIELD_LEFT_SHA" ) ) > 0 then
 
                 set cjlocgn_00000000 = X_GetMainChar( u )
-           
+
                 if cjlocgn_00000000 == 1 then
                     set cjlocgn_00000001 = GetHeroStr( u, TRUE ) * 1.0
                 endif
@@ -6333,8 +6271,6 @@ function SHAS4___Attacked takes nothing returns nothing
             endif
 
         endif
-
-
 
     endif
 
@@ -6368,9 +6304,9 @@ function SHAS4___Act_S takes nothing returns nothing
     local effect e
     local timer t
     if GetSpellAbilityId( ) == 'A02M' then
-        
+
         set caster = GetTriggerUnit( )
-       
+
         if LoadBoolean( HT, GetHandleId( caster ), StringHash( "H_IS_SHIELD_SHA" ) ) then
         //call PauseTimer(cjlocgn_00000002)
         //call DestroyTimer(cjlocgn_00000002)
@@ -6395,13 +6331,12 @@ function SHAS4___Act_S takes nothing returns nothing
     endif
 endfunction
 
-
 function SHAS4___Act_T takes nothing returns nothing
     local unit caster
     local effect fx
     local timer t
     if GetSpellAbilityId( ) == 'A02I' then
-       
+
         set caster = GetSpellTargetUnit( )
 
         if LoadBoolean( HT, GetHandleId( caster ), StringHash( "H_IS_SHIELD_SHA" ) ) then
@@ -6431,8 +6366,6 @@ function SHAS4___I takes nothing returns nothing
     call TriggerAddAction( SHAS4___Trg, function SHAS4___Act_S )
     call TriggerAddAction( SHAS4___Trg, function SHAS4___Act_T )
 endfunction
-
-
 
 function TDMKillsLib__RemoveMulti takes nothing returns nothing
     local timer t = GetExpiredTimer( )
@@ -6584,7 +6517,6 @@ function TKLS6_preload takes nothing returns nothing
     call EnableWeatherEffect( TKLS6___we, FALSE )
 endfunction
 
-
 function TKLS6___onTimerOnlyRemoveAbils takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local unit cst = LoadUnitHandle( HT, GetHandleId( t ), TKLS6___h_cst )
@@ -6694,12 +6626,12 @@ function UseItem__Act takes nothing returns nothing
                     else
                         call IssueTargetOrderById( dummy, s__UseItem__it_order[j], caster )
                     endif
-                    
+
                 endif
             endif
             set j = j + 1
         endloop
-      
+
     endif
     set caster = null
     set dummy = null
@@ -6775,7 +6707,7 @@ function ASSS1___CreatePartOfWave takes nothing returns nothing
             endif
             call GroupRemoveUnit( ASSS1___gr, cjlocgn_00000000 )
         endloop
-        
+
         set x = x + 50. * Cos( angle * bj_DEGTORAD )
         set y = y + 50. * Sin( angle * bj_DEGTORAD )
         set dist = dist + ( 50. )
@@ -6948,9 +6880,9 @@ function ASSS3___Act takes nothing returns nothing
         set cjlocgn_00000006 = GetHeroAgi( caster, TRUE ) * 0.5
         call X_AddTimedEff( "Abilities\\Spells\\NightElf\\FanOfKnives\\FanOfKnivesCaster.mdl", cjlocgn_00000001, cjlocgn_00000002, 1.6 )
         set ASSS3___ch_p = GetOwningPlayer( caster )
-        //800 аое снизил до 
+        //800 аое снизил до
         call GroupEnumUnitsInRange( cjlocgn_00000003, cjlocgn_00000001, cjlocgn_00000002, 500., Condition( function ASSS3___Cond1 ) )
-       
+
         loop
             set cjlocgn_00000004 = FirstOfGroup( cjlocgn_00000003 )
             exitwhen( cjlocgn_00000004 == null )
@@ -6988,7 +6920,6 @@ function ASSS3___I takes nothing returns nothing
     call TriggerRegisterAnyUnitEventBJ( Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( Trg, function ASSS3___Act )
 endfunction
-
 
 function creepsInit takes nothing returns nothing
     call TriggerSleepAction( 0.01 )
@@ -7045,6 +6976,7 @@ function creepsInit takes nothing returns nothing
     call SaveReal( HT, StringHash( "Camp_5" ), StringHash( "Y" ), 1925. )
 endfunction
 
+// UNUSED: не вызывается нигде
 function CreepsLib__Is_Unit_Matching takes nothing returns boolean
     local unit u = GetFilterUnit( )
     local boolean b = ( GetUnitTypeId( u ) == CreepsLib__Matching_Type and GetUnitState( u, UNIT_STATE_LIFE ) > 0.405 and not IsUnitIllusion( u ) )
@@ -7082,7 +7014,6 @@ function CreepsLib_Creeps_Act takes nothing returns nothing
         else
             set u_type = LoadInteger( HT, StringHash( "Camp_" + I2S( i ) ), StringHash( "Level_" + I2S( CreepsLib__Lvl ) ) )
         endif
-
 
         if CountUnitsInGroup( s__CreepsLib__Creep_Camp_Group[i] ) == 0 then
             set x = LoadReal( HT, StringHash( "Camp_" + I2S( i ) ), StringHash( "X" ) )
@@ -7214,8 +7145,6 @@ function CreepsCount_Act takes nothing returns nothing
        // call DisplayTextToForce( GetPlayersAll(),GetUnitName(d) + "удалится через 5 сек" )
     endif
 
-
-
     loop
         exitwhen( i > 5 )
         set a = 1
@@ -7239,8 +7168,6 @@ function CreepsCount_Act takes nothing returns nothing
         endloop
         set i = i + 1
     endloop
-
- 
 
     set u = null
     set d = null
@@ -7275,7 +7202,6 @@ function DRASp1Lib_preload takes nothing returns nothing
     call X_PreloadAbility( 'A00H' )
 endfunction
 
-
 function DRASp1Lib__TT takes unit u, string t, boolean plus returns nothing
     local texttag tt = CreateTextTagUnitBJ(t, u, -3., 8., 0., 0., 0., 0.)
     local player p = GetLocalPlayer()
@@ -7299,8 +7225,7 @@ function DRASp1Lib__TT takes unit u, string t, boolean plus returns nothing
     set tt = null
 endfunction
 
-
-
+// UNUSED: не вызывается нигде
 function DRASp1Lib__TTOLD takes unit u, string t, boolean plus returns nothing
     local texttag tt = CreateTextTagUnitBJ( t, u, -3., 8., 0., 0., 0., 0. )
     if plus then
@@ -7364,7 +7289,7 @@ function DRASp1Lib__DRASp1_Act takes nothing returns nothing
     local real damage
     local integer j
     local group g
-    
+
     if GetSpellAbilityId( ) == 'A00F' then
 
         set caster = GetTriggerUnit( )
@@ -7379,7 +7304,7 @@ function DRASp1Lib__DRASp1_Act takes nothing returns nothing
         set g = CreateGroup()
         call GroupEnumUnitsInRange( g, x, y, 700., Condition( function DRASp1Lib__Cond1 ) )
        // set FoG = FirstOfGroup( g ) Не работает
-    
+
         //
         loop
             set FoG = FirstOfGroup( g )
@@ -7390,12 +7315,12 @@ function DRASp1Lib__DRASp1_Act takes nothing returns nothing
                 set j = j + 1
                 call SaveInteger( HT, GetHandleId( caster ), StringHash( "H_DRAS1_lol" ), j )
 
-                    //and GetHeroInt( FoG, false ) >=0 
+                    //and GetHeroInt( FoG, false ) >=0
                 call SetHeroInt( FoG, GetHeroInt( FoG, FALSE ) - 2, TRUE )
-                   
+
                     //call SetIntStatsSave(FoG, GetHeroInt(FoG, false) - 2, true)
                 call DRASp1Lib__TT( FoG, "-" + I2S( 2 ) + " ИНТ", FALSE )
-        
+
                 call SetHeroInt( caster, GetHeroInt( caster, FALSE ) + 2, TRUE )
                  //   call SetIntStatsSave(caster, GetHeroInt( caster, FALSE ) + 2, true)
 
@@ -7404,11 +7329,10 @@ function DRASp1Lib__DRASp1_Act takes nothing returns nothing
                //     call DisplayTextToForce( GetPlayersAll( ), GetUnitName( FoG ) + "AbsorbedUnit_" + I2S( j ) )
                 call DestroyEffect( AddSpecialEffectTarget( "Abilities\\Spells\\Undead\\CarrionSwarm\\CarrionSwarmDamage.mdl", FoG, "chest" ) )
 
-
             endif
-                
+
             call GroupRemoveUnit( g, FoG )
-                
+
         endloop
 
         call GroupClear( g )
@@ -7441,6 +7365,7 @@ function DRASp3Lib__Cond1 takes nothing returns boolean
     return b
 endfunction
 
+// UNUSED: не вызывается нигде
 function DRASp3Lib__Cond2 takes nothing returns boolean
     local unit u = GetFilterUnit( )
     local boolean b = GetUnitState( u, UNIT_STATE_LIFE ) > 0.405 and GetUnitAbilityLevel( u, 'Aloc' ) == 0 and IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) == false
@@ -7562,7 +7487,7 @@ function DRASp4Lib__CreatePartOfWave takes nothing returns nothing
     if dist <= 1000.then
         set DRASp4Lib__ch_p = p
         call GroupEnumUnitsInRange( DRASp4Lib__gr, x, y, 100., Condition( function DRASp4Lib__Cond1 ) )
-        
+
         loop
             set FoG = FirstOfGroup( DRASp4Lib__gr )
             exitwhen( FoG == null )
@@ -7643,7 +7568,6 @@ function DRASp4Lib__DRASp4Lib_Init takes nothing returns nothing
     call TriggerRegisterAnyUnitEventBJ( DRAS4_Trg, EVENT_PLAYER_UNIT_SPELL_EFFECT )
     call TriggerAddAction( DRAS4_Trg, function DRASp4Lib__DRAS4_Act )
 endfunction
-
 
 function DRASp5Lib_preload takes nothing returns nothing
     call X_PreloadAbility( 'Arav' )
@@ -7773,7 +7697,7 @@ function DRASp5Lib__DRAS5_Act takes nothing returns nothing
             exitwhen( cjlocgn_00000006 > 1.3 )
             set DRASp5Lib__ch_p = GetOwningPlayer( caster )
             call GroupEnumUnitsInRange( DRASp5Lib__gr, cjlocgn_00000001, cjlocgn_00000002, 600., Condition( function DRASp5Lib__Cond1 ) )
-          
+
             loop
                 set FoG = FirstOfGroup( DRASp5Lib__gr )
                 exitwhen ( FoG == null )
@@ -7791,7 +7715,7 @@ function DRASp5Lib__DRAS5_Act takes nothing returns nothing
                     call TimerStart( cjlocgn_00000004, 0.04, TRUE, function DRASp5Lib__Proj )
                 endif
                 call GroupRemoveUnit( DRASp5Lib__gr, FoG )
-           
+
             endloop
            // call TriggerSleepAction( 0.01 ) // закоментил вейт
             set cjlocgn_00000006 = cjlocgn_00000006 + ( 0.1 )
@@ -7872,7 +7796,7 @@ function FLOS6__Act takes nothing returns nothing
         call DestroyEffect( AddSpecialEffect( "war3mapImported\\CorpseExplosion.mdl", x, y ) )
         set FLOS6__ch_p = GetOwningPlayer( k )
         call GroupEnumUnitsInRange( g, x, y, 350., Condition( function FLOS6__Cond1 ) )
-      
+
         loop
             set FoG = FirstOfGroup( g )
             exitwhen( FoG == null )
@@ -7959,7 +7883,7 @@ function GLAS1__proj takes nothing returns nothing
                 call SaveUnitHandle( HT, GetHandleId( cjlocgn_00000001 ), StringHash( "H_FOG" ), cjlocgn_00000000 )
                 call TimerStart( cjlocgn_00000001, 1., false, function GLAS1__Att )
                 set cjlocgn_00000001 = null
-                
+
             endif
             call GroupRemoveUnit( GLAS1__gr, cjlocgn_00000000 )
         endloop
@@ -8223,7 +8147,7 @@ function GLAS3__Att takes nothing returns nothing
         call FlushChildHashtable( HT, GetHandleId( t ) )
         call PauseTimer( t )
         call DestroyTimer( t )
-        
+
     endif
 
     set cst = null
@@ -8231,7 +8155,7 @@ function GLAS3__Att takes nothing returns nothing
 endfunction
 function GLAS3__Act takes nothing returns nothing
     local unit caster
-//   local group cjlocgn_00000001 не используется 
+//   local group cjlocgn_00000001 не используется
     local real cjlocgn_00000002
     local timer cjlocgn_00000003
 
@@ -8416,7 +8340,7 @@ function GROS2___TimerEnd takes nothing returns nothing
     local real r = LoadReal( HT, GetHandleId( t ), StringHash( "H_2" ) )
     local unit e = CreateUnit( GetOwningPlayer( u ), 'h007', x, y, 0. )
     local unit FoG
-   
+
     set GROS2___ch_p = GetOwningPlayer( u )
     call GroupClear( GROS2___gr )
     call Dest_KillDestInRange( x, y, 600. )
@@ -8527,7 +8451,7 @@ function GROS3___CreateLightning takes nothing returns nothing
                 call X_ApplyLife( d )
                 call UnitAddAbility( d, 'A006' )
                 call IssueTargetOrderById( d, 852075, FoG )
-    
+
                 set d = null
             endif
 
@@ -8812,7 +8736,7 @@ function MRASp1Lib__CreatePartOfWave takes nothing returns nothing
                 call UnitApplyTimedLife( cjlocgn_00000001, 'BTLF', 0.5 )
                 call UnitAddAbility( cjlocgn_00000001, 'A01F' )
                 call IssueTargetOrderById( cjlocgn_00000001, 852149, FoG )
-        
+
             endif
             call GroupRemoveUnit( MRASp1Lib__gr, FoG )
         endloop
@@ -8888,6 +8812,7 @@ function MRASp2Lib__Cond1 takes nothing returns boolean
     return b
 endfunction
 //Не вызывается!
+// UNUSED: не вызывается нигде
 function MRASp2Lib__RemovePause takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local unit u = LoadUnitHandle( HT, GetHandleId( t ), StringHash( "H_1" ) )
@@ -9184,7 +9109,7 @@ function PALS3__Act takes nothing returns nothing
         endloop
         call GroupClear( cjlocgn_00000005 )
         call GroupEnumUnitsInRange( cjlocgn_00000005, cjlocgn_00000001, cjlocgn_00000002, 300., Condition( function PALS3__Cond1 ) )
-        
+
         loop
             set cjlocgn_00000006 = FirstOfGroup( cjlocgn_00000005 )
             exitwhen( cjlocgn_00000006 == null )
@@ -9257,7 +9182,7 @@ function REAS1___CreatePartOfWave takes nothing returns nothing
              //   call Stun_Target( cst, cjlocgn_00000000, 1.3 )
                 call StunUnit(cjlocgn_00000000,1.3)
                 call DestroyEffect( AddSpecialEffect( "Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl", x, y ) )
-    
+
                 call SaveBoolean( HT, GetHandleId( cjlocgn_00000000 ), StringHash( "ReasWave" ), TRUE )
                 set ti = CreateTimer( )
                 call SaveUnitHandle( HT, GetHandleId( ti ), StringHash( "2" ), cjlocgn_00000000 )
@@ -9296,7 +9221,7 @@ function REAS1___Act takes nothing returns nothing
     local real cjlocgn_00000006
     local timer cjlocgn_00000007
     local unit cjlocgn_00000008
-    
+
     if GetSpellAbilityId( ) == 'A04H' then
         set cjlocgn_00000000 = GetTriggerUnit( )
         set cjlocgn_00000001 = GetUnitX( cjlocgn_00000000 )
@@ -9323,7 +9248,7 @@ function REAS1___Act takes nothing returns nothing
         call PauseUnit( cjlocgn_00000000, FALSE )
         call IssueImmediateOrderById( cjlocgn_00000000, 851972 )
         //call IssueImmediateOrderById( cjlocgn_00000000, 851972 )
-    
+
         set cjlocgn_00000007 = null
         set cjlocgn_00000000 = null
     endif
@@ -9391,7 +9316,7 @@ function REAS5___I takes nothing returns nothing
     call TriggerAddAction( Trg, function REAS5___Act )
 endfunction
 function SHAS1_preload takes nothing returns nothing
-   
+
 endfunction
 function SHAS1___Cond1 takes nothing returns boolean
     local unit u = GetFilterUnit( )
@@ -9547,7 +9472,7 @@ function SHAS2___Act takes nothing returns nothing
             call UnitAddAbility( cjlocgn_00000006, 'A006' )
             call X_ApplyLife( cjlocgn_00000006 )
             call IssueTargetOrderById( cjlocgn_00000006, 852075, cjlocgn_00000004 )
-            
+
             call GroupRemoveUnit( cjlocgn_00000003, cjlocgn_00000004 )
         endloop
         call GroupClear( cjlocgn_00000003 )
@@ -9676,7 +9601,6 @@ function TEHS1___ReleazeMissile takes nothing returns nothing
     set t = null
 endfunction
 
-
 function TEHS1___CreateMissile takes real cX, real cY, real tX, real tY, player owner, real dmg, unit c returns nothing
     local timer t = CreateTimer( )
     local real rX = GetRandomReal( 0., 400. / 2 )
@@ -9733,7 +9657,6 @@ function TEHS1___I takes nothing returns nothing
     call TriggerAddAction( Trg, function TEHS1___Act )
 endfunction
 
-
 function TEHS2_preload takes nothing returns nothing
 endfunction
 
@@ -9776,7 +9699,6 @@ function TEHS2___I takes nothing returns nothing
     set TEHS2___turrel_id[10] = 'h00L'
     set Trg = null
 endfunction
-
 
 function TEHS3_preload takes nothing returns nothing
     local unit d
@@ -9851,7 +9773,7 @@ function TEHS3___DelChain takes nothing returns nothing
                 call IssueTargetOrderById( cst, 851983, FoG )
             else
                 call IssueImmediateOrderById( cst, 851972 )
-               
+
             endif
             call RemoveUnit( head )
             call FlushChildHashtable( HT, GetHandleId( ti ) )
@@ -9994,6 +9916,7 @@ function TEHS3___Chain takes nothing returns nothing
     set elem = null
     set r = null
 endfunction
+// UNUSED: не вызывается нигде
 function TEHS3___Unpause takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local unit u = LoadUnitHandle( HT, GetHandleId( t ), StringHash( "H_1" ) )
@@ -10080,7 +10003,7 @@ function TKLS3_preload takes nothing returns nothing
     call X_ApplyLife( TKLS3___d )
 endfunction
 
-
+// UNUSED: не вызывается нигде
 function TKLS3___ReduceSlowness takes nothing returns nothing
     local integer i = TKLS3___count_units
     loop
@@ -10123,8 +10046,7 @@ function TKLS3___onTimer takes nothing returns nothing
             call PauseTimer( t )
             call DestroyTimer( t )
         endif
-       
-        
+
     else
 
         if TKLS3___slowness[id] > 0 then
@@ -10207,7 +10129,7 @@ function TKLS3_Act takes unit u, integer modifer returns nothing
             set TKLS3___slowness[TKLS3___count_units] = modifer
             set a = TKLS3___count_units
         endif
-        
+
         call SaveUnitHandle( HT, GetHandleId( t ), TKLS3___h_u, u )
         call SaveInteger( HT, GetHandleId( t ), TKLS3___h_id, a )
         call TimerStart( t, TKLS3___period, TRUE, function TKLS3___onTimer )
@@ -10238,7 +10160,6 @@ function DRAPreload_Go takes nothing returns nothing
 endfunction
 function FLOS1_preload takes nothing returns nothing
 endfunction
-
 
 function FLOS1__Cond1 takes nothing returns boolean
     local unit u = GetFilterUnit( )
@@ -10314,6 +10235,7 @@ function FLOS3__RemoveAttacked takes nothing returns nothing
     set u = null
 endfunction
 
+// UNUSED: не вызывается нигде
 function FLOS3__RemEff takes nothing returns nothing
     local timer t = GetExpiredTimer( )
     local effect e = LoadEffectHandle( HT, GetHandleId( t ), StringHash( "H_1" ) )
@@ -10355,7 +10277,7 @@ function FLOS3__CreatePartOfWave takes nothing returns nothing
                 set ti = null
             endif
             call GroupRemoveUnit( FLOS3__gr, cjlocgn_00000000 )
-            
+
         endloop
         set x = x + 70. * Cos( angle * bj_DEGTORAD )
         set y = y + 70. * Sin( angle * bj_DEGTORAD )
@@ -10438,7 +10360,7 @@ function FLOS4__Act takes nothing returns nothing
     local timer cjlocgn_00000004
     local integer cjlocgn_00000005
     if GetSpellAbilityId( ) == 'A01T' then
-    
+
         set cjlocgn_00000000 = GetTriggerUnit( )
         set cjlocgn_00000001 = CreateGroup( )
         set cjlocgn_00000003 = GetHeroInt( cjlocgn_00000000, true ) * 0.7
@@ -11230,7 +11152,6 @@ function ChooseTDM takes nothing returns nothing
     call EnableTrigger( TDMKillsLib_TDMKills_Trg_Var )
     call EnableTrigger( TDMRevivingLib_TDM_Rev )
 endfunction
-
 
 function ChooseRM takes nothing returns nothing
 endfunction
@@ -12068,7 +11989,7 @@ function XPLib__XP_Act takes nothing returns nothing
     local integer lvl = GetUnitLevel( u )
     local integer xp = lvl * 80
     local unit FoG
-    //система опыта 
+    //система опыта
     if IsPlayerEnemy( GetOwningPlayer( u ), GetOwningPlayer( killer ) ) then
         call AddHeroXP( killer, xp, false )
         call XPLib__XPTextTag( killer, xp )
@@ -12184,7 +12105,7 @@ function BuyHeroes_Act takes nothing returns nothing
         set cjlocgn_00000002 = 0.
         set cjlocgn_00000003 = FALSE
         set cjlocgn_00000004 = 0
-        
+
         if Choosed_Mode == 1 then
             loop
                 exitwhen cjlocgn_00000003
@@ -12234,7 +12155,6 @@ function BuyHeroes_Act takes nothing returns nothing
         else
             set s__Lvl_Team[2] = s__Lvl_Team[2] + 1
         endif
-
 
         set s__ADSLib_ADS_Enabled[GetConvertedPlayerId( GetOwningPlayer( cjlocgn_00000000 ) )] = FALSE //TRUE было
 
@@ -12341,7 +12261,6 @@ function InitGlobals takes nothing returns nothing
     set udg_J_timer = CreateTimer( )
     set udg_all_units_group = CreateGroup( )
 endfunction
-
 
 function InitSounds takes nothing returns nothing
     set gg_snd_click = CreateSound( "Sound\\Interface\\MouseClick1.wav", false, false, false, 10, 10, "DefaultEAXON" )
@@ -12531,7 +12450,6 @@ function CreateBuildingsForPlayer8 takes nothing returns nothing
     set gg_unit_ncp2_0016 = CreateUnit( p, 'ncp2', 3136.0, -3264.0, 270.000 )
 endfunction
 
-
 function CreateBuildingsForPlayer9 takes nothing returns nothing
     local player p = Player( 9 )
     local unit u
@@ -12540,7 +12458,6 @@ function CreateBuildingsForPlayer9 takes nothing returns nothing
     local real life
     set gg_unit_ncp2_0017 = CreateUnit( p, 'ncp2', 3136.0, -3264.0, 270.000 )
 endfunction
-
 
 function CreateNeutralPassiveBuildings takes nothing returns nothing
     local player p = Player( PLAYER_NEUTRAL_PASSIVE )
@@ -12675,30 +12592,25 @@ function Trig_PartyFrame_Share_Actions takes nothing returns nothing
     call SetPlayerAllianceBJ( Player( 4 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 2 ) )
     call SetPlayerAllianceBJ( Player( 4 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 3 ) )
 
-
     call SetPlayerAllianceBJ( Player( 5 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 6 ) )
     call SetPlayerAllianceBJ( Player( 5 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 7 ) )
     call SetPlayerAllianceBJ( Player( 5 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 8 ) )
     call SetPlayerAllianceBJ( Player( 5 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 9 ) )
-
 
     call SetPlayerAllianceBJ( Player( 6 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 5 ) )
     call SetPlayerAllianceBJ( Player( 6 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 7 ) )
     call SetPlayerAllianceBJ( Player( 6 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 8 ) )
     call SetPlayerAllianceBJ( Player( 6 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 9 ) )
 
-
     call SetPlayerAllianceBJ( Player( 7 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 5 ) )
     call SetPlayerAllianceBJ( Player( 7 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 6 ) )
     call SetPlayerAllianceBJ( Player( 7 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 8 ) )
     call SetPlayerAllianceBJ( Player( 7 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 9 ) )
 
-
     call SetPlayerAllianceBJ( Player( 8 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 5 ) )
     call SetPlayerAllianceBJ( Player( 8 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 6 ) )
     call SetPlayerAllianceBJ( Player( 8 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 7 ) )
     call SetPlayerAllianceBJ( Player( 8 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 9 ) )
-
 
     call SetPlayerAllianceBJ( Player( 9 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 5 ) )
     call SetPlayerAllianceBJ( Player( 9 ), ALLIANCE_SHARED_ADVANCED_CONTROL, true, Player( 6 ) )
