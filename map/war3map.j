@@ -1,7 +1,6 @@
 globals
     boolexpr cj_true_bool_4896bnao87
-    player AI__ch_p = null
-    unit AI__ch_u = null
+    unit AI__ch_u = null // 05.09: AI__ch_p удалён — использовался только мёртвыми фильтрами
     group AI__g = CreateGroup( )
     unit AI__Shop
     boolean ComLib__Is_Test = FALSE
@@ -1128,21 +1127,7 @@ function UnitOccupiedSlotsNumber takes unit target returns integer
     return index
 endfunction
 
-// UNUSED: не вызывается нигде
-function AI__FilterHeroAndEnemy takes nothing returns boolean
-    local unit u = GetFilterUnit( )
-    local boolean b = IsUnitType( u, UNIT_TYPE_HERO )and IsPlayerEnemy( AI__ch_p, GetOwningPlayer( u ) )and GetUnitState( u, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( u, 'Avul' ) > 0 ) and IsUnitVisible( u, AI__ch_p ) //and GetUnitAbilityLevel( u, 'Aloc' ) == 0
-    set u = null
-    return b
-endfunction
-
-// UNUSED: не вызывается нигде
-function AI__FilterEnemy takes nothing returns boolean
-    local unit u = GetFilterUnit( )
-    local boolean b = IsPlayerEnemy( AI__ch_p, GetOwningPlayer( u ) )and GetUnitState( u, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( u, 'Avul' ) > 0 )and IsUnitVisible( u, AI__ch_p ) //and GetUnitAbilityLevel( u, 'Aloc' ) == 0
-    set u = null
-    return b
-endfunction
+// 05.09: удалены мёртвые фильтры AI__FilterHeroAndEnemy / AI__FilterEnemy (не вызывались, дублировали инлайн-условия AI_A_Do) и глобал AI__ch_p
 
 function AI__OrderBuyItem takes unit u, unit shop, integer id returns boolean
     call IssueNeutralTargetOrder( GetOwningPlayer( u ), shop, "smart", u )
@@ -1150,11 +1135,10 @@ function AI__OrderBuyItem takes unit u, unit shop, integer id returns boolean
 endfunction
 
 function AI__A_Buy takes nothing returns nothing
-    local integer i = Online_Players //число игроков
+    // 05.09: удалены мёртвые локалы i, b
     local player p
     local integer id = 0
     local unit u
-    local boolean b = FALSE
     local integer ch = 0
     local integer state = 0
     local integer j = 1
@@ -1166,7 +1150,6 @@ function AI__A_Buy takes nothing returns nothing
         set id = GetPlayerId( p ) + 1
 
         //call DisplayTextToForce( GetPlayersAll( ),GetPlayerName(p) + "_игрок_ "+ I2S(Online_Players ) +"_онлайн число" )
-        set b = FALSE
         if GetPlayerController( p ) == MAP_CONTROL_COMPUTER and GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING and GetPlayerState( p, PLAYER_STATE_RESOURCE_GOLD ) >= 290 then
 
           //  call DisplayTextToForce( GetPlayersAll( ),GetPlayerName(p) + "_комп_ "+ I2S(Online_Players ) +"_онлайн число2" )
@@ -1214,7 +1197,7 @@ endfunction
 function AI__A_Death takes nothing returns nothing
     local unit u = GetTriggerUnit( )
     local player p = GetOwningPlayer( u )
-    local integer id = GetPlayerId( p ) + 1
+    // 05.09: удалён мёртвый local id (использовался только в закомментированном дебаге)
     if GetPlayerController( p ) == MAP_CONTROL_COMPUTER and IsUnitType( u, UNIT_TYPE_HERO ) then
 
         call SaveBoolean( HT, GetHandleId( u ), StringHash( "H_IS_CREEPING" ), FALSE )
@@ -1439,7 +1422,8 @@ function AI__Spam_Abils takes unit u, unit t returns nothing
         if dist <= 250.then
             set b = IssueImmediateOrderById( u, 852096 )
             if not b then
-                call IssuePointOrderById( u, 852218, t_x, t_y )
+                // 05.09: фикс бага — было call вместо set b, из-за чего издавались два приказа подряд и каскад ломался
+                set b = IssuePointOrderById( u, 852218, t_x, t_y )
                 if not b then
                     call IssueImmediateOrderById( u, 852127 )
                 endif
@@ -1582,7 +1566,8 @@ endfunction
 function AI__GetItems takes nothing returns nothing
     local item it = GetEnumItem( )
     local unit u = AI__ch_u
-    if UnitOccupiedSlotsNumber( u ) < 6 and u != null and GetWidgetLife( u ) > 0 and IsUnitPaused( u ) == false then
+    // 05.09: фикс — в JASS нет короткого замыкания, проверка u != null должна идти первой
+    if u != null and UnitOccupiedSlotsNumber( u ) < 6 and GetWidgetLife( u ) > 0 and IsUnitPaused( u ) == false then
     call IssueTargetOrderById( u, 851971, it )
 //подобрать предмет с земли
     endif
@@ -1591,26 +1576,21 @@ function AI__GetItems takes nothing returns nothing
 endfunction
 
 function AI_A_Do takes nothing returns nothing
-    local integer i = Online_Players
+    // 05.09: удалены мёртвые локалы i, camp_id, c_x, c_y, a, t
     local player p
     local integer id = 0
     local unit u
     local unit FoG
-    local integer camp_id
-    local real c_x
-    local real c_y
     local unit t_unit
     local real min_hp = 999999.0
-    local integer a = 0
     local rect r = null
     local real x = 0.
     local real y = 0.
     local real t_t = 0.
-    local timer t
     local integer j = 1
     local unit f
     local group g
-    local group gRR = CreateGroup()
+    local group gRR = null // 05.09: фикс — группа создаётся на каждую итерацию игрока, раньше создавалась один раз и уничтожалась внутри веток с последующим использованием
 
     loop
         exitwhen ( j > 10 )
@@ -1635,20 +1615,26 @@ function AI_A_Do takes nothing returns nothing
              //   set u = s__Hero[id]
                 //добавил
 
+                    // 05.09: фикс — сброс цели и min_hp на каждого игрока, раньше перетекали от предыдущего бота
+                    set t_unit = null
+                    set min_hp = 999999.0
+
                     set r = Rect( GetUnitX( u ) - 300., GetUnitY( u ) - 300., GetUnitX( u ) + 300., GetUnitY( u ) + 300. )
                     set AI__ch_u = u
-                    set AI__ch_p = GetOwningPlayer(u)
+                    // 05.09: удалён set AI__ch_p — глобал больше не существует
 
                     call EnumItemsInRect( r, null, function AI__GetItems )
                     call RemoveRect( r )
                     set r = null
 
+                    set gRR = CreateGroup() // 05.09: создаём группу здесь, уничтожаем в конце блока — раньше уничтожалась в середине и использовалась дальше
                     set g = CreateGroup()
                     call GroupEnumUnitsInRange(g, GetUnitX( u ), GetUnitY( u ), 800., null)
                     loop
                         set f = FirstOfGroup(g)
                         exitwhen f == null
-                        if IsUnitInGroup(f, gRR) == false and IsUnitType( f, UNIT_TYPE_HERO ) and IsPlayerEnemy( GetOwningPlayer( f ) , GetOwningPlayer( u ) ) and GetUnitState(f, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( f, 'Avul' ) > 0 ) and IsUnitVisible( f, GetOwningPlayer( u ) ) and IsUnitType(f, UNIT_TYPE_MAGIC_IMMUNE) == false then
+                        // 05.09: убран бессмысленный IsUnitInGroup(f, gRR) — gRR пуст на момент перебора
+                        if IsUnitType( f, UNIT_TYPE_HERO ) and IsPlayerEnemy( GetOwningPlayer( f ) , GetOwningPlayer( u ) ) and GetUnitState(f, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( f, 'Avul' ) > 0 ) and IsUnitVisible( f, GetOwningPlayer( u ) ) and IsUnitType(f, UNIT_TYPE_MAGIC_IMMUNE) == false then
                             call GroupAddUnit(gRR, f)
                         endif
                         call GroupRemoveUnit(g, f)
@@ -1673,7 +1659,7 @@ function AI_A_Do takes nothing returns nothing
                             call GroupRemoveUnit( gRR, FoG )
 
                         endloop
-                        call DestroyGroup(gRR)
+                    // 05.09: DestroyGroup(gRR) убран отсюда — группа уничтожается один раз в конце блока
                     //set t_unit = Get_Target_Unit(u, GetUnitX( u ), GetUnitY( u ))
                    // set t_unit = Get_Target_Unit(u, GetUnitX( u ), GetUnitY( u )) вызвает поиск цели из ловса
 
@@ -1688,7 +1674,7 @@ function AI_A_Do takes nothing returns nothing
                             loop
                                 set f = FirstOfGroup(g)
                                 exitwhen f == null
-                                if IsUnitInGroup(f, gRR) == false and IsPlayerEnemy( GetOwningPlayer( f ) , GetOwningPlayer( u ) ) and GetUnitState(f, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( f, 'Avul' ) > 0 ) and IsUnitVisible( f, GetOwningPlayer( u ) ) then
+                                if IsPlayerEnemy( GetOwningPlayer( f ) , GetOwningPlayer( u ) ) and GetUnitState(f, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( f, 'Avul' ) > 0 ) and IsUnitVisible( f, GetOwningPlayer( u ) ) then
                                     call GroupAddUnit(gRR, f)
                                 endif
                                 call GroupRemoveUnit(g, f)
@@ -1712,7 +1698,7 @@ function AI_A_Do takes nothing returns nothing
                                     call GroupRemoveUnit( gRR, FoG )
 
                                 endloop
-                                call DestroyGroup(gRR)
+                                // 05.09: DestroyGroup(gRR) убран — группа ещё используется в конце блока
 
                                 call SaveUnitHandle( HT, GetHandleId( u ), StringHash( "H_TARGET" ), t_unit )
                             //    call DisplayTextToForce( GetPlayersAll( ), GetUnitName(u) + "нашел цель ИИ2_" + GetUnitName(t_unit) )
@@ -1740,7 +1726,7 @@ function AI_A_Do takes nothing returns nothing
                         loop
                             set f = FirstOfGroup(g)
                             exitwhen f == null
-                            if IsUnitInGroup(f, gRR) == false and IsPlayerEnemy( GetOwningPlayer( f ) , GetOwningPlayer( u ) ) and GetUnitState(f, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( f, 'Avul' ) > 0 ) and IsUnitVisible( f, GetOwningPlayer( u ) ) and IsUnitType(f, UNIT_TYPE_MAGIC_IMMUNE) == false then
+                            if IsPlayerEnemy( GetOwningPlayer( f ) , GetOwningPlayer( u ) ) and GetUnitState(f, UNIT_STATE_LIFE ) > 0.405 and not( GetUnitAbilityLevel( f, 'Avul' ) > 0 ) and IsUnitVisible( f, GetOwningPlayer( u ) ) and IsUnitType(f, UNIT_TYPE_MAGIC_IMMUNE) == false then
                                 call GroupAddUnit(gRR, f)
                             endif
                             call GroupRemoveUnit(g, f)
@@ -1764,7 +1750,7 @@ function AI_A_Do takes nothing returns nothing
 
                             endloop
 
-                            call DestroyGroup(gRR)
+                            // 05.09: DestroyGroup(gRR) убран — группа ещё используется в конце блока
                             // работает
 
                             if t_unit != null then
@@ -1807,6 +1793,10 @@ function AI_A_Do takes nothing returns nothing
 
                         endif
                     endif
+
+                    // 05.09: фикс — группа уничтожается ровно один раз в конце блока, раньше могла уничтожаться в ветках и использоваться дальше / утекать
+                    call DestroyGroup(gRR)
+                    set gRR = null
 
                     if GetAIDifficulty( p ) == AI_DIFFICULTY_NEWBIE then
                         set t_t = 3.
