@@ -3622,7 +3622,7 @@ function SHAS3A___Act takes nothing returns nothing
     local unit attacked = GetTriggerUnit( )
     local unit attacker = GetEventDamageSource( )
     local real dist = SquareRoot( ( GetUnitX( attacker ) - GetUnitX( attacked ) ) * ( GetUnitX( attacker ) - GetUnitX( attacked ) ) + ( GetUnitY( attacker ) - GetUnitY( attacked ) ) * ( GetUnitY( attacker ) - GetUnitY( attacked ) ) )
-    local real dmg = 0.
+    // 09.09: убран дубль local real dmg = 0. — второе объявление перетирало его
     local real dmg = GetEventDamage()
     if attacker != null and dmg > 1. and IsUnitEnemy(attacker, GetOwningPlayer(attacked)) and IsUnitType(attacked, UNIT_TYPE_MAGIC_IMMUNE) == false then
 
@@ -8021,7 +8021,10 @@ function GLAS1__proj takes nothing returns nothing
     local real di = LoadReal( HT, GetHandleId( t ), StringHash( "H_7" ) )
     local effect e = LoadEffectHandle( HT, GetHandleId( t ), StringHash( "H_10" ) )
     local unit target
-    local timer t
+    // 09.09: было local timer t — дубль объявления (склейка переименования 05.09),
+    // второе объявление обнуляло таймер рывка -> PauseTimer/DestroyTimer получали null,
+    // периодический таймер жил вечно (спам эффектов). Переименовано в t2.
+    local timer t2
     local unit missile
     set nd = nd + ( 70. )
     set cX = cX + 70. * Cos( an * bj_DEGTORAD )
@@ -8049,10 +8052,10 @@ function GLAS1__proj takes nothing returns nothing
                 call IssueTargetOrderById( missile, 852075, target )
                 set missile = null
                 call SaveBoolean( HT, GetHandleId( target ), StringHash( "H_ATT_GLA" ), TRUE )
-                set t = CreateTimer( )
-                call SaveUnitHandle( HT, GetHandleId( t ), StringHash( "H_FOG" ), target )
-                call TimerStart( t, 1., false, function GLAS1__Att )
-                set t = null
+                set t2 = CreateTimer( ) // 09.09: t -> t2 (дубль объявления)
+                call SaveUnitHandle( HT, GetHandleId( t2 ), StringHash( "H_FOG" ), target )
+                call TimerStart( t2, 1., false, function GLAS1__Att )
+                set t2 = null
 
             endif
             call GroupRemoveUnit( GLAS1__gr, target )
@@ -8342,7 +8345,8 @@ function GLAS3__Act takes nothing returns nothing
 
     if GetSpellAbilityId( ) == 'A028' then
         set caster = GetTriggerUnit( )
-        set gr = CreateGroup( )
+        // 09.09: убрано set gr = CreateGroup() — группа нигде не использовалась
+        // (утечка). Локал gr закомментирован ранее как неиспользуемый — теперь правда.
         set dmg = GetHeroAgi( caster, true ) * 1.
         set t = CreateTimer( )
         call SetUnitAnimationByIndex( caster, 13 )
@@ -8393,7 +8397,9 @@ function GROS1___proj takes nothing returns nothing
     local real di = LoadReal( HT, GetHandleId( t ), StringHash( "H_7" ) )
     local unit arrow = LoadUnitHandle( HT, GetHandleId( t ), StringHash( "H_10" ) )
     local unit FoG
-    local timer t
+    // 09.09: было local timer t — дубль объявления (склейка переименования 05.09),
+    // обнуляло таймер импульса -> PauseTimer/DestroyTimer получали null, таймер жил вечно. Переименовано в t2.
+    local timer t2
     local unit unused_u
     set nd = nd + ( 90. )
     set cX = cX + 90. * Cos( an * bj_DEGTORAD )
@@ -8421,10 +8427,10 @@ function GROS1___proj takes nothing returns nothing
                 call DamageLib_SpellDamage( u, FoG, GROS5_FilterWater( GetUnitX( FoG ), GetUnitY( FoG ), dm ) )
                 call DestroyEffect( AddSpecialEffectTarget( "Abilities\\Weapons\\Bolt\\BoltImpact.mdl", FoG, "origin" ) )
                 call SaveBoolean( HT, GetHandleId( FoG ), StringHash( "H_ATT_GRO" ), TRUE )
-                set t = CreateTimer( )
-                call SaveUnitHandle( HT, GetHandleId( t ), StringHash( "H_FOG" ), FoG )
-                call TimerStart( t, 1., false, function GROS1___Att )
-                set t = null
+                set t2 = CreateTimer( ) // 09.09: t -> t2 (дубль объявления)
+                call SaveUnitHandle( HT, GetHandleId( t2 ), StringHash( "H_FOG" ), FoG )
+                call TimerStart( t2, 1., false, function GROS1___Att )
+                set t2 = null
             endif
             call GroupRemoveUnit( GROS1___gr, FoG )
         endloop
