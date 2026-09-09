@@ -793,12 +793,6 @@ function ItemDestroyUpdate takes nothing returns nothing
         call DestroyTimer( t )
     endif
 
-    if GetWidgetLife( it ) <= 0. and IsItemOwned( it ) == false then // 07.09: anti-leak - predmet udalen vneshne
-        call FlushChildHashtable( HT, id )
-        call PauseTimer( t )
-        call DestroyTimer( t )
-    endif
-
     set t = null
     set it = null
 endfunction
@@ -1848,10 +1842,7 @@ function AI_A_Do takes nothing returns nothing
 endfunction
 
 function Ai_wait takes nothing returns nothing
-    local timer old = GetExpiredTimer( ) // 07.09: anti-leak - tajmer iz AI__I
     call TimerStart(CreateTimer(), 5., TRUE, function AI__A_Buy )
-    call DestroyTimer( old )
-    set old = null
 endfunction
 
 function AI__I takes nothing returns nothing
@@ -1925,14 +1916,11 @@ function Anims__B takes nothing returns nothing
 endfunction
 
 function Anims__A takes nothing returns nothing
-    local timer tm = GetExpiredTimer( ) // 07.09: anti-leak
     local group g = CreateGroup( )
     call GroupEnumUnitsInRange( g, 0., 0., 9999999., Condition( function Anims__BE ) )
     call ForGroup( g, function Anims__B )
     call GroupClear( g )
     call DestroyGroup( g )
-    call DestroyTimer( tm ) // 07.09: anti-leak
-    set tm = null
     set g = null
 endfunction
 
@@ -3731,7 +3719,6 @@ function StunUnit takes unit target,real last returns real
     local unit dummy
     local integer HID=0
     local boolean boolean01=false
-    local location dl // 07.09: anti-leak
     set last = last
 
     //своя хештаблица для стана
@@ -3749,11 +3736,7 @@ function StunUnit takes unit target,real last returns real
     if last>LoadReal(udg_Hash,UID,300) then
     set last=last
     call SaveReal(udg_Hash,UID,300,last)
-    set dl=GetUnitLoc(target) // 07.09: anti-leak - location v lokal
-    set dummy=CreateUnitAtLoc(GetOwningPlayer(target),'e002',dl,0)
-    call RemoveLocation(dl)
-    call RemoveUnitPerTimer(dummy, 3.0) // 07.09: vremya zhizni dammi
-    set dl=null
+    set dummy=CreateUnitAtLoc(GetOwningPlayer(target),'e002',GetUnitLoc(target),0)
     call UnitAddAbility(dummy,'A04S')
     call SetUnitAbilityLevel(dummy,'A04S',1+R2I(last))
 
@@ -6068,7 +6051,7 @@ function PALS5__Act takes nothing returns nothing
             if GetLocalPlayer( ) == GetOwningPlayer( cst ) then
                 call StartSound( gg_snd_a )
             endif
-            // 07.09: anti-leak - udalen mertvyj CreateTimer (ne ispolzovalsya)
+            set t = CreateTimer()
             call UnitAddAbility( cst, 'A005' )
             call Energy_Minus( cst, -15 )
             call IncUnitAbilityLevel( cst, 'A003' )
